@@ -108,7 +108,7 @@
 
   /* Electric cyan — technology and personalization ONLY. Never decorative. */
   --cyan:       #00CFFF;    /* CANONICAL accent (doc 7.2)                 */
-  --cyan-deep:  #0084AD;    /* cyan that passes AA as text on off-white   */
+  --cyan-deep:  #00719A;    /* small cyan text on ivory — 4.89:1, AA      */
   --cyan-ink:   #005E7C;    /* cyan-family text at small sizes            */
   --cyan-soft:  #7FE4FF;    /* cyan on navy, secondary data series        */
   --cyan-wash:  #E4F8FF;    /* palest cyan fill on off-white              */
@@ -124,12 +124,19 @@
   /* Text roles */
   --ink:        #0B1F3A;    /* headings and body on off-white             */
   --ink-2:      #3B4C63;    /* lead paragraphs                            */
-  --ink-muted:  #64748B;    /* captions, secondary                        */
-  --ink-faint:  #8A96A8;    /* disabled, placeholder                      */
+  /* The muted and faint steps carry real content on these pages — mono
+     index numerals, multipliers, captions, field labels — so both are held
+     at or above WCAG AA 4.5:1 on #F7F6F1 rather than at the "pretty grey"
+     values they started from (#64748B measured 4.40, #8A96A8 measured 2.56).
+     Measured now: muted 5.62:1, faint 4.59:1. */
+  --ink-muted:  #55606F;    /* captions, secondary — 5.62:1 on ivory      */
+  --ink-faint:  #656E7C;    /* least emphasis that still passes — 4.59:1  */
   --on-navy:        #F7F6F1;
   --on-navy-soft:   rgba(247, 246, 241, .76);
-  --on-navy-muted:  rgba(247, 246, 241, .56);
-  --on-navy-faint:  rgba(247, 246, 241, .34);
+  /* Same reasoning on navy: .56 and .34 measured 4.1 and 2.69 against
+     #060F1F. Raised to keep the ramp while clearing AA. */
+  --on-navy-muted:  rgba(247, 246, 241, .68);
+  --on-navy-faint:  rgba(247, 246, 241, .54);
 
   /* Hairlines */
   --line:         rgba(11, 31, 58, .12);
@@ -140,9 +147,11 @@
   --line-cyan:    rgba(0, 207, 255, .38);
 
   /* Semantic */
-  --ok:    #0F9D6B;
-  --warn:  #C97A16;
-  --alert: #D64545;
+  /* Used as 11px bold status labels, so they are held to AA on ivory:
+     4.75:1, 4.73:1 and 4.98:1 respectively. */
+  --ok:    #0B7A54;
+  --warn:  #9A5B0B;
+  --alert: #B02F2F;
 
   /* ----------------------------------------------------------------------
      2 · TYPE
@@ -223,6 +232,10 @@
   --dur-3: 420ms;
 
   --ring: 0 0 0 3px var(--cyan-glow), 0 0 0 1px var(--cyan-deep);
+  --label-ink: #55606F;
+
+  /* Height of the sticky trust bar; the sticky header parks beneath it. */
+  --trustbar-h: 36px;
 }
 
 /* ==========================================================================
@@ -324,8 +337,10 @@ button, input, select, textarea {
   height: 1px;
   background: var(--cyan-deep);
 }
-.on-navy .eyebrow, .navy .eyebrow { color: var(--cyan-soft); }
-.on-navy .eyebrow::before, .navy .eyebrow::before { background: var(--cyan); }
+.on-navy .eyebrow, .navy .eyebrow, .section--navy .eyebrow,
+.card--navy .eyebrow { color: var(--cyan-soft); }
+.on-navy .eyebrow::before, .navy .eyebrow::before,
+.section--navy .eyebrow::before, .card--navy .eyebrow::before { background: var(--cyan); }
 .eyebrow--bare::before { display: none; }
 
 /* Section index numerals: 01 / 02 / 03 in mono, the Function Health device */
@@ -336,6 +351,8 @@ button, input, select, textarea {
   letter-spacing: var(--ls-mono-wide);
   color: var(--cyan-ink);
 }
+.on-navy .index-num, .navy .index-num, .section--navy .index-num,
+.card--navy .index-num { color: var(--cyan); }
 
 /* ==========================================================================
    LAYOUT
@@ -573,7 +590,8 @@ button, input, select, textarea {
    ========================================================================== */
 
 .trustbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 60;
   background: var(--navy-900);
   color: var(--on-navy-soft);
@@ -591,7 +609,7 @@ button, input, select, textarea {
 .trustbar__dot { color: var(--navy-500); }
 
 .sitehead {
-  position: sticky; top: 0; z-index: 50;
+  position: sticky; top: var(--trustbar-h); z-index: 50;
   padding: var(--sp-3) 0;
   background: color-mix(in srgb, var(--ivory) 82%, transparent);
   backdrop-filter: saturate(140%) blur(14px);
@@ -692,8 +710,11 @@ button, input, select, textarea {
 .field__label {
   font-family: var(--font-mono); font-size: var(--t-micro);
   font-weight: var(--w-bold); letter-spacing: var(--ls-mono-wide);
-  text-transform: uppercase; color: var(--ink-muted);
+  text-transform: uppercase; color: var(--label-ink);
 }
+/* The footer newsletter puts this label on navy, where the ivory-tuned ink
+   measured 3.0:1. Dark contexts get the on-navy ramp instead. */
+.navy, .section--navy, .card--navy, .sitefoot { --label-ink: rgba(247, 246, 241, .68); }
 .input {
   min-height: 52px; padding: 0 var(--sp-4);
   border: 1px solid var(--line-strong); border-radius: var(--r-sm);
@@ -807,7 +828,7 @@ button, input, select, textarea {
    ========================================================================== */
 
 @media (max-width: 620px) {
-  .trustbar { font-size: 10px; letter-spacing: .07em; }
+  .trustbar { font-size: 11px; letter-spacing: .06em; }
   .trustbar__inner {
     flex-wrap: wrap;
     justify-content: center;
@@ -819,3 +840,70 @@ button, input, select, textarea {
   }
   .trustbar__dot { display: none; }
 }
+
+/* ==========================================================================
+   STICKY HEADER — narrow viewports.
+   The translucent blurred pill lets display headlines ghost through it while
+   scrolling on a phone. Below 700px the header takes an opaque ground.
+   ========================================================================== */
+
+@media (max-width: 700px) {
+  .sitehead {
+    background: var(--ivory);
+    backdrop-filter: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .sitehead__bar {
+    background: var(--ivory-white);
+    backdrop-filter: none;
+  }
+  .section--navy + .sitehead, .navy .sitehead { background: var(--navy-900); }
+}
+
+/* ==========================================================================
+   HEADER CTA — narrow viewports.
+   The nav CTA must never wrap inside its pill. Below 700px it tightens rather
+   than breaking to two lines.
+   ========================================================================== */
+
+@media (max-width: 700px) {
+  .sitehead__actions .btn--sm { padding-inline: var(--sp-4); font-size: 12px; }
+  /* Reclaim viewport: the sticky trust bar plus header took 131px of an 844px
+     phone screen. Tighter padding and a shorter pill bring it to ~116px. */
+  .sitehead { padding-block: var(--sp-2); }
+  .sitehead__bar { gap: var(--sp-3); min-height: 54px; padding: 0 var(--sp-3) 0 var(--sp-5); }
+}
+
+/* ==========================================================================
+   CHROME BUTTON WRAPPING
+   Nav and menu pills must never break their label across two lines. Content
+   buttons MAY wrap: their labels are full sentences ("Kup bez analizy — cena
+   standardowa"), and forcing nowrap on those pushed the 390px layout to a
+   571px scrollWidth.
+   ========================================================================== */
+
+.sitehead .btn,
+.menu-panel .btn,
+.trustbar .btn { white-space: nowrap; }
+
+@media (max-width: 640px) {
+  .btn { white-space: normal; text-align: center; line-height: 1.25; }
+  .btn--lg, .btn { padding-block: var(--sp-2); height: auto; }
+}
+
+/* ==========================================================================
+   STICKY OFFSET AT NARROW WIDTHS
+   The trust bar settles to two lines below 620px, so the header's sticky
+   offset grows with it and in-page anchors keep clearing both bars.
+   ========================================================================== */
+
+@media (max-width: 620px) {
+  :root { --trustbar-h: 46px; }
+  /* The header parks at exactly --trustbar-h, so the trust bar must occupy
+     exactly that height. Left to its intrinsic two-line height it measured
+     44.7px, leaving a ~1.3px transparent seam that display text scrolled
+     through. Pin it. */
+  .trustbar__inner { min-height: 46px; }
+}
+
+html { scroll-padding-top: calc(var(--trustbar-h) + 78px); }

@@ -6,6 +6,16 @@
 <title>Sklep PERSONA — cztery formuły BioSNEDS™ | ITP</title>
 <meta name="description" content="DigestEase Pro, NeuroSynapse, InflamShield i VitalCore™ — cztery formuły PERSONA w technologii BioSNEDS™. 249 zł w sklepie otwartym, 179 zł/szt. w zestawie personalizowanym.">
 <link rel="stylesheet" href="../styles/tokens.css">
+<script>
+/* Ukryta karta (headless / tło): przejścia CSS mogą nigdy nie ruszyć, więc
+   stany scroll-reveal zapisujemy synchronicznie — bez animacji. */
+if (document.visibilityState === 'hidden') {
+  var itpRevealFix = document.createElement('style');
+  itpRevealFix.textContent =
+    '[data-itp-reveal]{opacity:1 !important;transform:none !important;transition:none !important}';
+  document.head.appendChild(itpRevealFix);
+}
+</script>
 <style>
 /* ======================================================================
    product.html — page-specific styles only.
@@ -20,15 +30,20 @@
   padding-bottom: 2px;
 }
 
+/* Przypisy: domyślne skalowanie <sup> schodziło do 10.83px — twarde minimum. */
+sup { font-size: 11px; line-height: 0; }
+
 /* ------------------------------------------------------------- HERO -- */
-.store-hero { padding-block: clamp(64px, 8vw, 128px) clamp(48px, 6vw, 88px); }
+.store-hero { padding-block: clamp(36px, 4vw, 48px) clamp(48px, 6vw, 80px); }
+.store-hero__head { display: grid; gap: var(--sp-3); }
 .store-hero__grid {
+  margin-top: clamp(24px, 2.5vw, 32px);
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: clamp(40px, 6vw, 96px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
   align-items: end;
 }
-.store-hero__copy { display: grid; gap: var(--sp-6); max-width: 56ch; }
+.store-hero__copy { display: grid; gap: var(--sp-5); max-width: 56ch; }
 .store-hero__micro {
   font-family: var(--font-mono);
   font-size: var(--t-micro);
@@ -36,49 +51,65 @@
   text-transform: uppercase;
   color: var(--ink-muted);
 }
-.f-nav { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.f-nav { display: flex; flex-wrap: wrap; gap: var(--sp-2); max-width: 360px; }
 .f-nav a { text-decoration: none; }
 .f-dot {
   width: 8px; height: 8px; border-radius: 50%;
   background: var(--fc); flex: none;
 }
 
-.shelf {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--sp-5) var(--sp-6);
-  align-self: center;
-  padding-bottom: 30px;
-}
-.shelf .pk { max-width: 200px; justify-self: center; }
-.shelf .pk:nth-child(even) { margin-top: 30px; }
+/* Scena packshotów: mniejsza, dobrze ustawiona — wspiera fold, nie jest
+   jego tematem. Małe butelki bez liter: pole koloru + znak. */
 .pk { width: 100%; height: auto; }
-
-.store-hero__stats { margin-top: clamp(40px, 5vw, 72px); }
-.store-hero__stats .stat__num { font-size: clamp(1.5rem, 2.6vw, 2.4rem); }
-
-/* -------------------------------------------------------- DUALITY BAR */
-.duality { border-block: 1px solid var(--line); background: var(--ivory-bright); }
-.duality__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: var(--sp-6);
-  align-items: center;
-  padding-block: var(--sp-6);
+.stage { margin: 0; display: grid; gap: var(--sp-3); justify-items: center; }
+.stage__row {
+  position: relative;
+  display: flex; align-items: flex-end; justify-content: center;
+  gap: clamp(12px, 1.4vw, 18px);
+  width: 100%;
+  padding-bottom: 9px;
 }
-.duality__cell { display: grid; gap: 2px; }
-.duality__cell + .duality__cell { border-left: 1px solid var(--line); padding-left: var(--sp-6); }
-.duality__label {
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  letter-spacing: var(--ls-mono);
-  text-transform: uppercase;
+.stage__row::after {
+  content: "";
+  position: absolute; left: 6%; right: 6%; bottom: 8px;
+  height: 1px; background: var(--line-strong);
+}
+.stage__row .pk { flex: none; }
+.stage__lead { width: clamp(198px, 14.5vw, 208px); }
+.stage__mini--f1 { display: none; }
+.stage__mini--f2 { width: 80px; }
+.stage__mini--f3 { width: 66px; }
+.stage__mini--f4 { width: 54px; }
+.stage__cap {
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono); text-transform: uppercase;
   color: var(--ink-muted);
 }
-.duality__price { font-family: var(--font-mono); font-weight: var(--w-bold);
-                  font-size: 1.25rem; letter-spacing: -.02em; }
-.duality__price small { font-size: var(--t-caption); font-weight: var(--w-regular);
-                        color: var(--ink-muted); letter-spacing: 0; }
+
+/* Pas faktów: mono nad hairline'ami — dualność cen jako fakt, nie badge */
+.store-hero__facts {
+  margin-top: clamp(28px, 3vw, 36px);
+  display: grid;
+  grid-template-columns: 1.05fr .75fr 1.45fr .75fr;
+  border-block: 1px solid var(--line);
+}
+.fact { display: grid; gap: 4px; align-content: start; padding: var(--sp-5); }
+.fact:first-child { padding-left: 0; }
+.fact:last-child { padding-right: 56px; }
+.fact + .fact { border-left: 1px solid var(--line); }
+.fact__num {
+  font-family: var(--font-mono); font-weight: var(--w-bold);
+  font-size: clamp(1.2rem, 1.7vw, 1.55rem); line-height: 1.25;
+  letter-spacing: -.02em; font-feature-settings: 'tnum' 1;
+  white-space: nowrap;
+}
+.fact__to { color: var(--ink-faint); font-weight: var(--w-regular); }
+.fact__set { color: var(--cyan-ink); }
+.fact__label { font-size: var(--t-caption); color: var(--ink-muted); max-width: 34ch; }
+.fact__label a { color: var(--cyan-ink); text-decoration: none;
+                 border-bottom: 1px solid var(--line-cyan); }
+.fact__label a:hover { border-bottom-color: var(--cyan-deep); }
+
 
 /* ----------------------------------------------------------- FORMULAS */
 .formula {
@@ -95,11 +126,16 @@
 .formula__media {
   border-radius: var(--r-lg);
   background: color-mix(in srgb, var(--fc) 8%, var(--ivory-bright));
-  padding: clamp(24px, 3vw, 48px) clamp(20px, 3vw, 40px);
+  padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 36px);
   position: sticky; top: 96px;
+  display: grid;
+  gap: clamp(20px, 2.5vw, 32px);
 }
-.formula__media .pk { max-width: 360px; margin-inline: auto; }
-.params .mono { white-space: nowrap; }
+.formula__media .pk { max-width: 300px; margin-inline: auto; }
+.params { table-layout: fixed; }
+.params col.c-skladnik { width: 44%; }
+.params col.c-dawka { width: 18%; }
+.params col.c-rola { width: 38%; }
 
 .formula__body { display: grid; gap: var(--sp-5); }
 .formula__idx {
@@ -122,17 +158,17 @@
 .formula__desc { color: var(--ink-2); max-width: 58ch; }
 
 .biochip {
-  display: inline-flex; align-items: baseline; gap: 6px;
+  display: inline-block;
   margin-top: 6px;
   padding: 3px 10px;
   border: 1px solid var(--line-cyan);
-  border-radius: var(--r-pill);
+  border-radius: 12px;
   background: var(--cyan-wash);
   font-size: var(--t-micro);
+  line-height: 1.6;
   color: var(--cyan-ink);
   text-decoration: none;
   letter-spacing: .02em;
-  white-space: nowrap;
 }
 .biochip b {
   font-family: var(--font-mono);
@@ -141,6 +177,45 @@
 }
 .biochip:hover { border-color: var(--cyan-deep); }
 .params__note { font-size: var(--t-caption); color: var(--ink-muted); max-width: 58ch; }
+
+/* Chapter artefacts — jeden na formułę; fakty z BRIEF albo jawny schemat */
+.artefact { display: grid; gap: var(--sp-3); border-top: 1px solid var(--line);
+            padding-top: var(--sp-5); margin: 0; }
+.artefact__cap {
+  display: flex; justify-content: space-between; flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-4);
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono); text-transform: uppercase;
+  color: var(--ink-2);
+}
+.artefact > svg { width: 100%; height: auto; }
+
+.sleepmap { display: grid; grid-template-columns: auto minmax(0, 1fr);
+            gap: var(--sp-3); align-items: stretch; }
+.sleepmap__ax { display: flex; flex-direction: column; justify-content: space-between;
+  padding-block: 2px; font-family: var(--font-mono); font-size: var(--t-micro);
+  letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: right; }
+.sleepmap__svg { width: 100%; height: auto; }
+
+.gainbar { display: grid; grid-template-columns: minmax(76px, auto) minmax(0, 1fr) auto;
+           gap: var(--sp-3); align-items: center; font-size: var(--t-caption);
+           color: var(--ink-2); }
+.gainbar__track { height: 8px; border-radius: var(--r-pill);
+                  background: rgba(11, 31, 58, .08); overflow: hidden; }
+.gainbar__track i { display: block; height: 100%; border-radius: var(--r-pill);
+                    background: var(--fc); }
+.gainbar__val { font-family: var(--font-mono); font-weight: var(--w-bold);
+                font-feature-settings: 'tnum' 1; color: var(--ink); }
+
+.mito { display: flex; align-items: center; gap: var(--sp-5); }
+.mito__ring { width: 104px; flex: none; }
+.mito__txt { margin: 0; }
+.mito__num { font-family: var(--font-mono); font-weight: var(--w-bold);
+             font-size: 1.5rem; letter-spacing: -.02em; display: block;
+             color: var(--ink); }
+.mito__sub { font-size: var(--t-caption); color: var(--ink-2); display: block;
+             margin-top: 4px; max-width: 26ch; }
 
 .buy {
   border: 1px solid var(--line);
@@ -172,6 +247,19 @@
 .buy__alt a { color: inherit; }
 .buy__row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
 .buy .btn { padding-block: 12px; min-height: 52px; height: auto; text-align: center; }
+.buy--strip {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-4) var(--sp-7);
+  padding: var(--sp-4) var(--sp-6);
+}
+.buy--strip .btn { flex: 1 1 260px; }
+.buy--strip .price { flex: none; }
+.buy-match {
+  font-size: var(--t-body-sm);
+  color: var(--ink-muted);
+  display: flex; flex-wrap: wrap; column-gap: var(--sp-5); row-gap: var(--sp-2);
+  align-items: baseline;
+}
 
 .qty {
   display: inline-flex; align-items: center;
@@ -195,42 +283,116 @@
 }
 
 /* --------------------------------------------------- NAVY · TWO PRICES */
-.pillars { margin-top: clamp(40px, 5vw, 72px); }
-.pillar { display: grid; gap: var(--sp-4); padding: var(--sp-6); }
+.pillars { margin-top: clamp(88px, 11vw, 184px); }
+.pillar { display: grid; gap: var(--sp-4); padding: var(--sp-6); align-content: start; }
 .pillar h3 { font-size: var(--t-display-4); letter-spacing: var(--ls-head); }
 .pillar p { font-size: var(--t-body-sm); color: var(--on-navy-soft); line-height: 1.55; }
 
-.compare { margin-top: clamp(48px, 6vw, 88px); }
-.compare__card { display: grid; gap: var(--sp-5); padding: clamp(24px, 3vw, 40px); }
-.compare__card--set { border-color: var(--line-cyan); box-shadow: var(--sh-cyan); }
-.compare__head { display: grid; gap: var(--sp-1); }
-.compare__price {
-  font-family: var(--font-mono); font-weight: var(--w-bold);
-  font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -.03em;
+.set-hero {
+  margin-top: clamp(112px, 14vw, 232px);
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(32px, 5vw, 88px);
+  align-items: center;
+  padding: clamp(28px, 4.5vw, 72px);
+  border: 1px solid var(--line-cyan);
+  border-radius: var(--r-lg);
+  background: var(--navy-800);
+  box-shadow: var(--sh-cyan);
 }
-.compare__card--set .compare__price { color: var(--cyan); }
-.compare__list { display: grid; }
+.set-hero__lead { display: grid; gap: var(--sp-5); justify-items: start; }
+.set-hero__price {
+  font-family: var(--font-mono); font-weight: var(--w-bold);
+  font-size: clamp(3rem, 6.2vw, 5.4rem);
+  letter-spacing: -.04em; line-height: 1; color: var(--cyan);
+}
+.set-hero__price small { font-size: .36em; font-weight: var(--w-bold);
+                         color: var(--on-navy-soft); letter-spacing: -.01em; }
+.set-hero__meta { color: var(--on-navy-soft); font-size: var(--t-body-sm);
+                  max-width: 36ch; }
+.set-hero__micro {
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono); text-transform: uppercase;
+  color: var(--on-navy-muted);
+}
+
+.open-panel {
+  margin-top: clamp(96px, 11vw, 172px);
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr);
+  gap: var(--sp-5) clamp(24px, 3.5vw, 64px);
+  padding: clamp(24px, 3vw, 48px);
+  align-items: start;
+}
+.open-panel__head { display: grid; gap: var(--sp-2); }
+.open-panel__price { font-family: var(--font-mono); font-weight: var(--w-bold);
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem); letter-spacing: -.03em; }
+.open-panel__price span { font-size: .5em; color: var(--on-navy-muted); }
+.open-panel__note { font-size: var(--t-caption); color: var(--on-navy-muted);
+                    max-width: 28ch; }
+
+.compare__list { display: grid; margin: 0; padding: 0; }
 .compare__list li {
   list-style: none;
   display: flex; gap: var(--sp-3); align-items: flex-start;
   padding-block: var(--sp-3);
-  border-bottom: 1px solid var(--line-navy);
+  border-bottom: 1px solid var(--line-navy-hi);
   font-size: var(--t-body-sm);
   color: var(--on-navy-soft);
 }
 .compare__list li:last-child { border-bottom: 0; }
-.compare__list .is-off { color: var(--on-navy-faint); }
+.compare__list .is-off { color: var(--on-navy-muted); }
 .mark { flex: none; margin-top: 3px; }
 
+.pricing-cta { margin-top: clamp(96px, 12vw, 200px); }
+
 /* ------------------------------------------------------------- WKRÓTCE */
-.soon-grid { margin-top: clamp(40px, 5vw, 64px); }
-.soon-card {
-  display: grid; grid-template-columns: 96px minmax(0, 1fr);
-  gap: var(--sp-6); align-items: center;
-  padding: var(--sp-7);
+.soon-stage {
+  --ground: clamp(38px, 5vw, 60px);
+  margin-top: clamp(40px, 5vw, 64px);
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, var(--ivory-bright), var(--ivory) 72%);
+  overflow: hidden;
 }
-.soon-card h3 { font-size: var(--t-display-4); }
-.soon-card p { font-size: var(--t-body-sm); color: var(--ink-muted); }
+.soon-stage::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: var(--ground);
+  background: var(--ivory-sunk);
+  border-top: 1px solid var(--line-strong);
+  pointer-events: none;
+}
+.soon-card {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: clamp(120px, 14vw, 180px) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: end;
+  padding: clamp(28px, 4vw, 48px) clamp(24px, 3.5vw, 48px) 0;
+}
+.soon-card + .soon-card { border-left: 1px solid var(--line); }
+.soon-pk {
+  width: 100%; height: auto;
+  margin-bottom: calc(var(--ground) - 18px);
+}
+.soon-card__body {
+  display: grid; gap: var(--sp-3); align-content: start;
+  padding-bottom: calc(var(--ground) + var(--sp-6));
+}
+.soon-card__body h3 { font-size: var(--t-display-4); }
+.soon-card__body p { font-size: var(--t-body-sm); color: var(--ink-muted); max-width: 44ch; }
+.soon-card .soon-meta {
+  display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-4);
+  margin-top: var(--sp-2); padding-top: var(--sp-3);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono); text-transform: uppercase;
+  color: var(--ink-muted);
+}
 .soon-chip {
   display: inline-block; width: fit-content;
   font-family: var(--font-mono); font-size: var(--t-micro);
@@ -241,11 +403,17 @@
 }
 
 /* ------------------------------------------------------------- CART -- */
+/* Pastylka koszyka w lepkim doku na końcu <main>: podąża za viewportem,
+   a przy stopce parkuje nad jej górną krawędzią — bez JS, bez rAF. */
+.cart-fab-dock {
+  position: sticky; bottom: 0; height: 0; z-index: 40;
+  pointer-events: none;
+}
 .cart-fab {
-  position: fixed;
+  position: absolute;
   right: clamp(16px, 3vw, 32px);
   bottom: clamp(16px, 3vw, 32px);
-  z-index: 60;
+  pointer-events: auto;
   display: inline-flex; align-items: center; gap: var(--sp-3);
   min-height: 54px; padding: 0 var(--sp-6);
   border: 1px solid var(--navy-700); border-radius: var(--r-pill);
@@ -256,7 +424,9 @@
   transition: transform var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease);
 }
 .cart-fab:hover { transform: translateY(-2px); box-shadow: var(--sh-4); }
-.cart-fab__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); }
+.cart-fab[hidden] { display: none; }
+.cart-fab__icon { flex: none; }
+.cart-fab__count { font-feature-settings: 'tnum' 1; }
 .cart-fab.is-bumped { animation: fab-bump .32s var(--ease-out); }
 @keyframes fab-bump { 40% { transform: scale(1.06); } }
 
@@ -337,7 +507,7 @@
   position: fixed;
   right: clamp(16px, 3vw, 32px);
   bottom: calc(clamp(16px, 3vw, 32px) + 66px);
-  z-index: 65;
+  z-index: 48;
   padding: 10px 18px;
   border-radius: var(--r-pill);
   background: var(--navy-900); color: var(--on-navy);
@@ -351,21 +521,75 @@
 
 /* ------------------------------------------------------ RESPONSIVE -- */
 @media (max-width: 960px) {
-  .store-hero__grid { grid-template-columns: minmax(0, 1fr); align-items: start; }
-  .shelf { max-width: 520px; }
-  .duality__inner { grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
-  .duality__cell + .duality__cell { border-left: 0; padding-left: 0;
-    border-top: 1px solid var(--line); padding-top: var(--sp-4); }
+  /* Fold mobilny: nagłówek → lead → CTA → mikro → pas faktów (dualność cen
+     domyka pierwszy ekran, jak pas statystyk FH) → scena butelek → skróty. */
+  .store-hero .wrap { display: grid; row-gap: var(--sp-5); }
+  .store-hero__grid, .store-hero__copy { display: contents; }
+  .store-hero .t-lead { max-width: 56ch; }
+  .store-hero__head { order: 1; }
+  .store-hero .t-lead { order: 2; }
+  .store-hero .btn-row { order: 3; }
+  .store-hero__micro { order: 4; }
+  .store-hero__facts { order: 5; margin-top: var(--sp-2); }
+  .stage { order: 6; width: 100%; max-width: 420px; justify-self: center;
+           margin-top: var(--sp-2); }
+  .f-nav { order: 7; }
+  .stage__lead { display: none; }
+  .stage__mini--f1 { display: block; width: 86px; }
+  .stage__mini--f2 { width: 72px; }
+  .stage__mini--f3 { width: 62px; }
+  .stage__mini--f4 { width: 54px; }
   .formula, .formula:nth-of-type(even) { grid-template-columns: minmax(0, 1fr); }
   .formula:nth-of-type(even) .formula__media { order: 0; }
   .formula__media { position: static; }
   .formula__media .pk { max-width: 240px; }
-  .soon-card { grid-template-columns: 72px minmax(0, 1fr); padding: var(--sp-6); }
+  .set-hero { grid-template-columns: minmax(0, 1fr); }
+  .open-panel { grid-template-columns: minmax(0, 1fr); }
+  .soon-stage { grid-template-columns: minmax(0, 1fr); }
+  .soon-stage::after { display: none; }
+  .soon-card + .soon-card { border-left: 0; border-top: 1px solid var(--line); }
+  .soon-card::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+    height: var(--ground);
+    background: var(--ivory-sunk);
+    border-top: 1px solid var(--line-strong);
+    pointer-events: none; z-index: -1;
+  }
+}
+@media (max-width: 700px) {
+  .store-hero__facts { grid-template-columns: minmax(0, 1fr); border-block: 0; }
+  .fact--price { order: -1; }
+  .fact { padding: var(--sp-4) 56px var(--sp-4) 0; border-top: 1px solid var(--line); }
+  .fact + .fact { border-left: 0; }
+  .fact:last-child { border-bottom: 1px solid var(--line); }
+  .fact__num { font-size: 1.15rem; }
 }
 @media (max-width: 640px) {
-  .buy__row { align-items: stretch; flex-direction: column; }
-  .buy__row .qty { align-self: flex-start; }
+  .buy__row, .buy--strip { align-items: stretch; flex-direction: column; }
+  .buy__row .qty, .buy--strip .qty { align-self: flex-start; }
   .buy .btn { width: 100%; }
+  .buy--strip .btn { flex: 0 0 auto; }
+  .params th, .params td { padding-inline: var(--sp-2); font-size: var(--t-caption); }
+  .params col.c-skladnik { width: 42%; }
+  .params col.c-dawka { width: 24%; }
+  .params col.c-rola { width: 34%; }
+  .store-hero { padding-bottom: 120px; }
+  #formuly, #dlaczego-dwie-ceny { padding-bottom: calc(var(--sp-section) + 72px); }
+  .set-hero__micro { padding-right: 72px; }
+  .cart-fab { width: 58px; height: 58px; min-height: 58px; padding: 0;
+              justify-content: center; }
+  .cart-fab__label {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+  .cart-fab__count {
+    position: absolute; top: -6px; right: -4px;
+    min-width: 23px; height: 23px; padding-inline: 6px;
+    border-radius: var(--r-pill);
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--cyan); color: var(--navy-900);
+    font-size: 0.75rem; border: 2px solid var(--ivory);
+  }
   .cart-panel__body, .cart-panel__head, .cart-panel__foot { padding-inline: var(--sp-5); }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -440,132 +664,289 @@
   <!-- =================================================== PACKSHOT DEFS -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <defs>
-      <linearGradient id="pkGlass" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#0E2748"/>
-        <stop offset=".35" stop-color="#1A3E6B"/>
-        <stop offset=".62" stop-color="#102C50"/>
-        <stop offset="1" stop-color="#081A30"/>
+      <!-- Światło wspólne dla wszystkich butelek: klucz z lewej-górnej,
+           rim z prawej, cień z półcieniem. Tekstom na etykiecie zapisano
+           rozmiary ≥12 px w przestrzeni 520×760 (2× dawnej siatki). -->
+      <filter id="pkB1" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2"/></filter>
+      <filter id="pkB2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4.4"/></filter>
+      <filter id="pkB4" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="8"/></filter>
+
+      <linearGradient id="pkGlass" gradientUnits="userSpaceOnUse" x1="116" y1="0" x2="404" y2="0">
+        <stop offset="0" stop-color="#0A1E38"/>
+        <stop offset=".05" stop-color="#071528"/>
+        <stop offset=".15" stop-color="#1D4879"/>
+        <stop offset=".26" stop-color="#2F66A4"/>
+        <stop offset=".36" stop-color="#1E4979"/>
+        <stop offset=".52" stop-color="#123156"/>
+        <stop offset=".72" stop-color="#0A2039"/>
+        <stop offset=".88" stop-color="#071626"/>
+        <stop offset=".96" stop-color="#0D2A4C"/>
+        <stop offset="1" stop-color="#17416F"/>
       </linearGradient>
+      <linearGradient id="pkGlassV" gradientUnits="userSpaceOnUse" x1="0" y1="162" x2="0" y2="732">
+        <stop offset="0" stop-color="#D7E9FB" stop-opacity=".18"/>
+        <stop offset=".07" stop-color="#FFFFFF" stop-opacity=".05"/>
+        <stop offset=".25" stop-color="#FFFFFF" stop-opacity="0"/>
+        <stop offset=".78" stop-color="#000509" stop-opacity="0"/>
+        <stop offset=".9" stop-color="#01080F" stop-opacity=".26"/>
+        <stop offset="1" stop-color="#000509" stop-opacity=".5"/>
+      </linearGradient>
+      <linearGradient id="pkCapX" gradientUnits="userSpaceOnUse" x1="186" y1="0" x2="334" y2="0">
+        <stop offset="0" stop-color="#0F2440"/>
+        <stop offset=".1" stop-color="#1B3D66"/>
+        <stop offset=".24" stop-color="#35639B"/>
+        <stop offset=".4" stop-color="#1A3A62"/>
+        <stop offset=".62" stop-color="#102647"/>
+        <stop offset=".85" stop-color="#0A1A31"/>
+        <stop offset=".95" stop-color="#11294A"/>
+        <stop offset="1" stop-color="#1B4070"/>
+      </linearGradient>
+      <linearGradient id="pkCapTop" gradientUnits="userSpaceOnUse" x1="206" y1="26" x2="316" y2="46">
+        <stop offset="0" stop-color="#4C7CB2"/>
+        <stop offset=".5" stop-color="#1E4573"/>
+        <stop offset="1" stop-color="#12294A"/>
+      </linearGradient>
+      <linearGradient id="pkBandShade" gradientUnits="userSpaceOnUse" x1="186" y1="0" x2="334" y2="0">
+        <stop offset="0" stop-color="#04101F" stop-opacity=".4"/>
+        <stop offset=".18" stop-color="#FFFFFF" stop-opacity=".38"/>
+        <stop offset=".3" stop-color="#FFFFFF" stop-opacity=".12"/>
+        <stop offset=".55" stop-color="#04101F" stop-opacity=".06"/>
+        <stop offset=".85" stop-color="#04101F" stop-opacity=".3"/>
+        <stop offset="1" stop-color="#04101F" stop-opacity=".5"/>
+      </linearGradient>
+      <linearGradient id="pkWrap" gradientUnits="userSpaceOnUse" x1="140" y1="0" x2="380" y2="0">
+        <stop offset="0" stop-color="#0B1F3A" stop-opacity=".2"/>
+        <stop offset=".07" stop-color="#0B1F3A" stop-opacity=".06"/>
+        <stop offset=".2" stop-color="#FFFFFF" stop-opacity=".09"/>
+        <stop offset=".35" stop-color="#FFFFFF" stop-opacity=".02"/>
+        <stop offset=".55" stop-color="#0B1F3A" stop-opacity="0"/>
+        <stop offset=".78" stop-color="#0B1F3A" stop-opacity=".06"/>
+        <stop offset=".92" stop-color="#0B1F3A" stop-opacity=".16"/>
+        <stop offset="1" stop-color="#0B1F3A" stop-opacity=".28"/>
+      </linearGradient>
+      <linearGradient id="pkSpecV" gradientUnits="userSpaceOnUse" x1="0" y1="168" x2="0" y2="724">
+        <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/>
+        <stop offset=".03" stop-color="#FFFFFF" stop-opacity=".5"/>
+        <stop offset=".1" stop-color="#FFFFFF" stop-opacity=".55"/>
+        <stop offset=".2" stop-color="#FFFFFF" stop-opacity=".3"/>
+        <stop offset=".26" stop-color="#FFFFFF" stop-opacity=".12"/>
+        <stop offset=".5" stop-color="#FFFFFF" stop-opacity=".07"/>
+        <stop offset=".85" stop-color="#FFFFFF" stop-opacity=".06"/>
+        <stop offset=".93" stop-color="#FFFFFF" stop-opacity=".16"/>
+        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="pkRim" gradientUnits="userSpaceOnUse" x1="0" y1="168" x2="0" y2="728">
+        <stop offset="0" stop-color="#9ED2FF" stop-opacity="0"/>
+        <stop offset=".08" stop-color="#9ED2FF" stop-opacity=".55"/>
+        <stop offset=".4" stop-color="#7FB4E8" stop-opacity=".3"/>
+        <stop offset=".8" stop-color="#9ED2FF" stop-opacity=".45"/>
+        <stop offset=".97" stop-color="#9ED2FF" stop-opacity=".55"/>
+        <stop offset="1" stop-color="#9ED2FF" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="pkShadowOut" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#0B1F3A" stop-opacity=".32"/>
+        <stop offset=".5" stop-color="#0B1F3A" stop-opacity=".16"/>
+        <stop offset=".78" stop-color="#0B1F3A" stop-opacity=".06"/>
+        <stop offset="1" stop-color="#0B1F3A" stop-opacity="0"/>
+      </radialGradient>
+      <pattern id="pkPaper" width="8" height="8" patternUnits="userSpaceOnUse">
+        <rect x="0" y="2" width="8" height="2" fill="rgba(11,31,58,.03)"/>
+        <rect x="4" y="6" width="4" height="2" fill="rgba(255,255,255,.05)"/>
+      </pattern>
+
+      <!-- Cień rzucany: szeroki półcień + jądro, lekko przesunięte w prawo -->
+      <g id="pk-shadow">
+        <ellipse cx="274" cy="732" rx="206" ry="23" fill="url(#pkShadowOut)"/>
+        <ellipse cx="262" cy="730" rx="144" ry="13" fill="#0B1F3A" opacity=".2" filter="url(#pkB4)"/>
+        <ellipse cx="258" cy="729" rx="96" ry="8" fill="#071527" opacity=".3" filter="url(#pkB2)"/>
+      </g>
+
+      <!-- Nakrętka: matowe tworzywo, szeroki miękki blik, glint na krawędzi -->
+      <g id="pk-cap">
+        <rect x="186" y="30" width="148" height="90" rx="16" fill="url(#pkCapX)"/>
+        <path d="M210 50v60M234 50v60M258 50v60M282 50v60M306 50v60" stroke="#081527" stroke-width="4" opacity=".6"/>
+        <path d="M222 50v60" stroke="#4E79AC" stroke-width="2.8" opacity=".5" filter="url(#pkB1)"/>
+        <path d="M329 52v56" stroke="#3E6796" stroke-width="3.2" opacity=".5" filter="url(#pkB1)"/>
+        <ellipse cx="260" cy="36" rx="73" ry="9.5" fill="url(#pkCapTop)"/>
+        <ellipse cx="260" cy="36" rx="73" ry="9.5" fill="none" stroke="#6E9CCF" stroke-width="1.5" opacity=".45"/>
+        <ellipse cx="246" cy="34.5" rx="40" ry="4.6" fill="#A9CDF2" opacity=".3" filter="url(#pkB1)"/>
+      </g>
+
+      <!-- Szyjka (ciemne tło pod banderolą) -->
+      <g id="pk-neck">
+        <rect x="202" y="126" width="116" height="36" fill="#081729"/>
+        <rect x="212" y="126" width="10" height="36" fill="#28517F" opacity=".5" filter="url(#pkB1)"/>
+      </g>
+      <!-- Cieniowanie banderoli: rysowane nad kolorem, łuk perspektywy -->
+      <g id="pk-bandshade">
+        <path d="M186 116 Q260 134 334 116 L334 130 Q260 148 186 130 Z" fill="url(#pkBandShade)"/>
+        <path d="M186 116 Q260 134 334 116" fill="none" stroke="#04101F" stroke-width="5" opacity=".35" filter="url(#pkB1)"/>
+      </g>
+
+      <!-- Korpus: gradient walca + modulacja pionowa + cień barku -->
+      <g id="pk-body">
+        <path d="M116 260 C116 196 176 162 208 162 H312 C344 162 404 196 404 260 V684 C404 718 380 732 348 732 H172 C140 732 116 718 116 684 Z" fill="url(#pkGlass)"/>
+        <path d="M116 260 C116 196 176 162 208 162 H312 C344 162 404 196 404 260 V684 C404 718 380 732 348 732 H172 C140 732 116 718 116 684 Z" fill="url(#pkGlassV)"/>
+        <path d="M192 168 C240 156 296 158 332 170 L320 192 C280 180 232 180 200 190 Z" fill="#03101F" opacity=".3" filter="url(#pkB4)"/>
+        <path d="M126 244 C132 204 160 178 192 168" fill="none" stroke="#A9CDF2" stroke-width="4.8" opacity=".5" filter="url(#pkB2)"/>
+        <path d="M328 168 C364 180 392 204 396 244" fill="none" stroke="#020B16" stroke-width="12" opacity=".5" filter="url(#pkB4)"/>
+      </g>
+
+      <!-- Warstwa połysku nad etykietą: papier, owinięcie, blik, rim, odbicie -->
+      <g id="pk-gloss">
+        <path d="M140 296 Q260 324 380 296 L380 684 Q260 716 140 684 Z" fill="url(#pkPaper)"/>
+        <path d="M140 296 Q260 324 380 296 L380 684 Q260 716 140 684 Z" fill="url(#pkWrap)"/>
+        <path d="M142 298 Q260 326 378 298" fill="none" stroke="#FFFFFF" stroke-width="2.6" opacity=".5"/>
+        <path d="M140 682 Q260 714 380 682" fill="none" stroke="#0B1F3A" stroke-width="4" opacity=".14" filter="url(#pkB1)"/>
+        <path d="M176 184 C184 174 196 168 208 168 L224 168 C210 188 204 212 204 248 L204 700 C204 710 200 716 192 718 L182 718 C178 714 176 706 176 696 Z" fill="url(#pkSpecV)" filter="url(#pkB2)"/>
+        <rect x="228" y="172" width="10" height="540" rx="5" fill="url(#pkSpecV)" opacity=".45" filter="url(#pkB2)"/>
+        <path d="M368 170 C392 184 402 208 403 252 L403 684 C403 704 394 718 378 724" fill="none" stroke="url(#pkRim)" stroke-width="5.2" stroke-linecap="round" filter="url(#pkB2)"/>
+        <path d="M117.5 272 L117.5 680" stroke="#7FA9D8" stroke-width="2.8" opacity=".3" filter="url(#pkB1)"/>
+        <rect x="136" y="704" width="248" height="8" rx="4" fill="#7FB0DF" opacity=".15" filter="url(#pkB2)"/>
+      </g>
 
       <!-- 01 · DigestEase Pro -->
-      <symbol id="pack-f1" viewBox="0 0 260 380">
-        <ellipse cx="130" cy="368" rx="86" ry="8" fill="rgba(11,31,58,.12)"/>
-        <rect x="93" y="14" width="74" height="46" rx="9" fill="#0B1F3A"/>
-        <path d="M105 20v34M117 20v34M129 20v34M141 20v34M153 20v34" stroke="#16375F" stroke-width="2" opacity=".7"/>
-        <rect x="93" y="58" width="74" height="7" fill="var(--f1-digest)"/>
-        <rect x="101" y="65" width="58" height="16" fill="#081729"/>
-        <path d="M58 130 C58 98 88 81 104 81 H156 C172 81 202 98 202 130 V342 C202 359 190 366 174 366 H86 C70 366 58 359 58 342 Z" fill="url(#pkGlass)"/>
-        <rect x="70" y="98" width="9" height="248" rx="4.5" fill="rgba(255,255,255,.05)"/>
-        <rect x="70" y="146" width="120" height="200" rx="5" fill="#FAF9F5"/>
-        <rect x="70" y="146" width="120" height="8" fill="var(--f1-digest)"/>
-        <text x="80" y="174" font-family="Space Mono, monospace" font-size="9" letter-spacing="2" fill="#64748B">N°01</text>
-        <circle cx="180" cy="170" r="4" fill="var(--f1-digest)"/>
-        <text x="80" y="194" font-family="Inter, sans-serif" font-weight="700" font-size="10.5" letter-spacing="4" fill="#0B1F3A">PERSONA</text>
-        <text x="80" y="224" font-family="Inter, sans-serif" font-weight="800" font-size="18.5" letter-spacing="-0.5" fill="#0B1F3A">DigestEase</text>
-        <text x="80" y="244" font-family="Inter, sans-serif" font-weight="800" font-size="18.5" letter-spacing="-0.5" fill="#0B1F3A">Pro</text>
-        <text x="80" y="266" font-family="Inter, sans-serif" font-size="9" fill="#64748B">Zdrowy układ trawienny</text>
-        <g fill="var(--f1-digest)">
-          <rect x="100" y="288" width="9" height="26" rx="4.5"/>
-          <rect x="117" y="280" width="9" height="34" rx="4.5"/>
-          <rect x="134" y="284" width="9" height="30" rx="4.5"/>
-          <rect x="151" y="290" width="9" height="24" rx="4.5"/>
+      <symbol id="pack-f1" viewBox="0 0 520 760">
+        <use href="#pk-shadow"/>
+        <use href="#pk-cap"/>
+        <use href="#pk-neck"/>
+        <path d="M186 116 Q260 134 334 116 L334 130 Q260 148 186 130 Z" fill="var(--f1-digest)"/>
+        <use href="#pk-bandshade"/>
+        <use href="#pk-body"/>
+        <path d="M140 296 Q260 324 380 296 L380 684 Q260 716 140 684 Z" fill="#FAF9F5"/>
+        <path d="M140 296 Q260 324 380 296 L380 312 Q260 340 140 312 Z" fill="var(--f1-digest)"/>
+        <text x="160" y="366" font-family="Space Mono, monospace" font-size="29" letter-spacing="3" fill="#64748B">N°01</text>
+        <circle cx="356" cy="357" r="9" fill="var(--f1-digest)"/>
+        <text x="160" y="410" font-family="Inter, sans-serif" font-weight="700" font-size="29" letter-spacing="6" fill="#0B1F3A">PERSONA</text>
+        <text x="160" y="472" font-family="Inter, sans-serif" font-weight="800" font-size="37" letter-spacing="-1" fill="#0B1F3A">DigestEase</text>
+        <text x="160" y="512" font-family="Inter, sans-serif" font-weight="800" font-size="37" letter-spacing="-1" fill="#0B1F3A">Pro</text>
+        <g fill="var(--f1-digest)" opacity=".65">
+          <circle cx="192" cy="554" r="3.6"/><circle cx="236" cy="548" r="3"/>
+          <circle cx="284" cy="556" r="3.6"/><circle cx="328" cy="550" r="3"/>
         </g>
-        <line x1="96" y1="318" x2="164" y2="318" stroke="var(--f1-digest)" stroke-width="1.5" opacity=".45"/>
-        <line x1="80" y1="324" x2="180" y2="324" stroke="rgba(11,31,58,.14)"/>
-        <text x="80" y="335" font-family="Space Mono, monospace" font-size="7" letter-spacing="1" fill="#3B4C63">THYMOPRO 170 MG</text>
-        <text x="80" y="343" font-family="Space Mono, monospace" font-size="5.9" letter-spacing=".4" fill="#8A96A8">BIOSNEDS™ · SUPLEMENT DIETY</text>
+        <path d="M160 576 Q180 564 200 574 T240 572 T280 574 T320 572 T360 574"
+              fill="none" stroke="var(--f1-digest)" stroke-width="3.2" opacity=".55"/>
+        <g fill="var(--f1-digest)">
+          <rect x="164" y="600" width="16" height="36" rx="8"/>
+          <rect x="188" y="590" width="16" height="46" rx="8"/>
+          <rect x="212" y="596" width="16" height="40" rx="8"/>
+          <rect x="236" y="586" width="16" height="50" rx="8"/>
+          <rect x="260" y="594" width="16" height="42" rx="8"/>
+          <rect x="284" y="588" width="16" height="48" rx="8"/>
+          <rect x="308" y="598" width="16" height="38" rx="8"/>
+          <rect x="332" y="590" width="16" height="46" rx="8"/>
+        </g>
+        <line x1="160" y1="648" x2="360" y2="648" stroke="rgba(11,31,58,.14)" stroke-width="2"/>
+        <text x="160" y="682" font-family="Space Mono, monospace" font-size="29" letter-spacing="2" fill="#3B4C63">BIOSNEDS™</text>
+        <use href="#pk-gloss"/>
       </symbol>
 
       <!-- 02 · NeuroSynapse -->
-      <symbol id="pack-f2" viewBox="0 0 260 380">
-        <ellipse cx="130" cy="368" rx="86" ry="8" fill="rgba(11,31,58,.12)"/>
-        <rect x="93" y="14" width="74" height="46" rx="9" fill="#0B1F3A"/>
-        <path d="M105 20v34M117 20v34M129 20v34M141 20v34M153 20v34" stroke="#16375F" stroke-width="2" opacity=".7"/>
-        <rect x="93" y="58" width="74" height="7" fill="var(--f2-neuro)"/>
-        <rect x="101" y="65" width="58" height="16" fill="#081729"/>
-        <path d="M58 130 C58 98 88 81 104 81 H156 C172 81 202 98 202 130 V342 C202 359 190 366 174 366 H86 C70 366 58 359 58 342 Z" fill="url(#pkGlass)"/>
-        <rect x="70" y="98" width="9" height="248" rx="4.5" fill="rgba(255,255,255,.05)"/>
-        <rect x="70" y="146" width="120" height="200" rx="5" fill="#FAF9F5"/>
-        <rect x="70" y="146" width="120" height="8" fill="var(--f2-neuro)"/>
-        <text x="80" y="174" font-family="Space Mono, monospace" font-size="9" letter-spacing="2" fill="#64748B">N°02</text>
-        <circle cx="180" cy="170" r="4" fill="var(--f2-neuro)"/>
-        <text x="80" y="194" font-family="Inter, sans-serif" font-weight="700" font-size="10.5" letter-spacing="4" fill="#0B1F3A">PERSONA</text>
-        <text x="80" y="224" font-family="Inter, sans-serif" font-weight="800" font-size="21" letter-spacing="-0.5" fill="#0B1F3A">Neuro</text>
-        <text x="80" y="246" font-family="Inter, sans-serif" font-weight="800" font-size="21" letter-spacing="-0.5" fill="#0B1F3A">Synapse</text>
-        <text x="80" y="266" font-family="Inter, sans-serif" font-size="9" fill="#64748B">Siła spokoju</text>
-        <path d="M84 298 Q96 278 108 298 T132 298 T156 298 T180 298"
-              fill="none" stroke="var(--f2-neuro)" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="168" cy="291" r="3.5" fill="var(--f2-neuro)"/>
-        <line x1="80" y1="324" x2="180" y2="324" stroke="rgba(11,31,58,.14)"/>
-        <text x="80" y="335" font-family="Space Mono, monospace" font-size="7" letter-spacing="1" fill="#3B4C63">RESVERASOL 180 MG</text>
-        <text x="80" y="343" font-family="Space Mono, monospace" font-size="5.9" letter-spacing=".4" fill="#8A96A8">BIOSNEDS™ · SUPLEMENT DIETY</text>
+      <symbol id="pack-f2" viewBox="0 0 520 760">
+        <use href="#pk-shadow"/>
+        <use href="#pk-cap"/>
+        <use href="#pk-neck"/>
+        <path d="M186 116 Q260 134 334 116 L334 130 Q260 148 186 130 Z" fill="var(--f2-neuro)"/>
+        <use href="#pk-bandshade"/>
+        <use href="#pk-body"/>
+        <path d="M140 296 Q260 324 380 296 L380 684 Q260 716 140 684 Z" fill="#FAF9F5"/>
+        <path d="M140 296 Q260 324 380 296 L380 312 Q260 340 140 312 Z" fill="var(--f2-neuro)"/>
+        <text x="160" y="366" font-family="Space Mono, monospace" font-size="29" letter-spacing="3" fill="#64748B">N°02</text>
+        <circle cx="356" cy="357" r="9" fill="var(--f2-neuro)"/>
+        <text x="160" y="410" font-family="Inter, sans-serif" font-weight="700" font-size="29" letter-spacing="6" fill="#0B1F3A">PERSONA</text>
+        <text x="160" y="474" font-family="Inter, sans-serif" font-weight="800" font-size="42" letter-spacing="-1" fill="#0B1F3A">Neuro</text>
+        <text x="160" y="518" font-family="Inter, sans-serif" font-weight="800" font-size="42" letter-spacing="-1" fill="#0B1F3A">Synapse</text>
+        <g stroke="var(--f2-neuro)" stroke-width="2" opacity=".28">
+          <path d="M168 560H360M168 584H360M168 608H360M168 632H360"/>
+        </g>
+        <path d="M168 560 H192 V632 H220 V608 H240 V584 H264 V624 H292 V608 H312 V584 H336 V560 H360"
+              fill="none" stroke="var(--f2-neuro)" stroke-width="4.8" stroke-linejoin="round"/>
+        <line x1="160" y1="648" x2="360" y2="648" stroke="rgba(11,31,58,.14)" stroke-width="2"/>
+        <text x="160" y="682" font-family="Space Mono, monospace" font-size="29" letter-spacing="2" fill="#3B4C63">BIOSNEDS™</text>
+        <use href="#pk-gloss"/>
       </symbol>
 
       <!-- 03 · InflamShield -->
-      <symbol id="pack-f3" viewBox="0 0 260 380">
-        <ellipse cx="130" cy="368" rx="86" ry="8" fill="rgba(11,31,58,.12)"/>
-        <rect x="93" y="14" width="74" height="46" rx="9" fill="#0B1F3A"/>
-        <path d="M105 20v34M117 20v34M129 20v34M141 20v34M153 20v34" stroke="#16375F" stroke-width="2" opacity=".7"/>
-        <rect x="93" y="58" width="74" height="7" fill="var(--f3-inflam)"/>
-        <rect x="101" y="65" width="58" height="16" fill="#081729"/>
-        <path d="M58 130 C58 98 88 81 104 81 H156 C172 81 202 98 202 130 V342 C202 359 190 366 174 366 H86 C70 366 58 359 58 342 Z" fill="url(#pkGlass)"/>
-        <rect x="70" y="98" width="9" height="248" rx="4.5" fill="rgba(255,255,255,.05)"/>
-        <rect x="70" y="146" width="120" height="200" rx="5" fill="#FAF9F5"/>
-        <rect x="70" y="146" width="120" height="8" fill="var(--f3-inflam)"/>
-        <text x="80" y="174" font-family="Space Mono, monospace" font-size="9" letter-spacing="2" fill="#64748B">N°03</text>
-        <circle cx="180" cy="170" r="4" fill="var(--f3-inflam)"/>
-        <text x="80" y="194" font-family="Inter, sans-serif" font-weight="700" font-size="10.5" letter-spacing="4" fill="#0B1F3A">PERSONA</text>
-        <text x="80" y="224" font-family="Inter, sans-serif" font-weight="800" font-size="21" letter-spacing="-0.5" fill="#0B1F3A">Inflam</text>
-        <text x="80" y="246" font-family="Inter, sans-serif" font-weight="800" font-size="21" letter-spacing="-0.5" fill="#0B1F3A">Shield</text>
-        <text x="80" y="266" font-family="Inter, sans-serif" font-size="9" fill="#64748B">Tarcza przeciwzapalna</text>
-        <g fill="none" stroke="var(--f3-inflam)" stroke-width="2.5" stroke-linecap="round">
-          <path d="M104 314 A26 26 0 0 1 156 314"/>
-          <path d="M112 314 A18 18 0 0 1 148 314"/>
-          <path d="M120 314 A10 10 0 0 1 140 314"/>
+      <symbol id="pack-f3" viewBox="0 0 520 760">
+        <use href="#pk-shadow"/>
+        <use href="#pk-cap"/>
+        <use href="#pk-neck"/>
+        <path d="M186 116 Q260 134 334 116 L334 130 Q260 148 186 130 Z" fill="var(--f3-inflam)"/>
+        <use href="#pk-bandshade"/>
+        <use href="#pk-body"/>
+        <path d="M140 296 Q260 324 380 296 L380 684 Q260 716 140 684 Z" fill="#FAF9F5"/>
+        <path d="M140 296 Q260 324 380 296 L380 312 Q260 340 140 312 Z" fill="var(--f3-inflam)"/>
+        <text x="160" y="366" font-family="Space Mono, monospace" font-size="29" letter-spacing="3" fill="#64748B">N°03</text>
+        <circle cx="356" cy="357" r="9" fill="var(--f3-inflam)"/>
+        <text x="160" y="410" font-family="Inter, sans-serif" font-weight="700" font-size="29" letter-spacing="6" fill="#0B1F3A">PERSONA</text>
+        <text x="160" y="474" font-family="Inter, sans-serif" font-weight="800" font-size="42" letter-spacing="-1" fill="#0B1F3A">Inflam</text>
+        <text x="160" y="518" font-family="Inter, sans-serif" font-weight="800" font-size="42" letter-spacing="-1" fill="#0B1F3A">Shield</text>
+        <g opacity=".3" stroke="var(--f3-inflam)" stroke-width="4" stroke-linecap="round" fill="none">
+          <path d="M224 568v-16M260 568v-16M296 568v-16"/>
         </g>
-        <circle cx="130" cy="313" r="3" fill="var(--f3-inflam)"/>
-        <line x1="80" y1="324" x2="180" y2="324" stroke="rgba(11,31,58,.14)"/>
-        <text x="80" y="335" font-family="Space Mono, monospace" font-size="7" letter-spacing="1" fill="#3B4C63">CURCUSOL 380 MG</text>
-        <text x="80" y="343" font-family="Space Mono, monospace" font-size="5.9" letter-spacing=".4" fill="#8A96A8">BIOSNEDS™ · SUPLEMENT DIETY</text>
+        <rect x="196" y="576" width="128" height="8" rx="4" fill="var(--f3-inflam)"/>
+        <g stroke="var(--f3-inflam)" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+          <path d="M224 636v-40M224 596l-10 12M224 596l10 12"/>
+          <path d="M260 636v-40M260 596l-10 12M260 596l10 12"/>
+          <path d="M296 636v-40M296 596l-10 12M296 596l10 12"/>
+        </g>
+        <line x1="160" y1="648" x2="360" y2="648" stroke="rgba(11,31,58,.14)" stroke-width="2"/>
+        <text x="160" y="682" font-family="Space Mono, monospace" font-size="29" letter-spacing="2" fill="#3B4C63">BIOSNEDS™</text>
+        <use href="#pk-gloss"/>
       </symbol>
 
       <!-- 04 · VitalCore™ -->
-      <symbol id="pack-f4" viewBox="0 0 260 380">
-        <ellipse cx="130" cy="368" rx="86" ry="8" fill="rgba(11,31,58,.12)"/>
-        <rect x="93" y="14" width="74" height="46" rx="9" fill="#0B1F3A"/>
-        <path d="M105 20v34M117 20v34M129 20v34M141 20v34M153 20v34" stroke="#16375F" stroke-width="2" opacity=".7"/>
-        <rect x="93" y="58" width="74" height="7" fill="var(--f4-vital)"/>
-        <rect x="101" y="65" width="58" height="16" fill="#081729"/>
-        <path d="M58 130 C58 98 88 81 104 81 H156 C172 81 202 98 202 130 V342 C202 359 190 366 174 366 H86 C70 366 58 359 58 342 Z" fill="url(#pkGlass)"/>
-        <rect x="70" y="98" width="9" height="248" rx="4.5" fill="rgba(255,255,255,.05)"/>
-        <rect x="70" y="146" width="120" height="200" rx="5" fill="#FAF9F5"/>
-        <rect x="70" y="146" width="120" height="8" fill="var(--f4-vital)"/>
-        <text x="80" y="174" font-family="Space Mono, monospace" font-size="9" letter-spacing="2" fill="#64748B">N°04</text>
-        <circle cx="180" cy="170" r="4" fill="var(--f4-vital)"/>
-        <text x="80" y="194" font-family="Inter, sans-serif" font-weight="700" font-size="10.5" letter-spacing="4" fill="#0B1F3A">PERSONA</text>
-        <text x="80" y="226" font-family="Inter, sans-serif" font-weight="800" font-size="19.5" letter-spacing="-0.5" fill="#0B1F3A">VitalCore™</text>
-        <text x="80" y="252" font-family="Inter, sans-serif" font-size="9" fill="#64748B">Długowieczność</text>
-        <text x="80" y="264" font-family="Inter, sans-serif" font-size="9" fill="#64748B">i energia komórkowa</text>
-        <g fill="none" stroke="var(--f4-vital)">
-          <circle cx="130" cy="298" r="22" stroke-width="1.6" stroke-dasharray="3 4"/>
-          <circle cx="130" cy="298" r="14" stroke-width="2.2"/>
-          <circle cx="130" cy="298" r="6" stroke-width="2.2"/>
-        </g>
-        <circle cx="130" cy="298" r="2.4" fill="var(--f4-vital)"/>
-        <line x1="80" y1="324" x2="180" y2="324" stroke="rgba(11,31,58,.14)"/>
-        <text x="80" y="335" font-family="Space Mono, monospace" font-size="7" letter-spacing="1" fill="#3B4C63">ELLAGISOL 100 MG</text>
-        <text x="80" y="343" font-family="Space Mono, monospace" font-size="5.9" letter-spacing=".4" fill="#8A96A8">BIOSNEDS™ · SUPLEMENT DIETY</text>
+      <symbol id="pack-f4" viewBox="0 0 520 760">
+        <use href="#pk-shadow"/>
+        <use href="#pk-cap"/>
+        <use href="#pk-neck"/>
+        <path d="M186 116 Q260 134 334 116 L334 130 Q260 148 186 130 Z" fill="var(--f4-vital)"/>
+        <use href="#pk-bandshade"/>
+        <use href="#pk-body"/>
+        <path d="M140 296 Q260 324 380 296 L380 684 Q260 716 140 684 Z" fill="#FAF9F5"/>
+        <path d="M140 296 Q260 324 380 296 L380 312 Q260 340 140 312 Z" fill="var(--f4-vital)"/>
+        <text x="160" y="366" font-family="Space Mono, monospace" font-size="29" letter-spacing="3" fill="#64748B">N°04</text>
+        <circle cx="356" cy="357" r="9" fill="var(--f4-vital)"/>
+        <text x="160" y="410" font-family="Inter, sans-serif" font-weight="700" font-size="29" letter-spacing="6" fill="#0B1F3A">PERSONA</text>
+        <text x="160" y="478" font-family="Inter, sans-serif" font-weight="800" font-size="39" letter-spacing="-1" fill="#0B1F3A">VitalCore™</text>
+        <ellipse cx="260" cy="580" rx="92" ry="42" fill="none" stroke="var(--f4-vital)"
+                 stroke-width="2.8" stroke-dasharray="4 10" opacity=".7"/>
+        <ellipse cx="260" cy="580" rx="64" ry="28" fill="none" stroke="var(--f4-vital)" stroke-width="4.4"/>
+        <path d="M212 580 c6 -18 14 -18 20 0 c6 18 14 18 20 0 c6 -18 14 -18 20 0 c6 18 14 18 20 0 c6 -18 14 -18 20 0"
+              fill="none" stroke="var(--f4-vital)" stroke-width="3.2" opacity=".85"/>
+        <line x1="160" y1="648" x2="360" y2="648" stroke="rgba(11,31,58,.14)" stroke-width="2"/>
+        <text x="160" y="682" font-family="Space Mono, monospace" font-size="29" letter-spacing="2" fill="#3B4C63">BIOSNEDS™</text>
+        <use href="#pk-gloss"/>
       </symbol>
 
-      <!-- Wkrótce · sylwetki -->
-      <symbol id="pack-soon-oil" viewBox="0 0 120 180">
+      <!-- Mała butelka bez liter: pole koloru + znak (scena hero) -->
+      <symbol id="pack-mini" viewBox="0 0 520 760">
+        <use href="#pk-shadow"/>
+        <use href="#pk-cap"/>
+        <use href="#pk-neck"/>
+        <path d="M186 116 Q260 134 334 116 L334 130 Q260 148 186 130 Z" fill="var(--fc, #8A96A8)"/>
+        <use href="#pk-bandshade"/>
+        <use href="#pk-body"/>
+        <path d="M140 296 Q260 324 380 296 L380 684 Q260 716 140 684 Z" fill="#FAF9F5"/>
+        <path d="M140 296 Q260 324 380 296 L380 312 Q260 340 140 312 Z" fill="var(--fc, #8A96A8)"/>
+        <circle cx="260" cy="450" r="44" fill="var(--fc, #8A96A8)"/>
+        <path d="M196 560 Q260 574 324 560" fill="none" stroke="var(--fc, #8A96A8)"
+              stroke-width="7" stroke-linecap="round" opacity=".55"/>
+        <line x1="180" y1="628" x2="340" y2="628" stroke="rgba(11,31,58,.14)" stroke-width="3"/>
+        <use href="#pk-gloss"/>
+      </symbol>
+
+      <!-- Wkrótce · sylwetki — stoją w tym samym świetle (miękki cień) -->
+      <symbol id="pack-soon-oil" viewBox="0 0 120 186">
+        <ellipse cx="60" cy="176" rx="38" ry="5.5" fill="url(#pkShadowOut)"/>
         <path d="M44 14h32v14H44z M34 60 C34 44 48 36 52 36 H68 C72 36 86 44 86 60 V160 C86 168 80 172 72 172 H48 C40 172 34 168 34 160 Z"
               fill="rgba(11,31,58,.04)" stroke="#8A96A8" stroke-width="1.5"/>
         <rect x="42" y="76" width="36" height="72" rx="4" fill="none" stroke="#8A96A8" stroke-width="1.2" stroke-dasharray="4 4"/>
         <path d="M60 100 C66 108 68 112 68 117 A8 8 0 0 1 52 117 C52 112 54 108 60 100 Z"
               fill="none" stroke="#8A96A8" stroke-width="1.5"/>
       </symbol>
-      <symbol id="pack-soon-mush" viewBox="0 0 120 180">
+      <symbol id="pack-soon-mush" viewBox="0 0 120 186">
+        <ellipse cx="60" cy="176" rx="38" ry="5.5" fill="url(#pkShadowOut)"/>
         <path d="M44 14h32v14H44z M34 60 C34 44 48 36 52 36 H68 C72 36 86 44 86 60 V160 C86 168 80 172 72 172 H48 C40 172 34 168 34 160 Z"
               fill="rgba(11,31,58,.04)" stroke="#8A96A8" stroke-width="1.5"/>
         <rect x="42" y="76" width="36" height="72" rx="4" fill="none" stroke="#8A96A8" stroke-width="1.2" stroke-dasharray="4 4"/>
@@ -578,10 +959,13 @@
   <!-- ============================================================ HERO -->
   <section class="section--ivory store-hero">
     <div class="wrap">
+      <div class="store-hero__head">
+        <p class="eyebrow">PERSONA · Sklep formuł</p>
+        <h1 class="t-d1">Cztery formuły.<br>Jedna zasada: <span class="t-accent">wchłanianie</span>.</h1>
+      </div>
+
       <div class="store-hero__grid">
         <div class="store-hero__copy">
-          <p class="eyebrow">PERSONA · Sklep formuł</p>
-          <h1 class="t-d1">Cztery formuły.<br>Jedna zasada: <span class="t-accent">wchłanianie</span>.</h1>
           <p class="t-lead">
             DigestEase&nbsp;Pro, NeuroSynapse, InflamShield i&nbsp;VitalCore™ — cztery
             precyzyjne kompozycje w&nbsp;technologii BioSNEDS™, która zwiększa
@@ -601,49 +985,40 @@
           </nav>
         </div>
 
-        <div class="shelf" role="img" aria-label="Cztery opakowania formuł PERSONA na półce">
-          <svg class="pk" viewBox="0 0 260 380" data-itp-reveal><use href="#pack-f1"/></svg>
-          <svg class="pk" viewBox="0 0 260 380" data-itp-reveal><use href="#pack-f2"/></svg>
-          <svg class="pk" viewBox="0 0 260 380" data-itp-reveal><use href="#pack-f3"/></svg>
-          <svg class="pk" viewBox="0 0 260 380" data-itp-reveal><use href="#pack-f4"/></svg>
-        </div>
+        <figure class="stage" data-itp-reveal>
+          <div class="stage__row" role="img"
+               aria-label="Opakowania czterech formuł PERSONA — DigestEase Pro na pierwszym planie">
+            <svg class="pk stage__lead" viewBox="0 0 260 380" aria-hidden="true"><use href="#pack-f1"/></svg>
+            <svg class="pk stage__mini stage__mini--f1" viewBox="0 0 260 380" style="--fc:var(--f1-digest)" aria-hidden="true"><use href="#pack-mini"/></svg>
+            <svg class="pk stage__mini stage__mini--f2" viewBox="0 0 260 380" style="--fc:var(--f2-neuro)" aria-hidden="true"><use href="#pack-mini"/></svg>
+            <svg class="pk stage__mini stage__mini--f3" viewBox="0 0 260 380" style="--fc:var(--f3-inflam)" aria-hidden="true"><use href="#pack-mini"/></svg>
+            <svg class="pk stage__mini stage__mini--f4" viewBox="0 0 260 380" style="--fc:var(--f4-vital)" aria-hidden="true"><use href="#pack-mini"/></svg>
+          </div>
+          <figcaption class="stage__cap">N°01–04 · PERSONA · Technologia BioSNEDS™</figcaption>
+        </figure>
       </div>
 
-      <div class="stat-row store-hero__stats">
-        <div class="stat">
-          <span class="stat__num">4</span>
-          <span class="stat__label">formuły PERSONA w Etapie I</span>
+      <div class="store-hero__facts">
+        <div class="fact">
+          <span class="fact__num">40–100×</span>
+          <span class="fact__label">wzrost wchłaniania, w zależności od składnika</span>
         </div>
-        <div class="stat">
-          <span class="stat__num">40–100×</span>
-          <span class="stat__label">wzrost wchłaniania, w zależności od składnika</span>
+        <div class="fact">
+          <span class="fact__num">4</span>
+          <span class="fact__label">formuły PERSONA w Etapie I</span>
         </div>
-        <div class="stat">
-          <span class="stat__num">24–48 h</span>
-          <span class="stat__label">wysyłka z produkcji</span>
+        <div class="fact fact--price">
+          <span class="fact__num">249 zł <span class="fact__to" aria-hidden="true">→</span> <span class="fact__set">179 zł/szt.</span></span>
+          <span class="fact__label">sklep otwarty → zestaw personalizowany po analizie ·
+            <a href="#dlaczego-dwie-ceny">dlaczego dwie ceny?</a></span>
         </div>
-        <div class="stat">
-          <span class="stat__num">179 zł/szt.</span>
-          <span class="stat__label">w zestawie personalizowanym</span>
+        <div class="fact">
+          <span class="fact__num">24–48 h</span>
+          <span class="fact__label">wysyłka z produkcji</span>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- ===================================================== DUALITY BAR -->
-  <div class="duality">
-    <div class="wrap duality__inner">
-      <div class="duality__cell">
-        <span class="duality__label">Sklep otwarty · bez analizy</span>
-        <span class="duality__price">249 zł <small>/ szt.</small></span>
-      </div>
-      <div class="duality__cell">
-        <span class="duality__label">Zestaw personalizowany · po analizie</span>
-        <span class="duality__price">179 zł/szt. <small>w subskrypcji planu</small></span>
-      </div>
-      <a class="link" href="#dlaczego-dwie-ceny">Dlaczego dwie ceny</a>
-    </div>
-  </div>
 
   <!-- ======================================================== FORMULAS -->
   <section class="section section--bright" id="formuly">
@@ -663,6 +1038,30 @@
       <article class="formula" id="digestease" style="--fc:var(--f1-digest)">
         <div class="formula__media" data-itp-reveal>
           <svg class="pk" viewBox="0 0 260 380" role="img" aria-label="Opakowanie DigestEase Pro"><use href="#pack-f1"/></svg>
+          <figure class="artefact">
+            <figcaption class="artefact__cap"><span>Bariera jelitowa</span><span>Schemat poglądowy</span></figcaption>
+            <svg viewBox="0 0 300 74" aria-hidden="true">
+              <g fill="var(--fc)" opacity=".55">
+                <circle cx="22" cy="12" r="3"/><circle cx="58" cy="8" r="2.4"/>
+                <circle cx="96" cy="14" r="3.2"/><circle cx="138" cy="7" r="2.2"/>
+                <circle cx="176" cy="13" r="3"/><circle cx="214" cy="8" r="2.6"/>
+                <circle cx="252" cy="12" r="3"/><circle cx="282" cy="9" r="2.2"/>
+              </g>
+              <path d="M0 34 Q19 26 38 33 T76 32 T114 33 T152 32 T190 33 T228 32 T266 33 T300 32"
+                    fill="none" stroke="var(--fc)" stroke-width="2"/>
+              <g fill="rgba(11,31,58,.16)">
+                <rect x="0" y="46" width="44" height="24" rx="4"/>
+                <rect x="52" y="46" width="44" height="24" rx="4"/>
+                <rect x="104" y="46" width="44" height="24" rx="4"/>
+                <rect x="156" y="46" width="44" height="24" rx="4"/>
+                <rect x="208" y="46" width="44" height="24" rx="4"/>
+                <rect x="260" y="46" width="40" height="24" rx="4"/>
+              </g>
+              <g stroke="var(--fc)" stroke-width="2" stroke-linecap="round">
+                <path d="M48 44v28M100 44v28M152 44v28M204 44v28M256 44v28"/>
+              </g>
+            </svg>
+          </figure>
         </div>
         <div class="formula__body">
           <p class="formula__idx">Formuła 01 / 04</p>
@@ -673,6 +1072,7 @@
             wsparcie mikrobiomu i produkcja maślanu.
           </p>
           <table class="params">
+            <colgroup><col class="c-skladnik"><col class="c-dawka"><col class="c-rola"></colgroup>
             <thead>
               <tr><th scope="col">Składnik</th><th scope="col">Dawka</th><th scope="col">Rola</th></tr>
             </thead>
@@ -732,6 +1132,22 @@
       <article class="formula" id="neurosynapse" style="--fc:var(--f2-neuro)">
         <div class="formula__media" data-itp-reveal>
           <svg class="pk" viewBox="0 0 260 380" role="img" aria-label="Opakowanie NeuroSynapse"><use href="#pack-f2"/></svg>
+          <figure class="artefact">
+            <figcaption class="artefact__cap"><span>Fazy snu · schemat poglądowy</span><span>MelaXorb™ ~3 mg melatoniny</span></figcaption>
+            <div class="sleepmap">
+              <div class="sleepmap__ax"><span>Czuwanie</span><span>REM</span><span>Sen głęboki</span></div>
+              <svg class="sleepmap__svg" viewBox="0 0 300 92" preserveAspectRatio="none" aria-hidden="true">
+                <g stroke="rgba(11,31,58,.12)" vector-effect="non-scaling-stroke">
+                  <path d="M0 8H300" vector-effect="non-scaling-stroke"/>
+                  <path d="M0 36H300" vector-effect="non-scaling-stroke"/>
+                  <path d="M0 84H300" vector-effect="non-scaling-stroke"/>
+                </g>
+                <path d="M0 8 H28 V84 H56 V52 H76 V36 H96 V80 H128 V56 H150 V36 H174 V72 H206 V48 H228 V36 H252 V20 H272 V8 H300"
+                      fill="none" stroke="var(--fc)" stroke-width="2.2" stroke-linejoin="round"
+                      vector-effect="non-scaling-stroke"/>
+              </svg>
+            </div>
+          </figure>
         </div>
         <div class="formula__body">
           <p class="formula__idx">Formuła 02 / 04</p>
@@ -742,6 +1158,7 @@
             neuroprotekcja i optymalizacja faz snu.
           </p>
           <table class="params">
+            <colgroup><col class="c-skladnik"><col class="c-dawka"><col class="c-rola"></colgroup>
             <thead>
               <tr><th scope="col">Składnik</th><th scope="col">Dawka</th><th scope="col">Rola</th></tr>
             </thead>
@@ -753,7 +1170,7 @@
               </tr>
               <tr>
                 <td>ResveraSol™ (resweratrol)<br>
-                  <a class="biochip" href="biosneds.html"><b>+4 330 %</b> biodostępności · BioSNEDS™</a>
+                  <a class="biochip" href="biosneds.html"><b>+4&nbsp;330&nbsp;%</b> biodostępności · BioSNEDS™</a>
                 </td>
                 <td class="mono">180 mg</td>
                 <td>Neuroprotekcja</td>
@@ -765,30 +1182,26 @@
               </tr>
             </tbody>
           </table>
-          <div class="buy">
-            <div class="buy__prices">
-              <div class="price">
-                <span class="price__now">249 zł</span>
-                <span class="price__unit">sklep otwarty · 1 szt.</span>
-              </div>
-              <p class="buy__alt">179 zł/szt.
-                <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
-              </p>
+          <div class="buy buy--strip">
+            <div class="price">
+              <span class="price__now">249 zł</span>
+              <span class="price__unit">sklep otwarty · 1 szt.</span>
             </div>
-            <div class="buy__row">
-              <div class="qty" data-qty>
-                <button type="button" class="qty__btn" data-qty-minus aria-label="Zmniejsz ilość">−</button>
-                <span class="qty__val" data-qty-val aria-live="polite">1</span>
-                <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
-              </div>
-              <button type="button" class="btn btn--primary" data-add="neurosynapse">
-                Kup bez analizy — cena standardowa
-              </button>
+            <div class="qty" data-qty>
+              <button type="button" class="qty__btn" data-qty-minus aria-label="Zmniejsz ilość">−</button>
+              <span class="qty__val" data-qty-val aria-live="polite">1</span>
+              <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
             </div>
-            <a class="btn btn--ghost" href="quiz.html">
-              Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu
-            </a>
+            <button type="button" class="btn btn--primary" data-add="neurosynapse">
+              Kup bez analizy — cena standardowa
+            </button>
           </div>
+          <p class="buy-match">
+            <span class="buy__alt">179 zł/szt.
+              <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
+            </span>
+            <a class="link" href="quiz.html">Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu</a>
+          </p>
         </div>
       </article>
 
@@ -796,6 +1209,19 @@
       <article class="formula" id="inflamshield" style="--fc:var(--f3-inflam)">
         <div class="formula__media" data-itp-reveal>
           <svg class="pk" viewBox="0 0 260 380" role="img" aria-label="Opakowanie InflamShield"><use href="#pack-f3"/></svg>
+          <figure class="artefact">
+            <figcaption class="artefact__cap"><span>Udokumentowany wzrost biodostępności</span><span>BioSNEDS™</span></figcaption>
+            <div class="gainbar">
+              <span>NADPro™</span>
+              <span class="gainbar__track"><i style="width:100%"></i></span>
+              <span class="gainbar__val">+4&nbsp;440&nbsp;%</span>
+            </div>
+            <div class="gainbar">
+              <span>CurcuSol™</span>
+              <span class="gainbar__track"><i style="width:90.5%"></i></span>
+              <span class="gainbar__val">+4&nbsp;020&nbsp;%</span>
+            </div>
+          </figure>
         </div>
         <div class="formula__body">
           <p class="formula__idx">Formuła 03 / 04</p>
@@ -807,20 +1233,21 @@
             udokumentowany wzrost biodostępności w BioSNEDS™.
           </p>
           <table class="params">
+            <colgroup><col class="c-skladnik"><col class="c-dawka"><col class="c-rola"></colgroup>
             <thead>
               <tr><th scope="col">Składnik</th><th scope="col">Dawka</th><th scope="col">Rola</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td>CurcuSol™ (kurkumina)<br>
-                  <a class="biochip" href="biosneds.html"><b>+4 020 %</b> biodostępności · BioSNEDS™</a>
+                  <a class="biochip" href="biosneds.html"><b>+4&nbsp;020&nbsp;%</b> biodostępności · BioSNEDS™</a>
                 </td>
                 <td class="mono">380 mg</td>
                 <td>Hamowanie NF-κB</td>
               </tr>
               <tr>
                 <td>NADPro™ (kwercetyna + niacynamid)<br>
-                  <a class="biochip" href="biosneds.html"><b>+4 440 %</b> biodostępności · BioSNEDS™</a>
+                  <a class="biochip" href="biosneds.html"><b>+4&nbsp;440&nbsp;%</b> biodostępności · BioSNEDS™</a>
                 </td>
                 <td class="mono">120 mg</td>
                 <td>Hamowanie szlaków COX/LOX</td>
@@ -832,30 +1259,26 @@
               </tr>
             </tbody>
           </table>
-          <div class="buy">
-            <div class="buy__prices">
-              <div class="price">
-                <span class="price__now">249 zł</span>
-                <span class="price__unit">sklep otwarty · 1 szt.</span>
-              </div>
-              <p class="buy__alt">179 zł/szt.
-                <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
-              </p>
+          <div class="buy buy--strip">
+            <div class="price">
+              <span class="price__now">249 zł</span>
+              <span class="price__unit">sklep otwarty · 1 szt.</span>
             </div>
-            <div class="buy__row">
-              <div class="qty" data-qty>
-                <button type="button" class="qty__btn" data-qty-minus aria-label="Zmniejsz ilość">−</button>
-                <span class="qty__val" data-qty-val aria-live="polite">1</span>
-                <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
-              </div>
-              <button type="button" class="btn btn--primary" data-add="inflamshield">
-                Kup bez analizy — cena standardowa
-              </button>
+            <div class="qty" data-qty>
+              <button type="button" class="qty__btn" data-qty-minus aria-label="Zmniejsz ilość">−</button>
+              <span class="qty__val" data-qty-val aria-live="polite">1</span>
+              <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
             </div>
-            <a class="btn btn--ghost" href="quiz.html">
-              Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu
-            </a>
+            <button type="button" class="btn btn--primary" data-add="inflamshield">
+              Kup bez analizy — cena standardowa
+            </button>
           </div>
+          <p class="buy-match">
+            <span class="buy__alt">179 zł/szt.
+              <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
+            </span>
+            <a class="link" href="quiz.html">Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu</a>
+          </p>
         </div>
       </article>
 
@@ -863,6 +1286,26 @@
       <article class="formula" id="vitalcore" style="--fc:var(--f4-vital)">
         <div class="formula__media" data-itp-reveal>
           <svg class="pk" viewBox="0 0 260 380" role="img" aria-label="Opakowanie VitalCore™"><use href="#pack-f4"/></svg>
+          <figure class="artefact">
+            <figcaption class="artefact__cap"><span>Mitofagia</span><span>Schemat poglądowy</span></figcaption>
+            <div class="mito">
+              <svg class="mito__ring" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="54" fill="none" stroke="var(--fc)"
+                        stroke-width="1.4" stroke-dasharray="2 6" opacity=".7"/>
+                <path d="M60 14 A46 46 0 1 1 22 34" fill="none" stroke="var(--fc)"
+                      stroke-width="2.4" stroke-linecap="round"/>
+                <path d="M22 34 l-2 -9 M22 34 l9 -1" stroke="var(--fc)"
+                      stroke-width="2.4" stroke-linecap="round" fill="none"/>
+                <ellipse cx="60" cy="60" rx="26" ry="15" fill="none" stroke="var(--fc)" stroke-width="2"/>
+                <path d="M40 60 c3 -8 7 -8 9 0 c2 8 6 8 9 0 c2 -8 6 -8 9 0 c2 8 6 8 9 0"
+                      fill="none" stroke="var(--fc)" stroke-width="1.6" opacity=".8"/>
+              </svg>
+              <p class="mito__txt">
+                <span class="mito__num">10&nbsp;000&nbsp;% (100×)</span>
+                <span class="mito__sub">wzrost biodostępności EllagiSol™ (kwas elagowy) w BioSNEDS™</span>
+              </p>
+            </div>
+          </figure>
         </div>
         <div class="formula__body">
           <p class="formula__idx">Formuła 04 / 04</p>
@@ -875,6 +1318,7 @@
             <span class="mono">10&nbsp;000&nbsp;%&nbsp;(100×)</span>.
           </p>
           <table class="params">
+            <colgroup><col class="c-skladnik"><col class="c-dawka"><col class="c-rola"></colgroup>
             <thead>
               <tr><th scope="col">Składnik</th><th scope="col">Dawka</th><th scope="col">Rola</th></tr>
             </thead>
@@ -891,37 +1335,33 @@
               </tr>
               <tr>
                 <td>EllagiSol™ (kwas elagowy)<br>
-                  <a class="biochip" href="biosneds.html"><b>10 000 % (100×)</b> biodostępności · BioSNEDS™</a>
+                  <a class="biochip" href="biosneds.html"><b>10&nbsp;000&nbsp;% (100×)</b> biodostępności · BioSNEDS™</a>
                 </td>
                 <td class="mono">100 mg</td>
                 <td>Stymulacja mitofagii</td>
               </tr>
             </tbody>
           </table>
-          <div class="buy">
-            <div class="buy__prices">
-              <div class="price">
-                <span class="price__now">249 zł</span>
-                <span class="price__unit">sklep otwarty · 1 szt.</span>
-              </div>
-              <p class="buy__alt">179 zł/szt.
-                <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
-              </p>
+          <div class="buy buy--strip">
+            <div class="price">
+              <span class="price__now">249 zł</span>
+              <span class="price__unit">sklep otwarty · 1 szt.</span>
             </div>
-            <div class="buy__row">
-              <div class="qty" data-qty>
-                <button type="button" class="qty__btn" data-qty-minus aria-label="Zmniejsz ilość">−</button>
-                <span class="qty__val" data-qty-val aria-live="polite">1</span>
-                <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
-              </div>
-              <button type="button" class="btn btn--primary" data-add="vitalcore">
-                Kup bez analizy — cena standardowa
-              </button>
+            <div class="qty" data-qty>
+              <button type="button" class="qty__btn" data-qty-minus aria-label="Zmniejsz ilość">−</button>
+              <span class="qty__val" data-qty-val aria-live="polite">1</span>
+              <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
             </div>
-            <a class="btn btn--ghost" href="quiz.html">
-              Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu
-            </a>
+            <button type="button" class="btn btn--primary" data-add="vitalcore">
+              Kup bez analizy — cena standardowa
+            </button>
           </div>
+          <p class="buy-match">
+            <span class="buy__alt">179 zł/szt.
+              <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
+            </span>
+            <a class="link" href="quiz.html">Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu</a>
+          </p>
         </div>
       </article>
 
@@ -973,52 +1413,58 @@
         </div>
       </div>
 
-      <div class="grid grid--2 compare">
-        <div class="card compare__card" data-itp-reveal>
-          <div class="compare__head">
-            <p class="eyebrow eyebrow--bare">Sklep otwarty</p>
-            <p class="compare__price">249 zł <span style="font-size:.45em;color:var(--on-navy-muted)">/ szt.</span></p>
-          </div>
-          <ul class="compare__list">
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#7FE4FF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Dowolna z czterech formuł PERSONA, od ręki</li>
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#7FE4FF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Ta sama technologia BioSNEDS™ i ten sam skład</li>
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#7FE4FF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Wysyłka w <span class="mono">24–48 h</span></li>
-            <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.34)" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Bez doboru pod Twój profil zdrowia</li>
-            <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.34)" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Bez zatwierdzenia specjalisty i uzasadnienia</li>
-            <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.34)" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Bez synergii zestawu i ceny planu</li>
-          </ul>
+      <div class="set-hero" data-itp-reveal>
+        <div class="set-hero__lead">
+          <p class="eyebrow eyebrow--bare">Zestaw personalizowany</p>
+          <p class="set-hero__price">179 zł<small>/szt.</small></p>
+          <p class="set-hero__meta">w subskrypcji planu — zamiast
+            <span class="mono">249 zł</span>, czyli <span class="mono">70 zł</span>
+            różnicy na każdej sztuce.</p>
+          <a class="btn btn--primary btn--lg" href="quiz.html">Rozpocznij analizę</a>
+          <p class="set-hero__micro">Bezpłatnie · około 5–7 minut · uzasadniony wynik</p>
         </div>
-
-        <div class="card compare__card compare__card--set" data-itp-reveal>
-          <div class="compare__head">
-            <p class="eyebrow eyebrow--bare">Zestaw personalizowany</p>
-            <p class="compare__price">179 zł/szt. <span style="font-size:.45em;color:var(--on-navy-muted)">w subskrypcji</span></p>
-          </div>
-          <ul class="compare__list">
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Formuły dobrane z analizy (<span class="mono">5–7 min</span>) i uzasadnione</li>
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Każda rekomendacja zatwierdzana przez specjalistę</li>
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Składniki zaprojektowane, by działać razem</li>
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Produkcja just-in-time — zawsze świeża partia</li>
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              <span><span class="mono">179 zł/szt.</span> zamiast <span class="mono">249 zł</span> — <span class="mono">70 zł</span> różnicy na sztuce</span></li>
-            <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Wysyłka w <span class="mono">24–48 h</span></li>
-          </ul>
-          <a class="btn btn--primary" href="quiz.html" style="justify-self:start">Rozpocznij analizę</a>
-        </div>
+        <ul class="compare__list">
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Formuły dobrane z analizy <span class="mono">(5–7 min)</span> i uzasadnione</span></li>
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Każda rekomendacja zatwierdzana przez specjalistę</li>
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Składniki zaprojektowane, by działać razem</li>
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Produkcja just-in-time — zawsze świeża partia</li>
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span><span class="mono">179 zł/szt.</span> zamiast <span class="mono">249 zł</span> — <span class="mono">70 zł</span> różnicy na sztuce</span></li>
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Wysyłka w <span class="mono">24–48 h</span></span></li>
+        </ul>
       </div>
 
-      <div class="btn-row btn-row--center" style="margin-top:clamp(48px,6vw,80px)">
+      <div class="card open-panel" data-itp-reveal>
+        <div class="open-panel__head">
+          <p class="eyebrow eyebrow--bare">Sklep otwarty</p>
+          <p class="open-panel__price">249 zł <span>/ szt.</span></p>
+          <p class="open-panel__note">Bez analizy, od ręki — wysoka cena
+            detaliczna chroni prestiż marki.</p>
+        </div>
+        <ul class="compare__list">
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#7FE4FF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Dowolna z czterech formuł PERSONA, od ręki</li>
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#7FE4FF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Ta sama technologia BioSNEDS™ i ten sam skład</li>
+          <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#7FE4FF" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Wysyłka w <span class="mono">24–48 h</span></span></li>
+        </ul>
+        <ul class="compare__list">
+          <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.56)" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Bez doboru pod Twój profil zdrowia</li>
+          <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.56)" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Bez zatwierdzenia specjalisty i uzasadnienia</li>
+          <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.56)" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Bez synergii zestawu i ceny planu</li>
+        </ul>
+      </div>
+
+      <div class="btn-row btn-row--center pricing-cta">
         <a class="btn btn--primary btn--lg" href="quiz.html">
           Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu
         </a>
@@ -1046,36 +1492,52 @@
           ich i nie wyceniamy.
         </p>
       </div>
-      <div class="grid grid--2 soon-grid">
-        <div class="card soon-card" data-itp-reveal>
-          <svg viewBox="0 0 120 180" role="img" aria-label="Sylwetka butelki oleju CBD"><use href="#pack-soon-oil"/></svg>
-          <div>
+      <div class="soon-stage" data-itp-reveal>
+        <article class="soon-card">
+          <svg class="soon-pk" viewBox="0 0 120 186" role="img" aria-label="Sylwetka butelki oleju CBD"><use href="#pack-soon-oil"/></svg>
+          <div class="soon-card__body">
             <span class="soon-chip">Wkrótce</span>
             <h3>Oleje CBD</h3>
             <p>Kolejna linia w przygotowaniu. Pojawi się w sklepie dopiero
                z pełną specyfikacją i tą samą dyscypliną doboru.</p>
+            <p class="soon-meta">
+              <span>Linia · oleje CBD</span>
+              <span>Status · w przygotowaniu</span>
+              <span>Zasada · bez ceny do premiery</span>
+            </p>
           </div>
-        </div>
-        <div class="card soon-card" data-itp-reveal>
-          <svg viewBox="0 0 120 180" role="img" aria-label="Sylwetka opakowania grzybów funkcyjnych"><use href="#pack-soon-mush"/></svg>
-          <div>
+        </article>
+        <article class="soon-card">
+          <svg class="soon-pk" viewBox="0 0 120 186" role="img" aria-label="Sylwetka opakowania grzybów funkcyjnych"><use href="#pack-soon-mush"/></svg>
+          <div class="soon-card__body">
             <span class="soon-chip">Wkrótce</span>
             <h3>Grzyby funkcyjne</h3>
             <p>Linia adaptogenna w przygotowaniu. Bez daty, bez ceny — do
                czasu, aż będzie gotowa naprawdę.</p>
+            <p class="soon-meta">
+              <span>Linia · adaptogeny</span>
+              <span>Status · w przygotowaniu</span>
+              <span>Zasada · bez ceny do premiery</span>
+            </p>
           </div>
-        </div>
+        </article>
       </div>
     </div>
   </section>
 
-</main>
+  <!-- ============================================================ CART -->
+  <div class="cart-fab-dock">
+    <button type="button" class="cart-fab" data-cart-open aria-haspopup="dialog" aria-controls="cart-layer" hidden>
+      <svg class="cart-fab__icon" width="17" height="18" viewBox="0 0 18 19" fill="none" aria-hidden="true">
+        <path d="M2.5 6.5h13l-1.2 10.5H3.7L2.5 6.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M6 8.5V4.75a3 3 0 0 1 6 0V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="cart-fab__label">Koszyk ·</span>
+      <span class="cart-fab__count" data-cart-count>0</span>
+    </button>
+  </div>
 
-<!-- =============================================================== CART -->
-<button type="button" class="cart-fab" data-cart-open aria-haspopup="dialog" aria-controls="cart-layer">
-  <span class="cart-fab__dot" aria-hidden="true"></span>
-  Koszyk · <span data-cart-count>0</span>
-</button>
+</main>
 
 <div class="cart-layer" id="cart-layer" data-cart-layer>
   <div class="cart-scrim" data-cart-close-scrim></div>
@@ -1312,6 +1774,7 @@
   function render() {
     var t = totals();
     fabCount.textContent = t.count;
+    fab.hidden = t.count === 0;
     titleEl.textContent = t.count ? 'Koszyk · ' + t.count + ' szt.' : 'Koszyk';
 
     itemsEl.textContent = '';
@@ -1454,6 +1917,7 @@
       toast.classList.remove('is-shown');
     }, 2400);
   }
+
 
   render();
 })();

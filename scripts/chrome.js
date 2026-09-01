@@ -89,24 +89,56 @@
     var targets = document.querySelectorAll('[data-itp-reveal]');
     if (!targets.length) return;
 
+    function show(el) { el.setAttribute('data-itp-revealed', 'true'); }
+    function showAll() { Array.prototype.forEach.call(targets, show); }
+
     var reduce = window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce || typeof IntersectionObserver !== 'function') {
-      Array.prototype.forEach.call(targets, function (el) {
-        el.setAttribute('data-itp-revealed', 'true');
-      });
+
+    // A hidden document never services requestAnimationFrame, so an observer
+    // callback may never run and the page would screenshot half-faded. Reduced
+    // motion resolves the same way: straight to the revealed state.
+    var hidden = document.visibilityState === 'hidden';
+
+    if (reduce || hidden || typeof IntersectionObserver !== 'function') {
+      showAll();
       return;
     }
 
+    // Anything already on screen at load is content, not an entrance. Reveal it
+    // synchronously: headline facts must never sit faded at the fold.
+    var pending = [];
+    Array.prototype.forEach.call(targets, function (el) {
+      var rect = el.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      if (rect.top < vh && rect.bottom > 0) show(el);
+      else pending.push(el);
+    });
+    if (!pending.length) return;
+
+    var fired = false;
     var io = new IntersectionObserver(function (entries) {
+      fired = true;
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          entry.target.setAttribute('data-itp-revealed', 'true');
+          show(entry.target);
           io.unobserve(entry.target);
         }
       });
-    }, { rootMargin: '0px 0px -18% 0px', threshold: 0.2 });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
 
-    Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
+    pending.forEach(function (el) { io.observe(el); });
+
+    // Belt and braces. A throttled or offscreen tab can report itself visible
+    // while never servicing requestAnimationFrame, in which case the observer
+    // never delivers and the page renders permanently half-faded. If a frame
+    // never arrives, there is no animation to preserve: settle everything.
+    var rafOk = false;
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(function () { rafOk = true; });
+    }
+    window.setTimeout(function () {
+      if (!rafOk && !fired) showAll();
+    }, 800);
   }
 })();

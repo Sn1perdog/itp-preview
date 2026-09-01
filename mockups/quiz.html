@@ -16,7 +16,7 @@
 
 .quiz-stage {
   position: relative;
-  padding-block: clamp(40px, 6vw, 88px) clamp(64px, 8vw, 120px);
+  padding-block: clamp(24px, 2vw, 28px) clamp(56px, 6vw, 88px);
   overflow: hidden;
 }
 /* Faint structural hex geometry behind the panel — never louder than a hairline */
@@ -31,7 +31,7 @@
 .quiz-intro {
   position: relative; z-index: 1;
   display: grid; justify-items: center; gap: var(--sp-4);
-  margin-bottom: clamp(28px, 4vw, 48px);
+  margin-bottom: clamp(16px, 1.4vw, 20px);
   text-align: center;
 }
 
@@ -42,7 +42,7 @@
   border: 1px solid var(--line);
   border-radius: var(--r-xl);
   box-shadow: var(--sh-3);
-  padding: clamp(20px, 4vw, 52px);
+  padding: clamp(20px, 3vw, 44px);
   min-height: 640px;
   display: flex; flex-direction: column;
 }
@@ -84,6 +84,13 @@
 }
 .qscreen__sub { margin-top: var(--sp-4); max-width: 52ch; }
 .qscreen__body { margin-top: clamp(24px, 3.6vw, 40px); }
+/* Q0 alone must fit a 1440×900 screenful with its CTA (round-2 fold fix);
+   later screens keep the roomier rhythm the blind pairs already won with. */
+.qpanel:has(#s0:not([hidden])) .qrail { margin-bottom: var(--sp-4); }
+.qpanel:has(#s0:not([hidden])) .qerror { margin-top: var(--sp-4); }
+.qpanel:has(#s0:not([hidden])) .qnav { padding-top: var(--sp-5); margin-top: var(--sp-2); }
+#s0 .qscreen__sub { margin-top: var(--sp-3); }
+#s0 .qscreen__body { margin-top: var(--sp-5); }
 
 .qopts { display: grid; gap: var(--sp-3); max-width: 560px; }
 .qopts--cols { grid-template-columns: 1fr 1fr; max-width: 620px; }
@@ -95,7 +102,7 @@
    --hx swap re-lays the comb: 3+3 rows on desktop, 2-wide comb on mobile.
    ------------------------------------------------------------------- */
 .comb {
-  --hx: 168px;                                /* hex width                  */
+  --hx: 142px;                                /* hex width                  */
   --g: 10px;                                  /* visual gap                 */
   --hh: calc(var(--hx) * 1.1547);             /* hex height (pointy-top)    */
   --step: calc(var(--hx) + var(--g));         /* horizontal step            */
@@ -108,7 +115,11 @@
 .combcell {
   position: absolute;
   width: var(--hx); height: var(--hh);
-  transition: transform var(--dur-1) var(--ease);
+  /* Depth follows the hexagon silhouette: clip-path clips box-shadow, so the
+     cell's edges are shadowed with drop-shadow filters on the wrapper. */
+  filter: drop-shadow(0 2px 3px rgba(11, 31, 58, .08))
+          drop-shadow(0 14px 24px rgba(11, 31, 58, .11));
+  transition: transform var(--dur-1) var(--ease), filter var(--dur-1) var(--ease);
 }
 .combcell:nth-child(1) { left: 0; top: 0; }
 .combcell:nth-child(2) { left: var(--step); top: 0; }
@@ -116,7 +127,15 @@
 .combcell:nth-child(4) { left: calc(var(--step) * .5); top: var(--vstep); }
 .combcell:nth-child(5) { left: calc(var(--step) * 1.5); top: var(--vstep); }
 .combcell:nth-child(6) { left: calc(var(--step) * 2.5); top: var(--vstep); }
-.combcell:hover { transform: translateY(-3px); }
+.combcell:hover {
+  transform: translateY(-3px);
+  filter: drop-shadow(0 4px 6px rgba(11, 31, 58, .10))
+          drop-shadow(0 20px 34px rgba(11, 31, 58, .16));
+}
+.combcell:has(.qhex[aria-checked='true']) {
+  filter: drop-shadow(0 2px 4px rgba(11, 31, 58, .10))
+          drop-shadow(0 16px 30px rgba(0, 207, 255, .28));
+}
 
 .combcell__ring, .qhex {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
@@ -124,24 +143,26 @@
 /* The ring layer doubles as the hexagon's hairline border and its focus ring:
    clip-path clips outlines and shadows, so focus is a widened solid ring. */
 .combcell__ring {
-  position: absolute; inset: -1px;
-  background: var(--line-strong);
+  position: absolute; inset: -1.5px;
+  background: linear-gradient(180deg, rgba(11, 31, 58, .16), rgba(11, 31, 58, .34));
   transition: background var(--dur-1) var(--ease), inset var(--dur-1) var(--ease);
 }
 .qhex {
   position: absolute; inset: 0;
   border: 0; margin: 0; cursor: pointer;
-  background: var(--ivory);
+  /* Ivory facet lit from above: sheen at the top vertex, recessed lower edge */
+  background:
+    radial-gradient(130% 100% at 50% -15%, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(180deg, var(--ivory-bright) 0%, var(--ivory) 58%, var(--ivory-sunk) 100%);
   color: var(--ink);
   font: inherit;
   display: grid; place-content: center; justify-items: center; gap: 6px;
   text-align: center;
   padding-inline: calc(var(--hx) * .13);
-  transition: background var(--dur-1) var(--ease);
 }
 .qhex:focus { outline: none; }
 .qhex__key {
-  font-family: var(--font-mono); font-size: 10px; font-weight: var(--w-bold);
+  font-family: var(--font-mono); font-size: var(--t-micro); font-weight: var(--w-bold);
   letter-spacing: var(--ls-mono-wide); color: var(--ink-muted);
 }
 .qhex__label {
@@ -150,8 +171,20 @@
   text-wrap: balance;
 }
 .combcell:hover .combcell__ring { background: var(--cyan-deep); }
+.combcell:hover .qhex {
+  background:
+    radial-gradient(130% 100% at 50% -15%, var(--ivory-white), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(180deg, var(--ivory-white) 0%, var(--ivory-bright) 58%, var(--ivory) 100%);
+}
 .combcell:has(.qhex:focus-visible) .combcell__ring { background: var(--cyan-deep); inset: -4px; }
-.qhex[aria-checked='true'] { background: var(--cyan); }
+.qhex[aria-checked='true'] {
+  background:
+    radial-gradient(130% 100% at 50% -15%, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--cyan), var(--ivory-white) 26%) 0%,
+      var(--cyan) 58%,
+      color-mix(in srgb, var(--cyan), var(--navy-900) 16%) 100%);
+}
 .qhex[aria-checked='true'] .qhex__key { color: var(--navy-800); }
 .qhex[aria-checked='true'] .qhex__label { color: var(--navy-900); font-weight: var(--w-bold); }
 .combcell:has(.qhex[aria-checked='true']) .combcell__ring { background: var(--navy-900); inset: -3px; }
@@ -170,7 +203,6 @@
   .combcell:nth-child(5) { left: 0; top: calc(var(--vstep) * 2); }
   .combcell:nth-child(6) { left: var(--step); top: calc(var(--vstep) * 2); }
   .qhex__label { font-size: 12.5px; }
-  .qhex__key { font-size: 9px; }
 }
 
 /* ------------------------------------------------------------------------
@@ -246,7 +278,7 @@
   min-height: 1.5em;
   font-size: var(--t-body-sm); font-weight: var(--w-medium);
   color: var(--alert);
-  margin-top: var(--sp-7);
+  margin-top: var(--sp-5);
 }
 .qnav {
   display: flex; align-items: center; justify-content: space-between;
@@ -267,12 +299,25 @@
 .quiz-legal {
   position: relative; z-index: 1;
   max-width: 800px; margin: var(--sp-7) auto 0;
-  display: grid; gap: var(--sp-4);
+  display: grid; gap: var(--sp-5);
+  /* Solid ground so the structural bg hex hairline cannot cross the fact
+     row and read as a stray border (same hue as the stage — no seam). */
+  background: var(--ivory);
 }
-.quiz-legal__meta {
-  font-family: var(--font-mono); font-size: var(--t-micro);
-  font-weight: var(--w-bold); letter-spacing: var(--ls-mono-wide);
-  text-transform: uppercase; color: var(--ink-muted);
+/* Hairline-separated fact row closing the panel (FH stat device, doc facts:
+   12 questions / 4 blocks, 5–7 min, no account + localStorage, 48 h review) */
+.qfacts {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-block: 1px solid var(--line);
+}
+.qfacts .stat { padding: var(--sp-5); }
+.qfacts__unit { font-size: 1rem; margin-left: 3px; }
+.qfacts .stat + .stat { border-left: 1px solid var(--line); }
+.qfacts .stat__num { font-size: clamp(1.75rem, 2.4vw, 2.4rem); }
+@media (max-width: 760px) {
+  .qfacts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .qfacts .stat:nth-child(3) { border-left: 0; }
+  .qfacts .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
 }
 </style>
 </head>
@@ -387,8 +432,6 @@
               <h2 class="t-d2" id="s0-h" tabindex="-1">Jaki jest Twój <span class="t-accent">priorytet</span> na&nbsp;najbliższe 90&nbsp;dni?</h2>
               <p class="t-lead qscreen__sub">Wybierz jeden obszar — stanie się osią Twojej analizy.
                 Pozostałe obszary również zbadamy.</p>
-              <p class="t-caption qscreen__sub" style="margin-top:var(--sp-3)">
-                Bez konta i logowania · odpowiedzi zostają w&nbsp;Twojej przeglądarce.</p>
               <div class="qscreen__body">
                 <div class="comb" role="radiogroup" aria-labelledby="s0-h">
                   <div class="combcell"><span class="combcell__ring"></span>
@@ -606,10 +649,26 @@
         </div>
 
         <div class="quiz-legal">
+          <div class="qfacts">
+            <div class="stat">
+              <span class="stat__num">12</span>
+              <span class="stat__label">pytań w&nbsp;czterech blokach</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num">5–7</span>
+              <span class="stat__label">minut na całą analizę</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num">0</span>
+              <span class="stat__label">kont — dane pozostają w&nbsp;tej przeglądarce</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num">48<span class="qfacts__unit">h</span></span>
+              <span class="stat__label">na zatwierdzenie przez specjalistę</span>
+            </div>
+          </div>
           <p class="disclaimer">Platforma ma charakter edukacyjny i rekomendacyjny
             i nie zastępuje konsultacji lekarskiej.</p>
-          <p class="quiz-legal__meta">Bez konta · dane pozostają w tej przeglądarce ·
-            rekomendację zatwierdza specjalista</p>
         </div>
       </div>
     </div>
@@ -753,6 +812,10 @@
       pos: state.pos,
       updatedAt: new Date().toISOString()
     };
+    /* A completed result must survive page revisits: never strip
+       scores/completedAt, or result.html falls back to the example profile. */
+    if (state.scores) payload.scores = state.scores;
+    if (state.completedAt) payload.completedAt = state.completedAt;
     if (extra) for (var k in extra) payload[k] = extra[k];
     try { localStorage.setItem(KEY, JSON.stringify(payload)); } catch (e) { /* private mode */ }
   }
@@ -920,10 +983,9 @@
     if (finishing) return;
     finishing = true;
     elNext.disabled = true;
-    save({
-      scores: computeScores(state.answers, state.priority),
-      completedAt: new Date().toISOString()
-    });
+    state.scores = computeScores(state.answers, state.priority);
+    state.completedAt = new Date().toISOString();
+    save();
     window.location.href = 'result.html';
   }
 
@@ -1040,9 +1102,19 @@
       }
       return;
     }
-    if (e.key === 'Enter' && !typing && !t.closest('button, a')) {
-      e.preventDefault();
-      next();
+    if (e.key === 'Enter' && !typing) {
+      /* The advertised "↵ · dalej": Enter on an already-selected option
+         advances; on an unchecked option it stays select-on-activate. */
+      var radio = t.closest && t.closest('[role="radio"]');
+      if (radio && radio.getAttribute('aria-checked') === 'true') {
+        e.preventDefault();
+        next();
+        return;
+      }
+      if (!t.closest('button, a')) {
+        e.preventDefault();
+        next();
+      }
     }
   });
 
@@ -1078,6 +1150,8 @@
   if (saved) {
     if (saved.priority) state.priority = saved.priority;
     if (saved.answers && typeof saved.answers === 'object') state.answers = saved.answers;
+    if (saved.scores && typeof saved.scores === 'object') state.scores = saved.scores;
+    if (saved.completedAt) state.completedAt = saved.completedAt;
     var hasAny = state.priority || Object.keys(state.answers).length > 0;
     if (hasAny) {
       elNotice.hidden = false;

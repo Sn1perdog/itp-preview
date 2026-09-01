@@ -23,34 +23,74 @@ main [hidden] { display: none !important; }
   min-height: calc(100vh - 148px);
   display: grid;
   align-items: center;
-  padding-block: clamp(64px, 8vw, 128px);
+  padding-block: clamp(72px, 9vw, 136px);
 }
 .proc__wrap {
   display: grid;
-  gap: var(--sp-7);
+  gap: clamp(28px, 3.5vw, 44px);
   justify-items: center;
   text-align: center;
-  max-width: 640px;
+  max-width: 780px;
   margin-inline: auto;
 }
-.proc__cluster {
-  position: relative;
-  width: 198px;
-  height: 190px;
+/* Six labeled hexes — a live preview of the result map. Values resolve as
+   the staged steps complete; main/support light up on step 3. */
+.proc__map {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-9) var(--sp-4);
 }
-.proc__hex {
-  position: absolute;
-  width: 58px;
+.proc__cell {
+  display: grid;
+  gap: var(--sp-3);
+  justify-items: center;
+  width: 112px;
+}
+.proc__cell:nth-child(even) { transform: translateY(34px); }
+.proc__phex {
+  width: 106px;
   aspect-ratio: 1 / 1.1547;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: var(--navy-700);
+  display: grid;
+  place-content: center;
   animation: proc-pulse 2.4s var(--ease) infinite;
+  /* no transition: colour flips must land instantly even in a hidden tab */
 }
-.proc__hex--core { background: var(--cyan); animation-delay: 0s; }
-.proc__hex--soft { background: var(--cyan-soft); opacity: .8; }
+.proc__cell.is-set  .proc__phex { animation: none; background: var(--navy-600); }
+.proc__cell.is-support .proc__phex { background: var(--cyan-soft); }
+.proc__cell.is-main .proc__phex { background: var(--cyan); }
+.proc__pval {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: var(--w-bold);
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: -.02em;
+  color: var(--on-navy-faint);
+}
+.proc__cell.is-set .proc__pval { color: var(--on-navy); }
+.proc__cell.is-main .proc__pval,
+.proc__cell.is-support .proc__pval { color: var(--navy-900); }
+.proc__plabel {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  white-space: nowrap;
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: var(--on-navy-muted);
+}
+.proc__cell.is-set .proc__plabel { color: var(--on-navy-soft); }
 @keyframes proc-pulse {
-  0%, 100% { transform: scale(.9);  opacity: .55; }
-  50%      { transform: scale(1.06); opacity: 1;  }
+  0%, 100% { transform: scale(.92); opacity: .6; }
+  50%      { transform: scale(1.04); opacity: 1;  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .proc__phex { animation: none; }
 }
 .proc__local {
   font-family: var(--font-mono);
@@ -71,22 +111,30 @@ main [hidden] { display: none !important; }
   list-style: none;
   margin: 0;
   padding: 0;
-  width: min(100%, 480px);
+  width: min(100%, 580px);
   display: grid;
   text-align: left;
 }
 .proc__step {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
   gap: var(--sp-4);
-  padding-block: var(--sp-3);
+  padding-block: var(--sp-4);
   border-bottom: 1px solid var(--line-navy);
-  font-size: var(--t-body-sm);
+  font-size: var(--t-body);
   color: var(--on-navy-muted);
-  transition: color var(--dur-2) var(--ease);
 }
+.proc__step > span:nth-child(2) { flex: 1; }
 .proc__step.is-done { color: var(--on-navy); }
+.proc__step-num {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono);
+  color: var(--on-navy-faint);
+  flex: none;
+}
+.proc__step.is-done .proc__step-num { color: var(--cyan); }
 .proc__step-status {
   font-family: var(--font-mono);
   font-size: var(--t-micro);
@@ -97,9 +145,18 @@ main [hidden] { display: none !important; }
   white-space: nowrap;
 }
 .proc__step.is-done .proc__step-status { color: var(--cyan); }
+@media (max-width: 640px) {
+  .proc__map { gap: var(--sp-8) var(--sp-3); padding-bottom: 26px; }
+  .proc__cell { width: 88px; }
+  .proc__cell:nth-child(even) { transform: translateY(26px); }
+  .proc__phex { width: 84px; }
+}
 
 /* ------------------------------------------------------ 2 · RESULT HEADER */
-.result-head { padding-bottom: clamp(40px, 5vw, 72px); }
+/* The hex map is this chapter's best device: the header run above it is
+   compressed so the map's top row — mono percentages included — enters the
+   first 900px screenful even with the example-profile insert present. */
+.result-head { padding-block: clamp(48px, 4vw, 60px) clamp(40px, 5vw, 72px); }
 .src-line {
   display: flex;
   flex-wrap: wrap;
@@ -110,26 +167,61 @@ main [hidden] { display: none !important; }
 .persona-note { max-width: 58ch; margin-top: var(--sp-5); }
 .persona-note .mono { font-weight: var(--w-bold); }
 
-/* Example-profile notice: honest, designed, impossible to miss */
+/* At phone width the two status chips must not stack as administrative
+   pill bars: they flatten to a tracked mono meta block, one line each. */
+@media (max-width: 640px) {
+  .src-line { gap: var(--sp-2) var(--sp-4); margin-top: var(--sp-4); }
+  .src-line .chip {
+    border: 0;
+    padding: 0;
+    min-height: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ink-muted);
+  }
+  .src-line .chip--tech { color: var(--cyan-ink); }
+}
+
+/* Example-profile notice: honest, designed, impossible to miss.
+   A navy insert — the page's structural chapter colour — not a grey admin box. */
 .example-note {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--sp-4);
+  gap: var(--sp-3) var(--sp-6);
+  max-width: 760px;
   margin-top: var(--sp-6);
-  padding: var(--sp-4) var(--sp-5);
-  border: 1px solid var(--line-strong);
-  border-left: 3px solid var(--warn);
-  border-radius: var(--r-md);
-  background: var(--ivory-bright);
+  padding: clamp(20px, 2.4vw, 30px) clamp(24px, 3vw, 36px);
+  border-radius: var(--r-lg);
+  background: var(--navy-900);
+  color: var(--on-navy-soft);
   font-size: var(--t-body-sm);
-  color: var(--ink-2);
+  line-height: 1.6;
+}
+.example-note b { color: var(--on-navy); }
+.example-note::before {
+  content: 'Przykład działania wyniku';
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono-wide);
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.example-note::before { grid-column: 1 / -1; }
+@media (max-width: 700px) {
+  .example-note {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    gap: var(--sp-4);
+  }
+  .example-note::before { grid-column: auto; }
 }
 
 /* ----------------------------------------------------------- 3 · HEX MAP */
 .hexmap {
   list-style: none;
-  margin: clamp(32px, 4vw, 56px) 0 0;
+  margin: clamp(24px, 2.5vw, 36px) 0 0;
   padding: 0 0 34px;
   display: flex;
   flex-wrap: wrap;
@@ -184,7 +276,9 @@ main [hidden] { display: none !important; }
   text-transform: uppercase;
   color: var(--ink-muted);
 }
-.hexcell--main .hx-cap { color: rgba(11, 31, 58, .68); }
+/* On the cyan main cell this measured 4.27:1 at 11px; the solid navy ink
+   clears AA without changing the cell's hierarchy. */
+.hexcell--main .hx-cap { color: var(--navy-900); }
 .hx-label {
   font-size: var(--t-caption);
   font-weight: var(--w-semi);
@@ -199,7 +293,18 @@ main [hidden] { display: none !important; }
   color: var(--cyan-ink);
   min-height: 1em;
 }
-.hexmap-caption { max-width: 62ch; margin-top: var(--sp-4); }
+/* Caption and mandatory disclaimer close the map chapter as ONE block —
+   a hairline-ruled tail, not two loose paragraphs drifting toward the
+   next chapter head. */
+.map-close {
+  max-width: 74ch;
+  margin-top: var(--sp-2);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: var(--sp-3);
+}
+.hexmap-caption { max-width: 62ch; }
 
 /* --------------------------------------------------------------- 4 · GATE */
 .gate { padding-block: clamp(24px, 3vw, 48px) clamp(56px, 6vw, 88px); }
@@ -259,6 +364,68 @@ main [hidden] { display: none !important; }
   gap: var(--sp-2);
   padding-top: var(--sp-4);
   border-top: 1px solid var(--line);
+}
+
+/* The gate screenful is a composed chapter, not one card floating in an
+   ivory field: beside the form, a hairline-ruled mono ledger names exactly
+   what the e-mail unlocks. Ink and the existing cyan family only. */
+.gate__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
+  gap: clamp(40px, 5.5vw, 84px);
+  align-items: stretch;
+}
+/* The form keeps its natural height; only the ledger stretches to match,
+   its 1fr rows sharing the column so the hairlines span the full flank. */
+.gate__card { align-self: start; }
+.gate__ledger {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.gate__ledger-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-block: var(--sp-4);
+  border-bottom: 1px solid var(--line-strong);
+}
+.unlock-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-auto-rows: minmax(0, 1fr);
+}
+.unlock-item {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-content: center;
+  row-gap: var(--sp-2);
+  padding-block: var(--sp-5);
+  border-bottom: 1px solid var(--line);
+}
+.unlock-item > * { grid-column: 2; }
+.unlock-item .index-num { grid-column: 1; grid-row: 1; padding-top: 4px; }
+.unlock-item .price { line-height: 1.15; }
+.unlock-item .price__now { font-size: 1.5rem; }
+.unlock-item__title {
+  font-size: var(--t-body);
+  font-weight: var(--w-semi);
+  letter-spacing: var(--ls-body);
+  color: var(--ink);
+}
+.unlock-item__cap {
+  font-size: var(--t-caption);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 40ch;
+}
+@media (max-width: 900px) {
+  .gate__grid { grid-template-columns: minmax(0, 1fr); }
+  .gate__ledger { margin-inline: auto; width: 100%; max-width: 620px; }
+  .unlock-list { grid-auto-rows: auto; }
+  .unlock-item { padding-block: var(--sp-4); }
 }
 
 /* -------------------------------------------------------- 5 · LOCKED PLAN */
@@ -323,28 +490,26 @@ main [hidden] { display: none !important; }
   background: rgba(6, 15, 31, .82);
 }
 .locked__stamp-note { max-width: 42ch; color: var(--on-navy-soft); font-size: var(--t-body-sm); }
-.locked__tease {
-  margin-top: var(--sp-4);
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  font-weight: var(--w-bold);
-  letter-spacing: var(--ls-mono);
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  text-align: center;
-}
 
 /* ------------------------------------------------------- 6 · UNLOCKED PLAN */
-.plan { padding-block: clamp(56px, 7vw, 120px); }
+/* Wider chapter seam above the plan (FH-calibrated 150–250px block rhythm):
+   a 900px screenful lands in the map's close OR the plan head, not both. */
+.plan { padding-block: clamp(96px, 11vw, 176px) clamp(72px, 9vw, 144px); }
+/* Programmatic focus after a POINTER-driven unlock must not paint the ring;
+   keyboard-driven submits keep full focus visibility. */
+.focus-quiet:focus, .focus-quiet:focus-visible { outline: none; box-shadow: none; }
 .plan__grid {
   display: grid;
   grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
-  gap: clamp(32px, 4vw, 64px);
-  margin-top: clamp(36px, 4.5vw, 64px);
+  gap: clamp(40px, 5vw, 88px);
+  margin-top: clamp(44px, 5.5vw, 80px);
   align-items: start;
 }
 @media (max-width: 900px) { .plan__grid { grid-template-columns: minmax(0, 1fr); } }
-.plan__aside { display: grid; gap: var(--sp-6); position: sticky; top: 96px; }
+/* Sticky chrome measured at 1440: trustbar bottom 36px + sitehead bottom
+   121px. The stuck aside heading must clear that stack with a breath:
+   121px chrome + 11px = 132px. (Was 96px — decapitated the heading.) */
+.plan__aside { display: grid; gap: var(--sp-8); position: sticky; top: 132px; }
 @media (max-width: 900px) { .plan__aside { position: static; } }
 .why-list {
   list-style: none;
@@ -354,10 +519,10 @@ main [hidden] { display: none !important; }
 }
 .why-list li {
   position: relative;
-  padding: var(--sp-3) 0 var(--sp-3) var(--sp-6);
+  padding: var(--sp-4) 0 var(--sp-4) var(--sp-6);
   border-bottom: 1px solid var(--line);
-  font-size: var(--t-body-sm);
-  line-height: 1.55;
+  font-size: var(--t-body);
+  line-height: 1.58;
   color: var(--ink-2);
 }
 .why-list li::before {
@@ -374,15 +539,19 @@ main [hidden] { display: none !important; }
 .biosneds-note {
   border-left: 3px solid var(--cyan);
   padding: var(--sp-3) 0 var(--sp-3) var(--sp-5);
-  font-size: var(--t-body-sm);
+  font-size: var(--t-body);
+  line-height: 1.58;
   color: var(--ink-2);
 }
-.fcards { display: grid; gap: var(--sp-6); }
+.fcards { display: grid; gap: var(--sp-8); }
 .fcard {
+  /* stacks with html{scroll-padding-top: trustbar+78px}: lands card titles
+     a breath below the sticky chrome instead of clipped beneath it */
+  scroll-margin-top: var(--sp-3);
   border-top: 3px solid var(--fc, var(--navy-900));
   display: grid;
-  gap: var(--sp-5);
-  padding: clamp(24px, 3vw, 40px);
+  gap: var(--sp-6);
+  padding: clamp(28px, 3.4vw, 48px);
 }
 .fcard__head {
   display: flex;
@@ -410,7 +579,7 @@ main [hidden] { display: none !important; }
   justify-content: space-between;
   align-items: baseline;
   gap: var(--sp-4);
-  padding-block: var(--sp-2);
+  padding-block: var(--sp-3);
   border-bottom: 1px solid var(--line);
   font-size: var(--t-body-sm);
 }
@@ -421,21 +590,27 @@ main [hidden] { display: none !important; }
   white-space: nowrap;
   color: var(--ink);
 }
+/* One quiet voice for the card's rationale: a rule in the formula's own
+   colour, no boxed panel competing with the dose table and the price row. */
 .fcard__why {
   font-size: var(--t-body-sm);
+  line-height: 1.55;
   color: var(--ink-2);
-  background: var(--cyan-wash);
-  border-radius: var(--r-sm);
-  padding: var(--sp-3) var(--sp-4);
+  border-left: 3px solid var(--fc, var(--cyan));
+  padding: var(--sp-1) 0 var(--sp-1) var(--sp-4);
 }
-.fcard__why .mono { font-weight: var(--w-bold); color: var(--cyan-ink); }
+.fcard__why .mono { font-weight: var(--w-bold); color: var(--ink); }
+/* Price row: the 179/249 pair never wraps into a ragged orphan — the label
+   is its own line, always. */
 .fcard__foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-4);
+  display: grid;
+  gap: var(--sp-1);
+  justify-items: start;
+  border-top: 1px solid var(--line);
+  padding-top: var(--sp-5);
 }
+.fcard__foot .price { white-space: nowrap; }
+.fcard__foot-note { font-size: var(--t-caption); color: var(--ink-muted); }
 
 /* price fragments never break mid-unit */
 .price__now, .price__was { white-space: nowrap; }
@@ -556,32 +731,53 @@ main [hidden] { display: none !important; }
   <section class="proc section--navy" id="analiza" aria-busy="true">
     <div class="wrap">
       <div class="proc__wrap">
-        <div class="proc__cluster" aria-hidden="true">
-          <span class="proc__hex proc__hex--core" style="left:70px;top:61px"></span>
-          <span class="proc__hex" style="left:128px;top:61px;animation-delay:.3s"></span>
-          <span class="proc__hex proc__hex--soft" style="left:12px;top:61px;animation-delay:.6s"></span>
-          <span class="proc__hex proc__hex--soft" style="left:99px;top:11px;animation-delay:.9s"></span>
-          <span class="proc__hex" style="left:41px;top:11px;animation-delay:1.2s"></span>
-          <span class="proc__hex" style="left:99px;top:111px;animation-delay:1.5s"></span>
-          <span class="proc__hex proc__hex--soft" style="left:41px;top:111px;animation-delay:1.8s"></span>
-        </div>
+        <ul class="proc__map" id="proc-map" aria-hidden="true">
+          <li class="proc__cell" data-area="energia">
+            <span class="proc__phex"><span class="proc__pval">··</span></span>
+            <span class="proc__plabel">Energia</span>
+          </li>
+          <li class="proc__cell" data-area="sen">
+            <span class="proc__phex" style="animation-delay:.4s"><span class="proc__pval">··</span></span>
+            <span class="proc__plabel">Sen</span>
+          </li>
+          <li class="proc__cell" data-area="stres">
+            <span class="proc__phex" style="animation-delay:.8s"><span class="proc__pval">··</span></span>
+            <span class="proc__plabel">Stres</span>
+          </li>
+          <li class="proc__cell" data-area="trawienie">
+            <span class="proc__phex" style="animation-delay:1.2s"><span class="proc__pval">··</span></span>
+            <span class="proc__plabel">Trawienie</span>
+          </li>
+          <li class="proc__cell" data-area="koncentracja">
+            <span class="proc__phex" style="animation-delay:1.6s"><span class="proc__pval">··</span></span>
+            <span class="proc__plabel">Koncentracja</span>
+          </li>
+          <li class="proc__cell" data-area="odpornosc">
+            <span class="proc__phex" style="animation-delay:2s"><span class="proc__pval">··</span></span>
+            <span class="proc__plabel">Odporność</span>
+          </li>
+        </ul>
         <p class="proc__local">Analiza lokalna · dane pozostają w Twojej przeglądarce</p>
         <h1 class="t-d2">Analizujemy Twoje odpowiedzi…</h1>
         <p class="t-lead proc__teaser" id="proc-teaser">Widzimy obszar główny i&nbsp;obszar wspierający.</p>
         <ol class="proc__steps" id="proc-steps" aria-live="polite">
           <li class="proc__step" data-step="1">
+            <span class="proc__step-num">01</span>
             <span>Odczyt odpowiedzi z analizy</span>
             <span class="proc__step-status">oczekuje</span>
           </li>
           <li class="proc__step" data-step="2">
+            <span class="proc__step-num">02</span>
             <span>Normalizacja obciążeń w sześciu obszarach</span>
             <span class="proc__step-status">oczekuje</span>
           </li>
           <li class="proc__step" data-step="3">
+            <span class="proc__step-num">03</span>
             <span>Wyznaczenie obszaru głównego i wspierającego</span>
             <span class="proc__step-status">oczekuje</span>
           </li>
           <li class="proc__step" data-step="4">
+            <span class="proc__step-num">04</span>
             <span>Dobór formuł PERSONA — reguła obszar&nbsp;→&nbsp;formuła</span>
             <span class="proc__step-status">oczekuje</span>
           </li>
@@ -596,33 +792,34 @@ main [hidden] { display: none !important; }
   <section class="section section--ivory result-head" id="wynik" hidden>
     <div class="wrap">
       <p class="eyebrow">Wynik analizy</p>
-      <h1 class="t-d2" id="persona-title" tabindex="-1" style="max-width:16ch;margin-top:var(--sp-5)">
+      <h1 class="t-d2" id="persona-title" tabindex="-1" style="max-width:16ch;margin-top:var(--sp-4)">
         <!-- persona label · JS -->
       </h1>
       <div class="src-line" id="src-line"><!-- source chip + date · JS --></div>
       <p class="t-lead persona-note" id="persona-teaser"><!-- teaser · JS --></p>
 
       <div class="example-note" id="example-note" hidden>
-        <span><b>To profil przykładowy.</b> Nie znaleźliśmy Twoich odpowiedzi w tej przeglądarce —
-        poniższe wartości ilustrują działanie wyniku.</span>
-        <a class="btn btn--primary btn--sm" href="quiz.html">Wykonaj własną analizę — 5–7 min</a>
+        <span><b>To profil przykładowy.</b> Nie znaleźliśmy w tej przeglądarce poprawnych
+        odpowiedzi z analizy — poniższe wartości ilustrują działanie wyniku.</span>
+        <a class="btn btn--cyan btn--sm" href="quiz.html">Wykonaj własną analizę — 5–7 min</a>
       </div>
 
       <ul class="hexmap" id="hexmap"><!-- six hexagons · JS --></ul>
-      <p class="t-caption hexmap-caption">
-        Wartości w <span class="mono">%</span> to znormalizowane obciążenie obszaru wyliczone
-        z&nbsp;dwunastu odpowiedzi analizy — wyższa wartość oznacza większe obciążenie.
-      </p>
-
       <!-- print fallback: hex geometry does not survive ink-saving printers -->
       <table class="params print-only" aria-hidden="true" style="max-width:520px;margin-top:16px">
         <thead><tr><th>Obszar</th><th style="text-align:right">Obciążenie</th></tr></thead>
         <tbody id="print-areas"></tbody>
       </table>
 
-      <p class="disclaimer" style="max-width:74ch;margin-top:var(--sp-7)">
-        Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje konsultacji lekarskiej.
-      </p>
+      <div class="map-close">
+        <p class="t-caption hexmap-caption">
+          Wartości w <span class="mono">%</span> to znormalizowane obciążenie obszaru wyliczone
+          z&nbsp;dwunastu odpowiedzi analizy — wyższa wartość oznacza większe obciążenie.
+        </p>
+        <p class="disclaimer">
+          Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje konsultacji lekarskiej.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -630,6 +827,7 @@ main [hidden] { display: none !important; }
        Doc §8.2 step 2 — appears only after the processing view. -->
   <section class="gate st-hide-unlocked" id="odblokuj" hidden>
     <div class="wrap">
+      <div class="gate__grid">
       <form class="card card--lift gate__card" id="gate-form" novalidate>
         <div class="gate__legend">
           <svg width="20" height="24" viewBox="0 0 20 24" fill="none" aria-hidden="true">
@@ -672,6 +870,41 @@ main [hidden] { display: none !important; }
           </p>
         </div>
       </form>
+      <aside class="gate__ledger" aria-label="Co odblokowuje adres e-mail">
+        <div class="gate__ledger-head">
+          <span class="mono" style="font-size:var(--t-micro);font-weight:var(--w-bold);letter-spacing:var(--ls-mono-wide);text-transform:uppercase;color:var(--ink)">Co odblokowuje e-mail</span>
+          <span class="mono" style="font-size:var(--t-micro);font-weight:var(--w-bold);letter-spacing:var(--ls-mono);color:var(--ink-faint)">01–04</span>
+        </div>
+        <ol class="unlock-list">
+          <li class="unlock-item">
+            <span class="index-num" aria-hidden="true">01</span>
+            <p class="unlock-item__title">3 formuły PERSONA</p>
+            <p class="unlock-item__cap">Dobrane regułą obszar&nbsp;→&nbsp;formuła do obszaru
+            głównego i&nbsp;wspierającego Twojego profilu.</p>
+          </li>
+          <li class="unlock-item">
+            <span class="index-num" aria-hidden="true">02</span>
+            <p class="unlock-item__title">Uzasadnienie planu</p>
+            <p class="unlock-item__cap">Punkt po punkcie: które odpowiedzi z&nbsp;analizy
+            zdecydowały o&nbsp;doborze.</p>
+          </li>
+          <li class="unlock-item">
+            <span class="index-num" aria-hidden="true">03</span>
+            <p class="unlock-item__title">Cena zestawu</p>
+            <p class="price"><span class="price__now">179 zł/szt.</span>
+              <span class="price__was">249 zł</span></p>
+            <p class="unlock-item__cap">Niższa cena w&nbsp;zestawie jest nagrodą za
+            udostępnienie danych z&nbsp;analizy — zamiast ceny otwartego sklepu.</p>
+          </li>
+          <li class="unlock-item">
+            <span class="index-num" aria-hidden="true">04</span>
+            <p class="unlock-item__title">Mini-raport PDF</p>
+            <p class="unlock-item__cap">Wersja wyniku do druku — mapa sześciu obszarów
+            i&nbsp;plan w&nbsp;jednym dokumencie.</p>
+          </li>
+        </ol>
+      </aside>
+      </div>
     </div>
   </section>
 
@@ -733,7 +966,6 @@ main [hidden] { display: none !important; }
           po podaniu adresu e-mail powyżej.</p>
         </div>
       </div>
-      <p class="locked__tease">3 formuły · uzasadnienie · cena zestawu <span class="mono">179 zł/szt.</span> vs <span class="mono">249 zł</span></p>
     </div>
   </section>
 
@@ -1235,8 +1467,8 @@ main [hidden] { display: none !important; }
         '<p class="fcard__why">W planie, bo: ' + reasons + ' obciążenia.</p>' +
         '<div class="fcard__foot">' +
           '<span class="price"><span class="price__now">179 zł<span class="price__unit">/szt.</span></span>' +
-          '<span class="price__was">249 zł</span>' +
-          '<span class="price__unit">w zestawie personalizowanym</span></span>' +
+          '<span class="price__was">249 zł</span></span>' +
+          '<span class="fcard__foot-note">w zestawie personalizowanym</span>' +
         '</div>';
       wrap.appendChild(card);
     });
@@ -1307,7 +1539,36 @@ main [hidden] { display: none !important; }
     if (!li) return;
     li.classList.add('is-done');
     li.querySelector('.proc__step-status').textContent = stepStatus[i];
-    if (i === 2) document.getElementById('proc-teaser').classList.add('is-on');
+    if (i === 1) procMapValues();
+    if (i === 2) {
+      procMapRoles();
+      var teaser = document.getElementById('proc-teaser');
+      /* hidden tab: transition timelines freeze — reveal synchronously */
+      if (document.visibilityState === 'hidden') teaser.style.transition = 'none';
+      teaser.classList.add('is-on');
+    }
+  }
+
+  /* Preview hexes in the processing view resolve with the staged steps:
+     values on "normalizacja", main/support highlight on "wyznaczenie". */
+  function procMapValues() {
+    Array.prototype.forEach.call(
+      document.querySelectorAll('#proc-map .proc__cell'),
+      function (cell) {
+        cell.classList.add('is-set');
+        cell.querySelector('.proc__pval').textContent =
+          profile.scores[cell.getAttribute('data-area')] + '%';
+      });
+  }
+
+  function procMapRoles() {
+    Array.prototype.forEach.call(
+      document.querySelectorAll('#proc-map .proc__cell'),
+      function (cell) {
+        var k = cell.getAttribute('data-area');
+        if (k === mainArea.k) cell.classList.add('is-main');
+        else if (k === supportArea.k) cell.classList.add('is-support');
+      });
   }
 
   function finishProcessing(focusResult) {
@@ -1330,6 +1591,16 @@ main [hidden] { display: none !important; }
   var emailErr = document.getElementById('gate-email-err');
   var consentErr = document.getElementById('gate-consent-err');
   var gateStatus = document.getElementById('gate-status');
+
+  /* Input-modality tracker: the unlock handler moves focus to the plan
+     heading programmatically. Chrome then matches :focus-visible even for a
+     mouse-driven submit, painting the cyan ring as an artefact. Track the
+     last interaction; only a keyboard-driven submit keeps the ring. */
+  var usingKeyboard = false;
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ') usingKeyboard = true;
+  }, true);
+  window.addEventListener('pointerdown', function () { usingKeyboard = false; }, true);
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -1357,10 +1628,14 @@ main [hidden] { display: none !important; }
     try { window.localStorage.setItem(UNLOCK_KEY, JSON.stringify(unlock)); } catch (e) { /* still unlock this session */ }
 
     gateStatus.textContent = 'Wynik odblokowany.';
-    renderIdentity();
+    renderUnlocked();
     setState('unlocked');
     var planHead = SECTIONS.plan.querySelector('h2');
     planHead.setAttribute('tabindex', '-1');
+    /* The class stays on: the heading is tabindex=-1, so keyboard users can
+       never Tab back to it — removing the class on blur only lets a window
+       blur/refocus cycle repaint the ring as an artefact. */
+    planHead.classList.toggle('focus-quiet', !usingKeyboard);
     planHead.focus();
     SECTIONS.plan.scrollIntoView(reduceMotion ? {} : { behavior: 'smooth' });
   });
@@ -1373,10 +1648,17 @@ main [hidden] { display: none !important; }
 
   /* ----------------------------------------------------------------- boot */
 
+  /* The plan is rendered into the DOM ONLY on unlock (valid e-mail + consent,
+     or a stored unlock from a previous visit). Before that, #fcards,
+     #why-list, #plan-lead and #set-math stay empty — devtools shows no plan. */
+  function renderUnlocked() {
+    renderPlan();
+    renderIdentity();
+  }
+
   renderHeader();
   renderHexes();
-  renderPlan();
-  renderIdentity();
+  if (unlock) renderUnlocked();
 
   if (unlock || reduceMotion) {
     /* returning unlocked visitor or reduced motion: instant, no staging */

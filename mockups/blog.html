@@ -14,10 +14,14 @@
 /* ------------------------------------------------------------- MASTHEAD */
 .masthead { background: var(--ivory-bright); padding-block: clamp(64px, 8vw, 128px) clamp(40px, 5vw, 72px); }
 .masthead__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-                  gap: clamp(40px, 6vw, 96px); align-items: end; }
+                  grid-template-areas: "intro rubx" "stats rubx";
+                  column-gap: clamp(40px, 6vw, 96px); row-gap: clamp(32px, 4vw, 56px);
+                  align-items: end; }
+.masthead__intro { grid-area: intro; }
+.masthead__rubx { grid-area: rubx; }
+.masthead__stats { grid-area: stats; align-self: end; }
 .masthead h1 { max-width: 14ch; }
 .masthead .t-lead { max-width: 52ch; margin-top: var(--sp-6); }
-.masthead__stats { margin-top: clamp(32px, 4vw, 56px); }
 
 /* Rubryka index — mono ledger, each row applies the library filter */
 .rubx-head { display: flex; justify-content: space-between; align-items: baseline;
@@ -42,15 +46,55 @@
                 gap: var(--sp-4); padding-block: var(--sp-5); border-bottom: 1px solid var(--line); }
 .feature { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
            gap: clamp(40px, 5.5vw, 88px); align-items: center;
-           padding-block: clamp(48px, 6vw, 96px) clamp(64px, 8vw, 128px); }
+           padding-block: clamp(40px, 5vw, 72px) clamp(40px, 5vw, 72px); }
 .feature__kicker { display: flex; align-items: center; gap: var(--sp-3); }
 .feature h2 { max-width: 18ch; margin-top: var(--sp-5); }
+.feature h2 a { color: inherit; text-decoration: none; }
+.feature h2 a:hover { text-decoration: underline; text-decoration-color: var(--cyan-deep);
+                      text-decoration-thickness: 3px; text-underline-offset: 6px; }
 .feature__stand { margin-top: var(--sp-6); max-width: 58ch; }
 .feature__byline { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3);
                    margin-top: var(--sp-7); }
+
+/* Three-step BioSNEDS schematic — labels and captions live in HTML so they
+   render at system micro-label size; SVG strokes are non-scaling (2px). */
 .feature__visual { background: var(--navy-900); border-radius: var(--r-lg);
-                   padding: clamp(20px, 2.4vw, 36px); box-shadow: var(--sh-3); }
-.feature__visual svg { width: 100%; height: auto; }
+                   padding: clamp(24px, 2.6vw, 40px); box-shadow: var(--sh-3); }
+.fviz__top { display: flex; justify-content: space-between; gap: var(--sp-3);
+             padding-bottom: var(--sp-4); margin-bottom: var(--sp-5);
+             border-bottom: 1px solid var(--line-navy);
+             font-family: var(--font-mono); font-size: var(--t-micro);
+             letter-spacing: var(--ls-mono); text-transform: uppercase;
+             color: var(--on-navy-soft); }
+.fviz__top b { font-weight: var(--w-bold); color: var(--cyan); }
+.fsteps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.fstep { position: relative; display: grid; gap: var(--sp-4); align-content: start;
+         padding: var(--sp-2) var(--sp-5); }
+.fstep:first-child { padding-left: 0; }
+.fstep:last-child { padding-right: 0; }
+.fstep + .fstep { border-left: 1px solid var(--line-navy); }
+.fstep + .fstep::before { content: '→'; position: absolute; left: 0; top: 42%;
+                          transform: translate(-50%, -50%); color: var(--cyan);
+                          background: var(--navy-900); font-size: 15px; line-height: 1;
+                          padding-block: 8px; }
+.fstep__label { display: flex; gap: var(--sp-2); align-items: baseline; min-height: 31px;
+                font-family: var(--font-mono); font-size: var(--t-micro);
+                font-weight: var(--w-bold); letter-spacing: var(--ls-mono);
+                text-transform: uppercase; color: var(--on-navy-soft); line-height: 1.4; }
+.fstep__num { color: var(--cyan); }
+.fstep svg { width: 100%; height: auto; }
+.fstep svg [stroke] { vector-effect: non-scaling-stroke; }
+.fstep__sub { font-size: var(--t-caption); line-height: 1.5; color: var(--on-navy-soft); }
+.fviz__foot { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-3);
+              margin-top: var(--sp-6); padding-top: var(--sp-4);
+              border-top: 1px solid var(--line-navy); }
+.fviz__foot .v { font-family: var(--font-mono); font-weight: var(--w-bold);
+                 font-size: 1.125rem; letter-spacing: -.02em; color: var(--cyan);
+                 font-feature-settings: 'tnum' 1; }
+.fviz__foot .k { font-family: var(--font-mono); font-size: var(--t-micro);
+                 letter-spacing: var(--ls-mono); text-transform: uppercase;
+                 color: var(--on-navy-muted); }
+.fviz__caption { margin-top: var(--sp-4); font-family: var(--font-mono); }
 
 /* ------------------------------------------------------------- TOOLBAR */
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-5);
@@ -80,21 +124,35 @@
 .art { grid-column: span 4; display: flex; flex-direction: column; gap: var(--sp-4);
        background: var(--ivory-white); border: 1px solid var(--line);
        border-radius: var(--r-md); padding: clamp(24px, 2.4vw, 32px); }
-.art__kicker { display: flex; align-items: center; gap: 10px;
+.art[hidden] { display: none; }
+.art__kicker { display: flex; align-items: flex-start; gap: 10px;
                font-family: var(--font-mono); font-size: var(--t-micro);
                letter-spacing: var(--ls-mono); text-transform: uppercase;
                color: var(--ink-muted); }
-.art__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dot, var(--navy-500)); flex: none; }
+.art__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dot, var(--navy-500));
+            flex: none; margin-top: 5px; }
+/* Kicker segments are flex items; the interpunct is a ::before on non-first
+   items, clipped by .kclip when a segment opens a wrapped line — so no line
+   ever starts with a hanging separator. */
+.kclip { overflow: hidden; min-width: 0; }
+.kw { display: flex; flex-wrap: wrap; row-gap: 4px; margin-left: -19px; }
+.ks { white-space: nowrap; position: relative; margin-left: 19px; }
+.ks::before { content: '·'; position: absolute; left: -13px; color: var(--ink-faint); }
 .art__title { font-size: var(--t-display-4); font-weight: var(--w-extra);
               letter-spacing: var(--ls-head); line-height: 1.14; text-wrap: balance; }
+.art__title a { color: inherit; text-decoration: none; }
+.art__title a:hover { text-decoration: underline; text-decoration-color: var(--cyan-deep);
+                      text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .art__lede { font-size: var(--t-body-sm); line-height: 1.58; color: var(--ink-2); }
 .art--hero { grid-column: span 8; background: var(--navy-900); border-color: var(--navy-900);
              padding: clamp(28px, 3vw, 44px); gap: var(--sp-5); justify-content: center; }
 .art--hero .art__title { color: var(--on-navy); font-size: var(--t-display-3);
                          font-weight: var(--w-black); line-height: 1.05; max-width: 22ch; }
+.art--hero .art__title a:hover { text-decoration-color: var(--cyan); }
 .art--hero .art__lede { color: var(--on-navy-soft); font-size: var(--t-body); max-width: 52ch; }
 .art--hero .art__kicker { color: var(--cyan-soft); }
 .art--hero .art__kicker .art__dot { --dot: var(--on-navy-soft); }
+.art--hero .ks::before { color: var(--on-navy-muted); }
 .art--wide { grid-column: span 8; box-shadow: var(--sh-2);
              padding: clamp(28px, 3vw, 44px); gap: var(--sp-5); justify-content: center; }
 .art--wide .art__title { font-size: var(--t-display-3); font-weight: var(--w-black);
@@ -103,6 +161,15 @@
 .art--tech { background: var(--cyan-wash); border-color: var(--line-cyan); }
 .art--tech .art__kicker { color: var(--cyan-ink); }
 .art--half { grid-column: span 6; box-shadow: var(--sh-1); padding: clamp(26px, 2.6vw, 36px); }
+/* Index entry for the lead feature — folds it into the filterable corpus */
+.art--lead { grid-column: 1 / -1; border-color: var(--line-cyan); box-shadow: var(--sh-1);
+             gap: var(--sp-3); }
+.art__leadrow { display: flex; align-items: baseline; justify-content: space-between;
+                flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); }
+.art--lead .art__lede { max-width: 76ch; }
+.art__go { font-family: var(--font-mono); font-size: var(--t-micro);
+           letter-spacing: var(--ls-mono); text-transform: uppercase;
+           color: var(--cyan-ink); white-space: nowrap; }
 .lib-span { grid-column: 1 / -1; }
 
 /* Empty state */
@@ -167,17 +234,41 @@
 
 /* ----------------------------------------------------------- RESPONSIVE */
 @media (max-width: 1080px) {
-  .masthead__grid { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .masthead__grid { grid-template-columns: minmax(0, 1fr);
+                    grid-template-areas: "intro" "rubx" "stats"; align-items: start; }
   .feature { grid-template-columns: minmax(0, 1fr); }
   .lib { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .art { grid-column: span 3; }
   .art--hero, .art--wide, .art--half { grid-column: span 6; }
+  .art--lead { grid-column: 1 / -1; }
   .explain__grid { grid-template-columns: minmax(0, 1fr); }
   .lib-news { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 680px) {
+  .masthead { padding-block: 44px 56px; }
+  .masthead__grid { row-gap: var(--sp-7); }
+  .masthead .t-lead { font-size: 0.96875rem; }
+  .masthead__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+                     gap: var(--sp-4); }
+  .masthead__stats > .stat + .stat { padding-left: var(--sp-4); }
+  .masthead__stats .stat__label { font-size: var(--t-micro); }
+  .fsteps { grid-template-columns: minmax(0, 1fr); }
+  .fstep { padding: 14px 0; gap: var(--sp-3); }
+  .fstep:first-child { padding-top: 0; }
+  .fstep:last-child { padding-bottom: 0; }
+  .fstep + .fstep { border-left: 0; border-top: 1px solid var(--line-navy); }
+  .fstep + .fstep::before { content: '↓'; left: 50%; top: 0;
+                            padding: 0 10px; }
+  .fstep svg { max-width: 140px; margin-inline: auto; }
+  .fstep__label { min-height: 0; }
+  .feature { padding-block: 32px 36px; gap: 36px; }
+  .feature__visual { padding: 20px; }
+  .fviz__top { flex-direction: column; gap: 4px; padding-bottom: var(--sp-3);
+               margin-bottom: var(--sp-4); }
+  .fviz__top span { white-space: nowrap; }
+  .fviz__foot { margin-top: var(--sp-4); }
   .lib { grid-template-columns: minmax(0, 1fr); }
-  .art, .art--hero, .art--wide, .art--half { grid-column: auto; }
+  .art, .art--hero, .art--wide, .art--half, .art--lead { grid-column: auto; }
   .toolbar__right { flex-basis: 100%; margin-left: 0; }
   .toolbar__count { text-align: left; }
   .feature-rule { flex-direction: column; gap: var(--sp-2); }
@@ -253,28 +344,27 @@
   <section class="masthead">
     <div class="wrap">
       <div class="masthead__grid">
-        <div>
+        <div class="masthead__intro">
           <p class="eyebrow">Wiedza · Biblioteka Instytutu</p>
           <h1 class="t-d1">Zrozum swój organizm, <span class="t-accent">zanim</span> mu cokolwiek podasz.</h1>
           <p class="t-lead">Biodostępność, suplementacja personalizowana, profilaktyka
-             i sztuka czytania własnych wyników. Piszemy tak, żeby uzasadnienie każdej
-             rekomendacji dało się zrozumieć — nie po to, żeby sprzedawać.</p>
-          <div class="stat-row masthead__stats" data-itp-reveal>
-            <div class="stat">
-              <span class="stat__num">13</span>
-              <span class="stat__label">artykułów w bibliotece</span>
-            </div>
-            <div class="stat">
-              <span class="stat__num">6</span>
-              <span class="stat__label">rubryk tematycznych</span>
-            </div>
-            <div class="stat">
-              <span class="stat__num">110</span>
-              <span class="stat__label">minut czytania łącznie</span>
-            </div>
+             i sztuka czytania własnych wyników.</p>
+        </div>
+        <div class="stat-row masthead__stats" data-itp-reveal>
+          <div class="stat">
+            <span class="stat__num">13</span>
+            <span class="stat__label">artykułów w bibliotece</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num">6</span>
+            <span class="stat__label">rubryk tematycznych</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num">110</span>
+            <span class="stat__label">minut czytania łącznie</span>
           </div>
         </div>
-        <div data-itp-reveal>
+        <div class="masthead__rubx" data-itp-reveal>
           <div class="rubx-head">
             <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);text-transform:uppercase;color:var(--ink-muted)">Rubryki</span>
             <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);color:var(--ink-faint)">01–06</span>
@@ -282,7 +372,7 @@
           <ul class="rubx-list">
             <li><button type="button" class="rubx" data-jump="biodostepnosc">
               <span class="rubx__num">01</span><span class="rubx__dot" style="--dot:var(--cyan)"></span>
-              <span class="rubx__name">Biodostępność</span><span class="rubx__count">02</span></button></li>
+              <span class="rubx__name">Biodostępność</span><span class="rubx__count">03</span></button></li>
             <li><button type="button" class="rubx" data-jump="sen">
               <span class="rubx__num">02</span><span class="rubx__dot" style="--dot:var(--f2-neuro)"></span>
               <span class="rubx__name">Sen i regeneracja</span><span class="rubx__count">02</span></button></li>
@@ -305,7 +395,7 @@
   </section>
 
   <!-- ======================================================== LEAD FEATURE -->
-  <section class="feature-band" aria-labelledby="feature-title">
+  <section class="feature-band" id="przewodni" aria-labelledby="feature-title">
     <div class="wrap">
       <div class="feature-rule">
         <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono-wide);text-transform:uppercase;color:var(--ink)">Artykuł przewodni</span>
@@ -317,100 +407,106 @@
             <span class="art__dot" style="--dot:var(--cyan)"></span>
             Biodostępność · 12 min · 21.08.2026
           </p>
-          <h2 class="t-d2" id="feature-title">Dlaczego większość kurkuminy nigdy nie trafia do Twojej krwi</h2>
+          <h2 class="t-d2" id="feature-title"><a href="biosneds.html#mechanizm">Dlaczego większość kurkuminy nigdy nie trafia do Twojej krwi</a></h2>
           <p class="t-lead feature__stand">Kurkumina jest lipofilowa: nie rozpuszcza się w wodzie,
              więc układ pokarmowy przyswaja jedynie ułamek tego, co połykasz. Wyjaśniamy, czym
              naprawdę jest biodostępność, jak mierzy się ją w badaniach PAMPA i farmakokinetycznych —
              i dlaczego forma podania potrafi znaczyć więcej niż dawka na etykiecie.</p>
           <div class="feature__byline">
             <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);text-transform:uppercase;color:var(--ink-muted)">Zespół redakcyjny Instytutu</span>
-            <span class="chip">Konsultacja: specjalista ITP — nazwisko w akceptacji</span>
           </div>
         </div>
-        <div class="feature__visual" data-itp-reveal>
-          <svg viewBox="0 0 640 400" role="img"
-               aria-label="Schemat poglądowy: substancja lipofilowa przechodzi w nanoemulsję in situ i zostaje wchłonięta przez nabłonek jelita.">
-            <defs>
-              <pattern id="dg" width="24" height="24" patternUnits="userSpaceOnUse">
-                <circle cx="1" cy="1" r="1" fill="rgba(247,246,241,.08)"/>
-              </pattern>
-              <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
-                <path d="M0 0 8 4 0 8Z" fill="#00CFFF"/>
-              </marker>
-            </defs>
-            <rect x="0" y="0" width="640" height="400" fill="url(#dg)"/>
-            <g font-family="'Space Mono', monospace" font-size="10" letter-spacing="1.4">
-              <text x="58" y="52" fill="#00CFFF" font-size="11">01</text>
-              <text x="58" y="70" fill="rgba(247,246,241,.62)">SUBSTANCJA LIPOFILOWA</text>
-              <text x="262" y="52" fill="#00CFFF" font-size="11">02</text>
-              <text x="262" y="70" fill="rgba(247,246,241,.62)">NANOEMULSJA IN SITU</text>
-              <text x="484" y="52" fill="#00CFFF" font-size="11">03</text>
-              <text x="484" y="70" fill="rgba(247,246,241,.62)">WCHŁANIANIE</text>
-            </g>
-            <!-- 01 · big lipophilic droplet -->
-            <circle cx="110" cy="210" r="52" fill="#102A4C" stroke="rgba(247,246,241,.42)" stroke-width="1.4"/>
-            <g stroke="rgba(247,246,241,.22)" stroke-width="1.2">
-              <path d="M78 192c14-12 50-14 64 2"/>
-              <path d="M74 212c18-10 56-10 72 0"/>
-              <path d="M80 232c16 10 46 10 60 0"/>
-            </g>
-            <!-- connector 1 -->
-            <line x1="172" y1="210" x2="230" y2="210" stroke="#00CFFF" stroke-width="1.6"
-                  stroke-dasharray="2 7" opacity=".75" marker-end="url(#arr)"/>
-            <!-- 02 · nanoemulsion cluster inside hex -->
-            <path d="M398 210 359 277.5 281 277.5 242 210 281 142.5 359 142.5Z"
-                  fill="none" stroke="rgba(0,207,255,.35)" stroke-width="1.3"/>
-            <g stroke="#00CFFF" stroke-width="1.3" fill="none">
-              <circle cx="300" cy="185" r="8"/>
-              <circle cx="331" cy="168" r="5"/>
-              <circle cx="352" cy="198" r="7"/>
-              <circle cx="286" cy="222" r="5"/>
-              <circle cx="318" cy="238" r="8"/>
-              <circle cx="349" cy="234" r="4"/>
-              <circle cx="272" cy="192" r="4"/>
-            </g>
-            <g fill="rgba(0,207,255,.34)">
-              <circle cx="317" cy="206" r="4"/>
-              <circle cx="338" cy="216" r="3"/>
-              <circle cx="296" cy="248" r="3"/>
-              <circle cx="304" cy="160" r="3"/>
-              <circle cx="342" cy="252" r="3"/>
-            </g>
-            <!-- connector 2 -->
-            <line x1="404" y1="210" x2="452" y2="210" stroke="#00CFFF" stroke-width="1.6"
-                  stroke-dasharray="2 7" opacity=".75" marker-end="url(#arr)"/>
-            <!-- 03 · epithelium membrane -->
-            <g stroke="rgba(247,246,241,.4)" stroke-width="1.4" fill="none">
-              <path d="M506 118c10 16-10 30 0 46s-10 30 0 46-10 30 0 46-10 30 0 46"/>
-              <path d="M520 118c10 16-10 30 0 46s-10 30 0 46-10 30 0 46-10 30 0 46"/>
-            </g>
-            <g stroke="#00CFFF" stroke-width="1.3" opacity=".9">
-              <line x1="527" y1="164" x2="566" y2="164" marker-end="url(#arr)"/>
-              <line x1="527" y1="212" x2="580" y2="212" marker-end="url(#arr)"/>
-              <line x1="527" y1="260" x2="560" y2="260" marker-end="url(#arr)"/>
-            </g>
-            <g fill="rgba(0,207,255,.55)">
-              <circle cx="500" cy="164" r="4"/>
-              <circle cx="512" cy="212" r="4"/>
-              <circle cx="503" cy="260" r="4"/>
-              <circle cx="592" cy="164" r="3"/>
-              <circle cx="606" cy="212" r="3"/>
-              <circle cx="586" cy="260" r="3"/>
-            </g>
-            <text x="58" y="366" font-family="'Space Mono', monospace" font-size="9.5"
-                  letter-spacing="1.2" fill="rgba(247,246,241,.45)">SCHEMAT POGLĄDOWY — NIE PRZEDSTAWIA DANYCH POMIAROWYCH</text>
-          </svg>
+        <div data-itp-reveal>
+          <div class="feature__visual" role="img"
+               aria-label="Schemat poglądowy w trzech krokach: substancja lipofilowa przechodzi w nanoemulsję in situ i zostaje wchłonięta przez nabłonek jelita. Udokumentowany efekt: od 40× do 100× wzrost wchłaniania, w zależności od składnika.">
+            <div class="fviz__top" aria-hidden="true">
+              <span><b>BioSNEDS™</b> · nanoemulgacja in situ</span>
+              <span>Kroki 01–03</span>
+            </div>
+            <div class="fsteps" aria-hidden="true">
+              <div class="fstep">
+                <p class="fstep__label"><span class="fstep__num">01</span> Substancja lipofilowa</p>
+                <svg viewBox="0 0 180 132">
+                  <circle cx="90" cy="66" r="46" fill="#102A4C" stroke="rgba(247,246,241,.5)" stroke-width="2"/>
+                  <g stroke="rgba(247,246,241,.3)" stroke-width="2" fill="none">
+                    <path d="M62 50c12-10 44-12 56 2"/>
+                    <path d="M58 68c16-9 49-9 64 0"/>
+                    <path d="M64 86c14 9 40 9 52 0"/>
+                  </g>
+                </svg>
+                <p class="fstep__sub">Kurkumina rozpuszcza się w fazie olejowej, nie w wodzie — połknięta kropla jest za duża dla nabłonka.</p>
+              </div>
+              <div class="fstep">
+                <p class="fstep__label"><span class="fstep__num">02</span> Nanoemulsja in situ</p>
+                <svg viewBox="0 0 180 132">
+                  <path d="M142 66 116 111H64L38 66 64 21h52Z" fill="none" stroke="rgba(0,207,255,.45)" stroke-width="2"/>
+                  <g stroke="#00CFFF" stroke-width="2" fill="none">
+                    <circle cx="78" cy="48" r="9"/>
+                    <circle cx="108" cy="40" r="5"/>
+                    <circle cx="122" cy="72" r="8"/>
+                    <circle cx="70" cy="80" r="5"/>
+                    <circle cx="96" cy="92" r="9"/>
+                    <circle cx="118" cy="96" r="4"/>
+                    <circle cx="62" cy="60" r="4"/>
+                  </g>
+                  <g fill="rgba(0,207,255,.34)">
+                    <circle cx="94" cy="66" r="4"/>
+                    <circle cx="110" cy="80" r="3"/>
+                    <circle cx="80" cy="100" r="3"/>
+                    <circle cx="84" cy="30" r="3"/>
+                    <circle cx="120" cy="54" r="3"/>
+                  </g>
+                </svg>
+                <p class="fstep__sub">W płynie jelitowym prekoncentrat samorzutnie rozprasza się w mikroskopijne krople.</p>
+              </div>
+              <div class="fstep">
+                <p class="fstep__label"><span class="fstep__num">03</span> Wchłanianie</p>
+                <svg viewBox="0 0 180 132">
+                  <g stroke="rgba(247,246,241,.45)" stroke-width="2" fill="none">
+                    <path d="M76 8c8 12-8 22 0 34s-8 22 0 34-8 22 0 34"/>
+                    <path d="M92 8c8 12-8 22 0 34s-8 22 0 34-8 22 0 34"/>
+                  </g>
+                  <g stroke="#00CFFF" stroke-width="2">
+                    <line x1="100" y1="34" x2="146" y2="34"/>
+                    <line x1="100" y1="66" x2="156" y2="66"/>
+                    <line x1="100" y1="98" x2="142" y2="98"/>
+                  </g>
+                  <g fill="#00CFFF">
+                    <path d="M146 29.5l10 4.5-10 4.5z"/>
+                    <path d="M156 61.5l10 4.5-10 4.5z"/>
+                    <path d="M142 93.5l10 4.5-10 4.5z"/>
+                  </g>
+                  <g fill="rgba(0,207,255,.55)">
+                    <circle cx="60" cy="34" r="4"/>
+                    <circle cx="66" cy="66" r="4"/>
+                    <circle cx="58" cy="98" r="4"/>
+                    <circle cx="168" cy="34" r="3"/>
+                    <circle cx="174" cy="66" r="3"/>
+                    <circle cx="164" cy="98" r="3"/>
+                  </g>
+                </svg>
+                <p class="fstep__sub">Zemulgowaną formę nabłonek jelita jest w stanie przyjąć i przekazać dalej.</p>
+              </div>
+            </div>
+            <div class="fviz__foot" aria-hidden="true">
+              <span class="v">40×–100×</span>
+              <span class="k">wzrost wchłaniania · w zależności od składnika</span>
+            </div>
+          </div>
+          <p class="t-caption mono fviz__caption">Schemat poglądowy — nie przedstawia danych pomiarowych.</p>
         </div>
       </article>
     </div>
   </section>
 
   <!-- ============================================================= LIBRARY -->
-  <section class="section section--ivory" id="biblioteka" aria-labelledby="lib-title" style="padding-top:clamp(56px,7vw,104px)">
+  <section class="section section--ivory" id="biblioteka" aria-labelledby="lib-title" style="padding-top:clamp(40px,5vw,72px)">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Biblioteka</p>
         <h2 class="t-d2" id="lib-title" tabindex="-1">Czytaj według rubryki<br>albo szukaj po hasłach.</h2>
+        <p class="t-lead" style="max-width:52ch">Piszemy tak, żeby uzasadnienie każdej
+           rekomendacji dało się zrozumieć — nie po to, żeby sprzedawać.</p>
       </div>
 
       <div class="toolbar" data-itp-reveal>
@@ -433,101 +529,124 @@
           <label class="visually-hidden" for="lib-q">Szukaj w tytułach i zajawkach</label>
           <input class="input" type="search" id="lib-q" name="q" autocomplete="off"
                  placeholder="Szukaj: melatonina, maślan, NF-κB…">
-          <p class="toolbar__count mono" id="lib-count" role="status" aria-live="polite">12 / 12 artykułów</p>
+          <p class="toolbar__count mono" id="lib-count" role="status" aria-live="polite">13 / 13 artykułów</p>
         </div>
       </div>
 
       <div class="lib" id="lib">
 
-        <article class="art art--hero" data-rub="diagnostyka" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot"></span>Diagnostyka · 11 min · 25.08.2026</p>
-          <h3 class="art__title">Jak czytać własne wyniki badań: zakres referencyjny to nie werdykt</h3>
+        <article class="art art--lead" data-rub="biodostepnosc" data-itp-reveal
+                 data-keywords="wchłanianie kurkumina biodostępność badanie farmakokinetyka pampa forma podania">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--cyan)"></span><span class="kclip"><span class="kw"><span class="ks">Artykuł przewodni</span><span class="ks">Biodostępność</span><span class="ks">12 min</span><span class="ks">21.08.2026</span></span></span></p>
+          <div class="art__leadrow">
+            <h3 class="art__title"><a href="#przewodni">Dlaczego większość kurkuminy nigdy nie trafia do Twojej krwi</a></h3>
+            <span class="art__go" aria-hidden="true">Czytaj wyżej ↑</span>
+          </div>
+          <p class="art__lede">Czym naprawdę jest biodostępność, dlaczego kurkumina jest jej
+             podręcznikowym przykładem — i co mierzą badania PAMPA i farmakokinetyczne.</p>
+        </article>
+
+        <article class="art art--hero" data-rub="diagnostyka" data-itp-reveal
+                 data-keywords="wyniki badań krew laboratorium zakres referencyjny norma pomiar trend diagnostyka">
+          <p class="art__kicker"><span class="art__dot"></span><span class="kclip"><span class="kw"><span class="ks">Diagnostyka</span><span class="ks">11 min</span><span class="ks">25.08.2026</span></span></span></p>
+          <h3 class="art__title"><a href="result.html">Jak czytać własne wyniki badań: zakres referencyjny to nie werdykt</a></h3>
           <p class="art__lede">„W normie” znaczy tyle, co „typowe dla populacji” — a nie „optymalne
              dla Ciebie”. Od czego zacząć czytanie wyników, czym różni się pojedynczy pomiar od
              trendu i dlaczego dwa laboratoria mogą podać dwa różne zakresy dla tej samej krwi.</p>
         </article>
 
-        <article class="art" data-rub="sen" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f2-neuro)"></span>Sen i regeneracja · 7 min · 18.08.2026</p>
-          <h3 class="art__title">Melatonina nie jest tabletką nasenną. Jest sygnałem ciemności</h3>
+        <article class="art" data-rub="sen" data-itp-reveal
+                 data-keywords="melatonina sen chronobiologia światło rytm dobowy ciemność dawka pora">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f2-neuro)"></span><span class="kclip"><span class="kw"><span class="ks">Sen i regeneracja</span><span class="ks">7 min</span><span class="ks">18.08.2026</span></span></span></p>
+          <h3 class="art__title"><a href="product.html#neurosynapse">Melatonina nie jest tabletką nasenną. Jest sygnałem ciemności</a></h3>
           <p class="art__lede">Wieczorny wzrost melatoniny to informacja dla całego organizmu, nie
              środek usypiający. O chronobiologii, świetle po zmroku i tym, dlaczego pora przyjęcia
              znaczy więcej niż dawka.</p>
         </article>
 
-        <article class="art" data-rub="trawienie" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f1-digest)"></span>Trawienie i mikrobiom · 7 min · 11.08.2026</p>
-          <h3 class="art__title">Maślan: paliwo, które jelito grube woli wyprodukować samo</h3>
+        <article class="art" data-rub="trawienie" data-itp-reveal
+                 data-keywords="maślan jelito mikrobiom błonnik bariera jelitowa kolonocyt trawienie">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f1-digest)"></span><span class="kclip"><span class="kw"><span class="ks">Trawienie i mikrobiom</span><span class="ks">7 min</span><span class="ks">11.08.2026</span></span></span></p>
+          <h3 class="art__title"><a href="product.html#digestease">Maślan: paliwo, które jelito grube woli wyprodukować samo</a></h3>
           <p class="art__lede">Krótkołańcuchowy kwas tłuszczowy, który odżywia kolonocyty i
              uszczelnia barierę jelitową. Skąd się bierze, dlaczego bywa go za mało i co ma do
              tego błonnik, którego nie trawisz.</p>
         </article>
 
-        <article class="art art--tech" data-rub="biodostepnosc" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--cyan)"></span>Biodostępność · 8 min · 07.08.2026</p>
-          <h3 class="art__title">Nanoemulsja in situ: co dzieje się z kapsułką w jelicie cienkim</h3>
+        <article class="art art--tech" data-rub="biodostepnosc" data-itp-reveal
+                 data-keywords="nanoemulsja wchłanianie biodostępność kapsułka jelito cienkie substancja lipofilowa technologia">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--cyan)"></span><span class="kclip"><span class="kw"><span class="ks">Biodostępność</span><span class="ks">8 min</span><span class="ks">07.08.2026</span></span></span></p>
+          <h3 class="art__title"><a href="biosneds.html#mechanizm">Nanoemulsja in situ: co dzieje się z kapsułką w jelicie cienkim</a></h3>
           <p class="art__lede">Krok po kroku: jak system samonanoemulgujący zamienia lipofilową
              substancję w mikroskopijne krople, które nabłonek jelita potrafi przyjąć. Bez chemii
              ponad poziom liceum.</p>
         </article>
 
-        <article class="art" data-rub="zapalny" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f3-inflam)"></span>Stan zapalny · 10 min · 29.07.2026</p>
-          <h3 class="art__title">NF-κB: przełącznik zapalny, który styl życia zostawia włączony</h3>
+        <article class="art" data-rub="zapalny" data-itp-reveal
+                 data-keywords="nf-kb zapalenie stan zapalny przewlekły styl życia nawyk">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f3-inflam)"></span><span class="kclip"><span class="kw"><span class="ks">Stan zapalny</span><span class="ks">10 min</span><span class="ks">29.07.2026</span></span></span></p>
+          <h3 class="art__title"><a href="product.html#inflamshield">NF-κB: przełącznik zapalny, który styl życia zostawia włączony</a></h3>
           <p class="art__lede">Ostry stan zapalny leczy. Przewlekły — wyniszcza. Jak działa czynnik
              transkrypcyjny NF-κB i co w codziennych nawykach utrzymuje go w pozycji „on”.</p>
         </article>
 
-        <article class="art" data-rub="dlugowiecznosc" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f4-vital)"></span>Długowieczność · 9 min · 30.06.2026</p>
-          <h3 class="art__title">Mitofagia: wielkie sprzątanie w elektrowniach komórki</h3>
+        <article class="art" data-rub="dlugowiecznosc" data-itp-reveal
+                 data-keywords="mitofagia mitochondrium energia komórka starzenie długowieczność">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f4-vital)"></span><span class="kclip"><span class="kw"><span class="ks">Długowieczność</span><span class="ks">9 min</span><span class="ks">30.06.2026</span></span></span></p>
+          <h3 class="art__title"><a href="product.html#vitalcore">Mitofagia: wielkie sprzątanie w elektrowniach komórki</a></h3>
           <p class="art__lede">Stare mitochondria produkują mniej energii i więcej szkód. Jak
              organizm je rozpoznaje i utylizuje — i dlaczego ten proces zwalnia z wiekiem.</p>
         </article>
 
-        <article class="art" data-rub="sen" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f2-neuro)"></span>Sen i regeneracja · 9 min · 03.07.2026</p>
-          <h3 class="art__title">GABA: hamulec, którego układ nerwowy używa częściej niż gazu</h3>
+        <article class="art" data-rub="sen" data-itp-reveal
+                 data-keywords="gaba układ nerwowy spokój hamowanie neuron sen regeneracja rytm">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f2-neuro)"></span><span class="kclip"><span class="kw"><span class="ks">Sen i regeneracja</span><span class="ks">9 min</span><span class="ks">03.07.2026</span></span></span></p>
+          <h3 class="art__title"><a href="product.html#neurosynapse">GABA: hamulec, którego układ nerwowy używa częściej niż gazu</a></h3>
           <p class="art__lede">Większość neuronów w mózgu słucha sygnałów hamujących. Co aktywuje
              szlaki GABA, jak wygląda ich dobowy rytm i dlaczego „spokój” jest zjawiskiem
              biochemicznym, a nie cechą charakteru.</p>
         </article>
 
-        <article class="art art--wide" data-rub="zapalny" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f3-inflam)"></span>Stan zapalny · 8 min · 15.05.2026</p>
-          <h3 class="art__title">COX, LOX i kaskada, którą czujesz jako ból</h3>
+        <article class="art art--wide" data-rub="zapalny" data-itp-reveal
+                 data-keywords="cox lox zapalenie ból enzym kaskada hamowanie">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f3-inflam)"></span><span class="kclip"><span class="kw"><span class="ks">Stan zapalny</span><span class="ks">8 min</span><span class="ks">15.05.2026</span></span></span></p>
+          <h3 class="art__title"><a href="product.html#inflamshield">COX, LOX i kaskada, którą czujesz jako ból</a></h3>
           <p class="art__lede">Dwie rodziny enzymów zamieniają tłuszcze błon komórkowych w cząsteczki
              sygnałowe zapalenia. Wyjaśniamy mechanizm kaskady — i czym różni się hamowanie
              selektywne od siłowego wyłączania wszystkiego naraz.</p>
         </article>
 
-        <article class="art" data-rub="trawienie" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f1-digest)"></span>Trawienie i mikrobiom · 9 min · 20.06.2026</p>
-          <h3 class="art__title">Bariera jelitowa: jedna warstwa komórek między światem a Twoją krwią</h3>
+        <article class="art" data-rub="trawienie" data-itp-reveal
+                 data-keywords="bariera jelitowa nabłonek jelito odporność szczelność tolerancja pokarmowa zmęczenie">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f1-digest)"></span><span class="kclip"><span class="kw"><span class="ks">Trawienie i mikrobiom</span><span class="ks">9 min</span><span class="ks">20.06.2026</span></span></span></p>
+          <h3 class="art__title"><a href="product.html#digestease">Bariera jelitowa: jedna warstwa komórek między światem a Twoją krwią</a></h3>
           <p class="art__lede">Nabłonek jelita ma grubość pojedynczej komórki, a decyduje o
              odporności, tolerancji pokarmowej i przewlekłym zmęczeniu. O tym, co go uszczelnia,
              a co rozszczelnia.</p>
         </article>
 
-        <article class="art" data-rub="diagnostyka" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--navy-500)"></span>Diagnostyka · 6 min · 09.07.2026</p>
-          <h3 class="art__title">Dlaczego ankieta zdrowotna pyta o kofeinę, alkohol i porę badań</h3>
+        <article class="art" data-rub="diagnostyka" data-itp-reveal
+                 data-keywords="ankieta analiza wywiad pytanie kofeina alkohol rekomendacja specjalista">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--navy-500)"></span><span class="kclip"><span class="kw"><span class="ks">Diagnostyka</span><span class="ks">6 min</span><span class="ks">09.07.2026</span></span></span></p>
+          <h3 class="art__title"><a href="quiz.html">Dlaczego ankieta zdrowotna pyta o kofeinę, alkohol i porę badań</a></h3>
           <p class="art__lede">Anatomia dobrego wywiadu: co każde pytanie analizy ITP mówi o Twojej
              fizjologii i jak z odpowiedzi powstaje uzasadniona rekomendacja — zawsze zatwierdzana
              przez specjalistę, nie przez algorytm.</p>
         </article>
 
-        <article class="art art--half" data-rub="biodostepnosc" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--cyan)"></span>Biodostępność · 6 min · 12.06.2026</p>
-          <h3 class="art__title">PAMPA, PK, AUC: słownik, który pozwala czytać badania wchłaniania</h3>
+        <article class="art art--half" data-rub="biodostepnosc" data-itp-reveal
+                 data-keywords="pampa pk auc wchłanianie biodostępność badanie słownik model">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--cyan)"></span><span class="kclip"><span class="kw"><span class="ks">Biodostępność</span><span class="ks">6 min</span><span class="ks">12.06.2026</span></span></span></p>
+          <h3 class="art__title"><a href="biosneds.html#parametry">PAMPA, PK, AUC: słownik, który pozwala czytać badania wchłaniania</a></h3>
           <p class="art__lede">Trzy skróty wracają w każdej publikacji o biodostępności. Tłumaczymy,
              co naprawdę mierzą, czym różni się model od organizmu i które z nich mówi cokolwiek
              o Tobie.</p>
         </article>
 
-        <article class="art art--half" data-rub="dlugowiecznosc" data-itp-reveal>
-          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f4-vital)"></span>Długowieczność · 8 min · 02.06.2026</p>
-          <h3 class="art__title">Kwas elagowy i urolityny: co owoc granatu wie o starzeniu</h3>
+        <article class="art art--half" data-rub="dlugowiecznosc" data-itp-reveal
+                 data-keywords="kwas elagowy urolityna granat mikrobiom starzenie długowieczność wchłanianie">
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f4-vital)"></span><span class="kclip"><span class="kw"><span class="ks">Długowieczność</span><span class="ks">8 min</span><span class="ks">02.06.2026</span></span></span></p>
+          <h3 class="art__title"><a href="product.html#vitalcore">Kwas elagowy i urolityny: co owoc granatu wie o starzeniu</a></h3>
           <p class="art__lede">Kwas elagowy sam w sobie słabo się wchłania; część pracy wykonuje za
              nas mikrobiom, przetwarzając go w urolityny. O jednym z ciekawszych łańcuchów
              zależności w żywieniu.</p>
@@ -788,7 +907,12 @@
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
       .replace(/ł/g, 'l');
   }
-  cards.forEach(function (c) { c.text = fold(c.el.textContent || ''); });
+  /* Searchable text = rendered content + base-form keywords, so an inflected
+     query ("wchłanianie") still finds a card that renders "wchłaniania". */
+  cards.forEach(function (c) {
+    c.text = fold((c.el.textContent || '') + ' ' +
+                  (c.el.getAttribute('data-keywords') || ''));
+  });
 
   var state = { r: 'all', q: '' };
 
