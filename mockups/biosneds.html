@@ -1,0 +1,1393 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BioSNEDS™ — technologia biodostępności | ITP</title>
+<meta name="description" content="BioSNEDS™ — licencjonowany Self-Nanoemulsifying Delivery System. Od 40× do 100× wzrost wchłaniania, w zależności od składnika. Parametry oceniane w badaniach PAMPA, PK i farmakokinetycznych.">
+<link rel="stylesheet" href="../styles/tokens.css">
+<style>
+/* ======================================================================
+   biosneds.html — page-specific styles only.
+   Everything reusable comes from ../styles/tokens.css.
+   ==================================================================== */
+
+/* ------------------------------------------------------------- HERO -- */
+.bshero {
+  position: relative;
+  overflow: hidden;
+  background: var(--navy-900);
+  color: var(--on-navy);
+  padding-block: clamp(80px, 10vw, 168px) clamp(64px, 8vw, 128px);
+}
+.bshero__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(40px, 6vw, 88px);
+  align-items: center;
+}
+.bshero__title {
+  display: grid;
+  gap: clamp(8px, 1.2vw, 16px);
+  margin-top: var(--sp-6);
+}
+.bshero__range {
+  font-family: var(--font-mono);
+  font-weight: var(--w-bold);
+  font-size: clamp(2.5rem, 6.4vw, 4.75rem);
+  letter-spacing: -.04em;
+  line-height: 1;
+  color: var(--cyan);
+  white-space: nowrap;
+}
+.bshero__range small {
+  font-size: .42em;
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono);
+  color: var(--on-navy-soft);
+  vertical-align: .38em;
+  text-transform: uppercase;
+}
+.bshero__main {
+  font-size: var(--t-display-2);
+  font-weight: var(--w-black);
+  letter-spacing: var(--ls-display-tight);
+  line-height: var(--lh-display);
+  color: var(--on-navy);
+}
+.bshero__dep {
+  font-size: var(--t-display-3);
+  font-weight: var(--w-extra);
+  letter-spacing: var(--ls-head);
+  line-height: 1.1;
+  color: var(--on-navy-soft);
+}
+.bshero__lead { max-width: 52ch; margin-top: var(--sp-6); }
+.bshero__cta { margin-top: var(--sp-8); }
+.bshero__micro {
+  margin-top: var(--sp-6);
+  font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: var(--on-navy-muted);
+}
+.bshero__bg {
+  position: absolute;
+  right: -140px;
+  top: -120px;
+  width: 640px;
+  opacity: .5;
+  pointer-events: none;
+}
+.bshero__bg .pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bs-pulse 8s var(--ease) infinite;
+}
+.bshero__bg .pulse--late { animation-delay: -4s; }
+@keyframes bs-pulse {
+  0%, 100% { transform: scale(1); opacity: .8; }
+  50%      { transform: scale(1.18); opacity: .35; }
+}
+
+/* Hero instrument card — the evidence panel */
+.labcard {
+  margin: 0;
+  background: var(--navy-800);
+  border: 1px solid var(--line-navy);
+  border-radius: var(--r-md);
+  padding: clamp(20px, 2vw, 28px);
+  box-shadow: var(--sh-4);
+}
+.labcard__head {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: var(--on-navy-muted);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line-navy);
+}
+.labcard__head b { color: var(--cyan); font-weight: var(--w-bold); }
+.labcard__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--sp-2) var(--sp-4);
+  align-items: baseline;
+  padding-block: var(--sp-4);
+  border-bottom: 1px solid var(--line-navy);
+}
+.labcard__name { font-weight: var(--w-semi); font-size: var(--t-body-sm); }
+.labcard__sub { font-size: var(--t-caption); color: var(--on-navy-muted); }
+.labcard__val {
+  font-family: var(--font-mono);
+  font-weight: var(--w-bold);
+  font-size: var(--t-body);
+  color: var(--cyan);
+  text-align: right;
+  white-space: nowrap;
+}
+.labcard__val small {
+  display: block;
+  font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono);
+  color: var(--on-navy-muted);
+  font-weight: var(--w-regular);
+}
+.labcard__track {
+  grid-column: 1 / -1;
+  height: 3px;
+  background: rgba(247, 246, 241, .08);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+.labcard__bar {
+  height: 100%;
+  width: var(--w, 50%);
+  background: var(--cyan);
+  border-radius: var(--r-pill);
+  opacity: .85;
+}
+.labcard__foot {
+  padding-top: var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: var(--on-navy-faint);
+}
+
+/* ------------------------------------------------- DEFINITION / SPEC -- */
+.speclist { display: grid; margin-top: var(--sp-9); border-top: 1px solid var(--line-strong); }
+.specrow {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: var(--sp-4);
+  padding-block: var(--sp-5);
+  border-bottom: 1px solid var(--line);
+}
+.specrow dt {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono-wide);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding-top: 3px;
+}
+.specrow dd { margin: 0; font-size: var(--t-body); color: var(--ink-2); max-width: 62ch; }
+.specrow dd b { color: var(--ink); font-weight: var(--w-semi); }
+
+.defcards { margin-top: var(--sp-10); }
+.defcard { display: grid; gap: var(--sp-5); align-content: start; }
+.defcard h3 { font-size: var(--t-display-4); }
+.defcard p { font-size: var(--t-body-sm); color: var(--ink-2); }
+.defcard__art {
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--ivory-white);
+  padding: var(--sp-4);
+  display: grid;
+  gap: var(--sp-2);
+}
+.defcard__art .artrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-3);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--sp-2);
+}
+.defcard__art .artrow:last-child { border-bottom: 0; padding-bottom: 0; }
+.defcard__art .artrow .mono {
+  font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: var(--cyan-ink);
+}
+.defcard__art svg { width: 100%; height: auto; }
+.defcard__chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* -------------------------------------------------------- MECHANISM -- */
+.mech {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+  margin-top: var(--sp-10);
+}
+.mech__view {
+  position: relative;
+  aspect-ratio: 14 / 10;
+  background: var(--navy-800);
+  border: 1px solid var(--line-navy);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.mech__pane {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-3) var(--ease-out), visibility 0s linear var(--dur-3);
+}
+.mech__pane.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+.mech__pane svg { width: 100%; height: 100%; }
+
+/* SVG instrumentation voice */
+.mech .ln       { fill: none; stroke: var(--cyan); stroke-width: 1.4; }
+.mech .ln--soft { fill: none; stroke: rgba(127, 228, 255, .5); stroke-width: 1.1; }
+.mech .ln--dim  { fill: none; stroke: rgba(247, 246, 241, .22); stroke-width: 1; }
+.mech .ln--dash { stroke-dasharray: 4 5; }
+.mech .fillcap  { fill: rgba(0, 207, 255, .06); }
+.mech .drop     { fill: var(--cyan); }
+.mech .drop--soft { fill: rgba(127, 228, 255, .65); }
+.mech .lbl {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  fill: rgba(247, 246, 241, .62);
+}
+@media (max-width: 700px) {
+  .mech .lbl { font-size: 14px; }
+}
+.mech .lbl--hi  { fill: var(--cyan); }
+.mech .lbl--dim { fill: rgba(247, 246, 241, .38); }
+.mech .leader   { stroke: rgba(247, 246, 241, .3); stroke-width: 1; fill: none; }
+
+/* in-pane micro-motion; paused with the instrument, killed by reduced motion */
+.mech .water    { animation: bs-water 7s linear infinite alternate; }
+.mech .drift    { animation: bs-drift 6s var(--ease) infinite alternate; }
+.mech .drift--b { animation-delay: -3s; }
+.mech .cross    { animation: bs-cross 5.5s var(--ease) infinite; }
+.mech .cross--b { animation-delay: -2.6s; }
+.mech.is-paused svg * { animation-play-state: paused !important; }
+@keyframes bs-water { from { transform: translateX(-10px); } to { transform: translateX(10px); } }
+@keyframes bs-drift { from { transform: translate(0, 0); } to { transform: translate(7px, -6px); } }
+@keyframes bs-cross { 0% { transform: translateX(0); opacity: 0; }
+                      18% { opacity: 1; } 82% { opacity: 1; }
+                      100% { transform: translateX(58px); opacity: 0; } }
+
+.mech__timer {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: rgba(247, 246, 241, .1);
+}
+.mech__timer span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.mech__timer.is-run span { animation: bs-timer 5600ms linear forwards; }
+.mech.is-paused .mech__timer span { animation-play-state: paused; }
+@keyframes bs-timer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .mech__timer { display: none; } }
+
+.mech__side { display: grid; gap: var(--sp-5); align-content: start; }
+.mech__count {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono-wide);
+  text-transform: uppercase;
+  color: var(--cyan-soft);
+}
+.mech__title { font-size: var(--t-display-3); }
+.mech__caption { color: var(--on-navy-soft); min-height: 5.2em; max-width: 46ch; }
+.mech__pause {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: none;
+  border: 1px solid var(--line-navy-hi);
+  border-radius: var(--r-pill);
+  color: var(--on-navy-soft);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono-wide);
+  text-transform: uppercase;
+  padding: 10px 18px;
+  cursor: pointer;
+  justify-self: start;
+}
+.mech__pause:hover { border-color: var(--cyan); color: var(--cyan); }
+.mech__pause svg { display: inline-block; }
+.mech__tabs { display: grid; border-top: 1px solid var(--line-navy-hi); margin-top: var(--sp-2); }
+.mech__tab {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-1);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line-navy);
+  color: var(--on-navy-muted);
+  font: inherit;
+  font-size: var(--t-body-sm);
+  font-weight: var(--w-semi);
+  text-align: left;
+  cursor: pointer;
+}
+.mech__tab .mono {
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono);
+}
+.mech__tab:hover { color: var(--on-navy); }
+.mech__tab[aria-selected='true'] { color: var(--on-navy); }
+.mech__tab[aria-selected='true'] .mono { color: var(--cyan); }
+
+/* ------------------------------------------------------- PARAMETERS -- */
+.paramgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+  margin-top: var(--sp-10);
+}
+.params .fdot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: baseline;
+  background: var(--dot, var(--ink-muted));
+}
+.params .subname { display: block; font-size: var(--t-caption); color: var(--ink-muted); font-weight: var(--w-regular); }
+.params td:first-child { font-weight: var(--w-semi); }
+.params .formula-col { white-space: nowrap; }
+.paramfoot { margin-top: var(--sp-4); max-width: 68ch; }
+
+.meaning { display: grid; gap: var(--sp-5); }
+.meaning h3 { font-size: var(--t-display-4); }
+.meaning__row {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  gap: var(--sp-4);
+  padding-block: var(--sp-4);
+  border-top: 1px solid var(--line);
+}
+.meaning__tag {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  padding-top: 3px;
+}
+.meaning__tag--yes { color: var(--ok); }
+.meaning__tag--no  { color: var(--alert); }
+.meaning__row p { font-size: var(--t-body-sm); color: var(--ink-2); }
+
+/* ------------------------------------------------------------ CHART -- */
+.abschart { margin-top: var(--sp-11); display: grid; gap: var(--sp-4); }
+.abschart__row {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 96px;
+  gap: var(--sp-4);
+  align-items: center;
+}
+.abschart__name { font-size: var(--t-body-sm); font-weight: var(--w-semi); }
+.abschart__name small { display: block; font-size: var(--t-caption); color: var(--ink-muted); font-weight: var(--w-regular); }
+.abschart__track {
+  position: relative;
+  height: 30px;
+  background:
+    repeating-linear-gradient(to right,
+      var(--line) 0, var(--line) 1px, transparent 1px, transparent 25%);
+  background-size: 100.5% 100%;
+  border-right: 1px solid var(--line);
+}
+.abschart__bar {
+  position: absolute;
+  inset-block: 6px;
+  left: 0;
+  width: var(--w, 50%);
+  background: var(--navy-900);
+  border-radius: 0 2px 2px 0;
+}
+.abschart__bar--base { background: var(--ink-faint); }
+.abschart__bar--max  { background: linear-gradient(to right, var(--navy-900) 82%, var(--cyan-deep)); }
+.abschart__val {
+  font-family: var(--font-mono);
+  font-weight: var(--w-bold);
+  font-size: var(--t-body-sm);
+  text-align: right;
+  white-space: nowrap;
+}
+.abschart__axis {
+  grid-column: 2 / 3;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--ls-mono);
+  color: var(--ink-muted);
+  border-top: 1px solid var(--line-strong);
+  padding-top: var(--sp-2);
+}
+.abschart__rows { display: grid; gap: var(--sp-5); }
+.abschart__axisrow { display: grid; grid-template-columns: 220px minmax(0, 1fr) 96px; gap: var(--sp-4); }
+.abschart__caption { max-width: 74ch; margin-top: var(--sp-5); }
+
+/* --------------------------------------------------- EVIDENCE STATUS -- */
+.ledger { list-style: none; margin: var(--sp-10) 0 0; padding: 0; display: grid; }
+.ledger li {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: var(--sp-4) var(--sp-6);
+  padding-block: var(--sp-7);
+  border-top: 1px solid var(--line);
+}
+.ledger li:last-child { border-bottom: 1px solid var(--line); }
+.ledger__tag {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono-wide);
+  text-transform: uppercase;
+  padding-top: 4px;
+}
+.ledger__tag--ok   { color: var(--ok); }
+.ledger__tag--wait { color: var(--warn); }
+.ledger__tag--rule { color: var(--ink-muted); }
+.ledger h3 { font-size: var(--t-display-4); margin-bottom: var(--sp-3); }
+.ledger p { color: var(--ink-2); font-size: var(--t-body); max-width: 66ch; }
+.ledger .mono-val { font-family: var(--font-mono); font-weight: var(--w-bold); white-space: nowrap; }
+
+/* -------------------------------------------------------- FINAL CTA -- */
+.bscta { text-align: center; }
+.bscta .section-head { margin-inline: auto; }
+
+/* ------------------------------------------------------- RESPONSIVE -- */
+@media (max-width: 1080px) {
+  .bshero__bg { opacity: .28; }
+}
+@media (max-width: 980px) {
+  .bshero__grid, .mech, .paramgrid { grid-template-columns: minmax(0, 1fr); }
+  .bshero__range { font-size: clamp(2.1rem, 9.4vw, 3.4rem); }
+  .mech__caption { min-height: 0; }
+}
+@media (max-width: 640px) {
+  .specrow { grid-template-columns: minmax(0, 1fr); gap: var(--sp-2); }
+  .ledger li { grid-template-columns: minmax(0, 1fr); gap: var(--sp-2); }
+  .abschart__row, .abschart__axisrow { grid-template-columns: minmax(0, 1fr); gap: var(--sp-2); }
+  .abschart__val { text-align: left; }
+  .abschart__axis { grid-column: 1 / -1; }
+  .params .formula-col, .params th:last-child { display: none; }
+  .params th, .params td { padding-inline: var(--sp-2); }
+  .bshero__bg { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- --------------------------------------------------- FRAGMENT 1 · SKIP -->
+<a class="skip-link" href="#main">Przejdź do treści</a>
+
+<!-- ------------------------------------- FRAGMENT 2 · TRUST BAR (doc 7.1 §0) -->
+<div class="trustbar">
+  <div class="trustbar__inner">
+    <span>Rekomendacje zatwierdzane przez <b>specjalistę</b></span>
+    <span class="trustbar__dot" aria-hidden="true">·</span>
+    <span>Technologia <b>BioSNEDS™</b></span>
+    <span class="trustbar__dot" aria-hidden="true">·</span>
+    <span>Wysyłka w <b>24–48 h</b></span>
+  </div>
+</div>
+
+<!-- ------------------------------------------------- FRAGMENT 3 · HEADER -->
+<header class="sitehead">
+  <div class="wrap">
+    <div class="sitehead__bar">
+      <a class="sitehead__brand" href="hero.html">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z"
+                stroke="#0B1F3A" stroke-width="1.6"/>
+          <circle cx="13" cy="13" r="3.1" fill="#00CFFF"/>
+        </svg>
+        ITP
+      </a>
+      <nav class="sitehead__nav" aria-label="Główna nawigacja">
+        <a href="hero.html#jak-to-dziala">Jak to działa</a>
+        <a href="product.html">PERSONA</a>
+        <a href="biosneds.html" aria-current="page">BioSNEDS™</a>
+        <a href="blog.html">Wiedza</a>
+        <a href="affiliate.html">Program poleceń</a>
+      </nav>
+      <div class="sitehead__actions">
+        <a class="btn btn--ghost btn--sm btn--nav-hide" href="hero.html#instytut">Instytut</a>
+        <a class="btn btn--primary btn--sm" href="quiz.html">Rozpocznij analizę</a>
+      </div>
+      <button class="menu-toggle" type="button"
+              data-itp-menu-toggle
+              aria-expanded="false"
+              aria-controls="itp-menu-panel"
+              aria-label="Otwórz menu"
+              data-label-open="Otwórz menu"
+              data-label-close="Zamknij menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M0 1h18M0 6h18M0 11h18" stroke="#0B1F3A" stroke-width="1.6"/>
+        </svg>
+      </button>
+    </div>
+    <div class="menu-panel" id="itp-menu-panel">
+      <a href="hero.html#jak-to-dziala">Jak to działa</a>
+      <a href="product.html">PERSONA</a>
+      <a href="biosneds.html" aria-current="page">BioSNEDS™</a>
+      <a href="blog.html">Wiedza</a>
+      <a href="affiliate.html">Program poleceń</a>
+      <a href="hero.html#instytut">Instytut</a>
+      <a class="btn btn--primary btn--block" href="quiz.html">Rozpocznij analizę</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================================================== HERO · THE RANGE -->
+  <section class="bshero navy">
+    <svg class="bshero__bg" viewBox="0 0 640 640" aria-hidden="true">
+      <g fill="none" stroke="rgba(127,228,255,.22)" stroke-width="1">
+        <circle cx="330" cy="300" r="236" stroke-dasharray="2 7"/>
+        <circle cx="330" cy="300" r="150"/>
+        <circle class="pulse" cx="330" cy="300" r="64" stroke="rgba(0,207,255,.5)"/>
+        <circle cx="176" cy="176" r="13"/>
+        <circle cx="486" cy="180" r="8"/>
+        <circle class="pulse pulse--late" cx="512" cy="392" r="18" stroke="rgba(0,207,255,.4)"/>
+        <circle cx="212" cy="452" r="6"/>
+        <circle cx="416" cy="128" r="4"/>
+        <circle cx="120" cy="330" r="9"/>
+      </g>
+      <g fill="rgba(0,207,255,.55)">
+        <circle cx="330" cy="300" r="3"/>
+        <circle cx="176" cy="176" r="2"/>
+        <circle cx="512" cy="392" r="2.5"/>
+        <circle cx="120" cy="330" r="1.5"/>
+      </g>
+    </svg>
+
+    <div class="wrap">
+      <div class="bshero__grid">
+        <div>
+          <p class="eyebrow">Technologia BioSNEDS™ · licencja Verdant Nature</p>
+          <h1 class="bshero__title">
+            <span class="bshero__range">od&nbsp;40× <small>do</small>&nbsp;100×</span>
+            <span class="bshero__main">wzrost wchłaniania,</span>
+            <span class="bshero__dep">w&nbsp;zależności od&nbsp;składnika.</span>
+          </h1>
+          <p class="t-lead bshero__lead">
+            BioSNEDS™ to licencjonowany system Self&#8209;Nanoemulsifying Delivery
+            System: technologia zaprojektowana, aby zwiększyć biodostępność
+            substancji lipofilowych przez nanoemulgację in&nbsp;situ — w&nbsp;miejscu
+            wchłaniania. Cztery składniki, cztery udokumentowane wartości. Żadnych
+            uśrednień.
+          </p>
+          <div class="btn-row bshero__cta">
+            <a class="btn btn--primary" href="#mechanizm">Zobacz mechanizm</a>
+            <a class="btn btn--ghost" href="quiz.html">Sprawdź swoje dopasowanie</a>
+          </div>
+          <p class="mono bshero__micro">Parametry: badania PAMPA / PK / farmakokinetyczne</p>
+        </div>
+
+        <figure class="labcard" data-itp-reveal>
+          <figcaption class="labcard__head">
+            <span>Wzrost biodostępności</span><b>wg&nbsp;składnika</b>
+          </figcaption>
+          <div class="labcard__row">
+            <div>
+              <div class="labcard__name">EllagiSol™</div>
+              <div class="labcard__sub">kwas elagowy</div>
+            </div>
+            <div class="labcard__val">10&nbsp;000&nbsp;%<small>100×</small></div>
+            <div class="labcard__track"><div class="labcard__bar" style="--w:100%"></div></div>
+          </div>
+          <div class="labcard__row">
+            <div>
+              <div class="labcard__name">NADPro™</div>
+              <div class="labcard__sub">kwercetyna + niacynamid</div>
+            </div>
+            <div class="labcard__val">4&nbsp;440&nbsp;%<small>44,4×</small></div>
+            <div class="labcard__track"><div class="labcard__bar" style="--w:44.4%"></div></div>
+          </div>
+          <div class="labcard__row">
+            <div>
+              <div class="labcard__name">ResveraSol™</div>
+              <div class="labcard__sub">resweratrol</div>
+            </div>
+            <div class="labcard__val">4&nbsp;330&nbsp;%<small>43,3×</small></div>
+            <div class="labcard__track"><div class="labcard__bar" style="--w:43.3%"></div></div>
+          </div>
+          <div class="labcard__row">
+            <div>
+              <div class="labcard__name">CurcuSol™</div>
+              <div class="labcard__sub">kurkumina</div>
+            </div>
+            <div class="labcard__val">4&nbsp;020&nbsp;%<small>40,2×</small></div>
+            <div class="labcard__track"><div class="labcard__bar" style="--w:40.2%"></div></div>
+          </div>
+          <div class="labcard__foot">Poziom odniesienia: forma standardowa = 100&nbsp;%</div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ CZYM JEST BIOSNEDS™ -->
+  <section class="section section--ivory" id="czym-jest">
+    <div class="wrap">
+      <div class="section-head" data-itp-reveal>
+        <p class="eyebrow">Czym jest BioSNEDS™</p>
+        <h2 class="t-d2">Self&#8209;Nanoemulsifying Delivery&nbsp;System.</h2>
+        <p class="t-lead">
+          Większość cennych związków roślinnych jest lipofilowa — słabo
+          rozpuszcza się w&nbsp;wodzie i&nbsp;w&nbsp;standardowej formie
+          w&nbsp;dużej mierze przechodzi przez układ trawienny niewykorzystana.
+          BioSNEDS™ rozwiązuje ten problem u&nbsp;źródła.
+        </p>
+      </div>
+
+      <dl class="speclist" data-itp-reveal>
+        <div class="specrow">
+          <dt>System</dt>
+          <dd><b>Self&#8209;Nanoemulsifying Delivery System (SNEDS)</b> — samonanoemulgujący
+              system dostarczania składników aktywnych.</dd>
+        </div>
+        <div class="specrow">
+          <dt>Mechanizm</dt>
+          <dd>Nanoemulgacja <b>in&nbsp;situ</b> substancji lipofilowych — emulsja powstaje
+              dopiero w&nbsp;miejscu wchłaniania, nie w&nbsp;fabryce.</dd>
+        </div>
+        <div class="specrow">
+          <dt>Status</dt>
+          <dd>Technologia <b>licencjonowana</b>, dostarczana wraz z&nbsp;laboratorium
+              <b>Verdant Nature</b>.</dd>
+        </div>
+        <div class="specrow">
+          <dt>Weryfikacja</dt>
+          <dd>Parametry oceniane w&nbsp;badaniach <b>PAMPA, PK
+              i&nbsp;farmakokinetycznych</b>.</dd>
+        </div>
+      </dl>
+
+      <div class="grid grid--3 defcards">
+        <article class="card card--lift defcard" data-itp-reveal>
+          <p class="index-num">01</p>
+          <h3>Problem: lipofilowość</h3>
+          <p>
+            Kurkumina, resweratrol, kwas elagowy czy kwercetyna nie rozpuszczają
+            się w&nbsp;wodzie. Przyjęte w&nbsp;zwykłej kapsułce, docierają do
+            krwiobiegu w&nbsp;ułamku dawki.
+          </p>
+          <div class="defcard__art" aria-hidden="true">
+            <div class="artrow"><span>kurkumina</span><span class="mono">lipofilowa</span></div>
+            <div class="artrow"><span>resweratrol</span><span class="mono">lipofilowa</span></div>
+            <div class="artrow"><span>kwas elagowy</span><span class="mono">lipofilowy</span></div>
+            <div class="artrow"><span>kwercetyna</span><span class="mono">lipofilowa</span></div>
+          </div>
+        </article>
+
+        <article class="card card--lift defcard" data-itp-reveal>
+          <p class="index-num">02</p>
+          <h3>Rozwiązanie: nanoemulgacja in&nbsp;situ</h3>
+          <p>
+            Kapsułka zawiera bezwodny prekoncentrat. W&nbsp;kontakcie z&nbsp;płynem
+            jelitowym samorzutnie tworzy on nanoemulsję — stąd
+            „self&#8209;nanoemulsifying” w&nbsp;nazwie.
+          </p>
+          <div class="defcard__art" aria-hidden="true">
+            <svg viewBox="0 0 260 84">
+              <rect x="10" y="26" width="64" height="32" rx="16"
+                    fill="none" stroke="#0B1F3A" stroke-width="1.4"/>
+              <line x1="42" y1="26" x2="42" y2="58" stroke="rgba(11,31,58,.3)" stroke-width="1"/>
+              <path d="M86 42 h30" stroke="#0084AD" stroke-width="1.4" fill="none"/>
+              <path d="M112 37 l7 5 -7 5" stroke="#0084AD" stroke-width="1.4" fill="none"/>
+              <circle cx="150" cy="42" r="11" fill="none" stroke="#0B1F3A" stroke-width="1.4"/>
+              <path d="M172 42 h30" stroke="#0084AD" stroke-width="1.4" fill="none"/>
+              <path d="M198 37 l7 5 -7 5" stroke="#0084AD" stroke-width="1.4" fill="none"/>
+              <g fill="#0084AD">
+                <circle cx="226" cy="34" r="2.4"/><circle cx="238" cy="42" r="2.1"/>
+                <circle cx="228" cy="52" r="1.8"/><circle cx="246" cy="30" r="1.6"/>
+                <circle cx="248" cy="52" r="1.4"/>
+              </g>
+            </svg>
+            <div class="artrow"><span>kapsułka → krople</span><span class="mono">in&nbsp;situ</span></div>
+          </div>
+        </article>
+
+        <article class="card card--lift defcard" data-itp-reveal>
+          <p class="index-num">03</p>
+          <h3>Efekt: mierzalny parametr</h3>
+          <p>
+            Wyższa biodostępność wybranych składników przekłada się na większą
+            skuteczność — to większy potencjał wykorzystania składników przez
+            organizm, wyrażony liczbą, nie obietnicą.
+          </p>
+          <div class="defcard__art" aria-hidden="true">
+            <div class="artrow"><span>metoda pomiaru</span><span class="mono">parametr</span></div>
+            <div class="defcard__chips">
+              <span class="chip chip--tech">PAMPA</span>
+              <span class="chip chip--tech">PK</span>
+              <span class="chip chip--tech">farmakokinetyka</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================ MECHANIZM · NAVY -->
+  <section class="section section--navy" id="mechanizm">
+    <div class="wrap">
+      <div class="section-head" data-itp-reveal>
+        <p class="eyebrow">Mechanizm działania</p>
+        <h2 class="t-d2">Od kapsułki do <span class="t-accent">wchłonięcia</span>.</h2>
+        <p class="t-lead">
+          Pięć etapów, które dzielą połknięcie kapsułki od dostępności składnika
+          dla organizmu. Podgląd można zatrzymać w&nbsp;każdej chwili.
+        </p>
+      </div>
+
+      <div class="mech" data-mech>
+        <div class="mech__view">
+
+          <!-- ETAP 1 · kapsułka -->
+          <div class="mech__pane is-active" data-mech-pane role="tabpanel"
+               id="mech-pane-1" aria-labelledby="mech-tab-1">
+            <svg viewBox="0 0 560 400" aria-hidden="true">
+              <text class="lbl lbl--dim" x="24" y="36">Prekoncentrat SNEDS · układ bezwodny</text>
+              <g class="drift">
+                <rect class="ln fillcap" x="180" y="152" width="200" height="84" rx="42"/>
+                <line class="ln--soft ln--dash" x1="280" y1="152" x2="280" y2="236"/>
+                <circle class="drop" cx="228" cy="184" r="5"/>
+                <circle class="drop" cx="252" cy="208" r="4"/>
+                <circle class="drop" cx="300" cy="190" r="5"/>
+                <circle class="ln--soft" cx="322" cy="212" r="8" fill="none"/>
+                <circle class="ln--soft" cx="212" cy="212" r="7" fill="none"/>
+                <circle class="ln--soft" cx="342" cy="180" r="6" fill="none"/>
+              </g>
+              <path class="leader" d="M228 178 L150 108 H40"/>
+              <text class="lbl" x="40" y="100">substancja lipofilowa</text>
+              <path class="leader" d="M342 174 L410 108 H520" />
+              <text class="lbl" x="520" y="100" text-anchor="end">nośnik lipidowy</text>
+              <path class="leader" d="M322 220 L400 300 H520"/>
+              <text class="lbl" x="520" y="322" text-anchor="end">emulgator</text>
+              <text class="lbl lbl--hi" x="24" y="376">stabilny do momentu kontaktu z wodą</text>
+            </svg>
+          </div>
+
+          <!-- ETAP 2 · kontakt z płynem jelitowym -->
+          <div class="mech__pane" data-mech-pane role="tabpanel"
+               id="mech-pane-2" aria-labelledby="mech-tab-2" hidden>
+            <svg viewBox="0 0 560 400" aria-hidden="true">
+              <text class="lbl lbl--dim" x="24" y="36">Środowisko wodne jelita</text>
+              <g class="water">
+                <path class="ln--dim" d="M-20 110 Q 50 98 120 110 T 260 110 T 400 110 T 540 110 T 680 110"/>
+                <path class="ln--dim" d="M-20 200 Q 50 190 120 200 T 260 200 T 400 200 T 540 200 T 680 200"/>
+                <path class="ln--dim" d="M-20 290 Q 50 280 120 290 T 260 290 T 400 290 T 540 290 T 680 290"/>
+              </g>
+              <g class="drift">
+                <path class="ln fillcap" d="M262 156 H222 A42 42 0 0 0 222 240 H262"
+                      transform="translate(-16 -8) rotate(-8 240 198)"/>
+              </g>
+              <g class="drift drift--b">
+                <path class="ln fillcap" d="M298 156 H338 A42 42 0 0 1 338 240 H298"
+                      transform="translate(16 8) rotate(8 320 198)"/>
+              </g>
+              <circle class="drop" cx="270" cy="188" r="4"/>
+              <circle class="drop--soft" cx="286" cy="210" r="3.4"/>
+              <circle class="drop" cx="296" cy="184" r="2.8"/>
+              <path class="leader" d="M270 182 L200 120 H60"/>
+              <text class="lbl" x="60" y="112">otoczka uwalnia prekoncentrat</text>
+              <path class="leader" d="M420 290 L470 330 H520"/>
+              <text class="lbl" x="520" y="352" text-anchor="end">płyn jelitowy</text>
+              <text class="lbl lbl--hi" x="24" y="376">jedyny potrzebny impuls: woda</text>
+            </svg>
+          </div>
+
+          <!-- ETAP 3 · nanoemulgacja in situ -->
+          <div class="mech__pane" data-mech-pane role="tabpanel"
+               id="mech-pane-3" aria-labelledby="mech-tab-3" hidden>
+            <svg viewBox="0 0 560 400" aria-hidden="true">
+              <text class="lbl lbl--dim" x="24" y="36">Samorzutne rozproszenie fazy olejowej</text>
+              <circle class="ln--dim ln--dash" cx="280" cy="198" r="104" fill="none"/>
+              <circle class="ln--soft" cx="280" cy="198" r="16" fill="none"/>
+              <g class="drift">
+                <circle class="drop" cx="280" cy="130" r="7"/>
+                <circle class="drop--soft" cx="342" cy="152" r="5"/>
+                <circle class="drop" cx="366" cy="214" r="6"/>
+                <circle class="drop--soft" cx="332" cy="262" r="4"/>
+                <circle class="drop" cx="268" cy="284" r="5"/>
+              </g>
+              <g class="drift drift--b">
+                <circle class="drop--soft" cx="210" cy="258" r="5"/>
+                <circle class="drop" cx="186" cy="196" r="6"/>
+                <circle class="drop--soft" cx="214" cy="140" r="4"/>
+                <circle class="drop" cx="248" cy="164" r="3"/>
+                <circle class="drop--soft" cx="316" cy="196" r="3.4"/>
+              </g>
+              <path class="leader" d="M280 214 L280 198"/>
+              <path class="leader" d="M196 196 L120 260 H40"/>
+              <text class="lbl" x="40" y="282">krople fazy olejowej</text>
+              <path class="leader" d="M360 208 L440 130 H520"/>
+              <text class="lbl" x="520" y="122" text-anchor="end">faza wodna</text>
+              <text class="lbl lbl--hi" x="24" y="376">nanoemulgacja in situ · bez mieszadła, bez fabryki</text>
+            </svg>
+          </div>
+
+          <!-- ETAP 4 · spadek wielkości kropli -->
+          <div class="mech__pane" data-mech-pane role="tabpanel"
+               id="mech-pane-4" aria-labelledby="mech-tab-4" hidden>
+            <svg viewBox="0 0 560 400" aria-hidden="true">
+              <text class="lbl lbl--dim" x="24" y="36">Wielkość kropli w czasie · skala względna</text>
+              <path class="ln--dim" d="M90 70 V318 H530"/>
+              <path class="ln--dim" d="M90 70 l-4 8 M90 70 l4 8"/>
+              <path class="ln--dim" d="M530 318 l-8 -4 M530 318 l-8 4"/>
+              <line class="ln--dim ln--dash" x1="90" y1="120" x2="530" y2="120"/>
+              <line class="ln--dim ln--dash" x1="90" y1="286" x2="530" y2="286"/>
+              <text class="lbl lbl--dim" x="82" y="124" text-anchor="end">makro</text>
+              <text class="lbl lbl--dim" x="82" y="290" text-anchor="end">nano</text>
+              <path class="ln" d="M100 110 C 200 118 236 250 320 276 C 380 294 450 298 522 300"/>
+              <circle class="ln--soft" cx="112" cy="112" r="17" fill="none"/>
+              <circle class="ln--soft" cx="208" cy="140" r="11" fill="none"/>
+              <circle class="ln--soft" cx="288" cy="240" r="7" fill="none"/>
+              <circle class="drop--soft" cx="380" cy="288" r="4"/>
+              <circle class="drop" cx="470" cy="298" r="2.5"/>
+              <text class="lbl" x="90" y="348">czas od kontaktu z płynem jelitowym →</text>
+              <text class="lbl" x="66" y="212" transform="rotate(-90 66 212)" text-anchor="middle">średnica kropli</text>
+              <text class="lbl lbl--hi" x="24" y="376">mniejsza kropla = większa powierzchnia kontaktu</text>
+            </svg>
+          </div>
+
+          <!-- ETAP 5 · wchłanianie -->
+          <div class="mech__pane" data-mech-pane role="tabpanel"
+               id="mech-pane-5" aria-labelledby="mech-tab-5" hidden>
+            <svg viewBox="0 0 560 400" aria-hidden="true">
+              <text class="lbl lbl--dim" x="24" y="36">Bariera jelitowa · przekrój</text>
+              <line class="ln--soft" x1="352" y1="64" x2="352" y2="336"/>
+              <line class="ln--soft" x1="376" y1="64" x2="376" y2="336"/>
+              <g class="ln--dim">
+                <line x1="340" y1="76"  x2="352" y2="76"/><line x1="340" y1="100" x2="352" y2="100"/>
+                <line x1="340" y1="124" x2="352" y2="124"/><line x1="340" y1="148" x2="352" y2="148"/>
+                <line x1="340" y1="172" x2="352" y2="172"/><line x1="340" y1="196" x2="352" y2="196"/>
+                <line x1="340" y1="220" x2="352" y2="220"/><line x1="340" y1="244" x2="352" y2="244"/>
+                <line x1="340" y1="268" x2="352" y2="268"/><line x1="340" y1="292" x2="352" y2="292"/>
+                <line x1="340" y1="316" x2="352" y2="316"/>
+              </g>
+              <g class="cross">
+                <circle class="drop" cx="300" cy="150" r="3.2"/>
+              </g>
+              <g class="cross cross--b">
+                <circle class="drop" cx="290" cy="230" r="2.8"/>
+              </g>
+              <circle class="drop--soft" cx="180" cy="120" r="3"/>
+              <circle class="drop--soft" cx="150" cy="210" r="2.6"/>
+              <circle class="drop--soft" cx="210" cy="280" r="3.2"/>
+              <circle class="drop--soft" cx="250" cy="180" r="2.4"/>
+              <circle class="drop" cx="424" cy="170" r="2.6"/>
+              <circle class="drop" cx="448" cy="240" r="2.2"/>
+              <path class="ln" d="M392 198 h64"/>
+              <path class="ln" d="M448 192 l8 6 -8 6"/>
+              <text class="lbl" x="60" y="352">światło jelita</text>
+              <text class="lbl" x="520" y="352" text-anchor="end">krążenie</text>
+              <path class="leader" d="M364 90 L420 66 H520"/>
+              <text class="lbl" x="520" y="58" text-anchor="end">bariera jelitowa</text>
+              <text class="lbl lbl--hi" x="24" y="376">wynik: od 40× do 100× wyższe wchłanianie</text>
+            </svg>
+          </div>
+
+          <div class="mech__timer" data-mech-timer aria-hidden="true"><span></span></div>
+        </div>
+
+        <div class="mech__side">
+          <p class="mech__count">Etap <span data-mech-num>01</span> / 05</p>
+          <h3 class="mech__title" data-mech-title aria-live="polite">Kapsułka z prekoncentratem</h3>
+          <p class="mech__caption" data-mech-caption>
+            Wewnątrz kapsułki znajduje się bezwodny prekoncentrat: substancja
+            lipofilowa rozpuszczona w nośniku lipidowym z emulgatorem. Bez
+            kontaktu z wodą układ pozostaje stabilny.
+          </p>
+          <button class="mech__pause" type="button" data-mech-pause aria-pressed="false">
+            <svg width="8" height="10" viewBox="0 0 8 10" aria-hidden="true" data-mech-icon>
+              <path d="M1 0h2v10H1zM5 0h2v10H5z" fill="currentColor"/>
+            </svg>
+            <span data-mech-pause-label>Pauza</span>
+          </button>
+          <div class="mech__tabs" role="tablist" aria-label="Etapy mechanizmu BioSNEDS">
+            <button class="mech__tab" role="tab" type="button" id="mech-tab-1"
+                    aria-controls="mech-pane-1" aria-selected="true">
+              <span class="mono">01</span> Kapsułka z prekoncentratem
+            </button>
+            <button class="mech__tab" role="tab" type="button" id="mech-tab-2"
+                    aria-controls="mech-pane-2" aria-selected="false" tabindex="-1">
+              <span class="mono">02</span> Kontakt z płynem jelitowym
+            </button>
+            <button class="mech__tab" role="tab" type="button" id="mech-tab-3"
+                    aria-controls="mech-pane-3" aria-selected="false" tabindex="-1">
+              <span class="mono">03</span> Nanoemulgacja in&nbsp;situ
+            </button>
+            <button class="mech__tab" role="tab" type="button" id="mech-tab-4"
+                    aria-controls="mech-pane-4" aria-selected="false" tabindex="-1">
+              <span class="mono">04</span> Spadek wielkości kropli
+            </button>
+            <button class="mech__tab" role="tab" type="button" id="mech-tab-5"
+                    aria-controls="mech-pane-5" aria-selected="false" tabindex="-1">
+              <span class="mono">05</span> Wchłanianie przez barierę
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== PARAMETRY · TABELA -->
+  <section class="section section--bright" id="parametry">
+    <div class="wrap">
+      <div class="section-head" data-itp-reveal>
+        <p class="eyebrow">Parametry laboratoryjne</p>
+        <h2 class="t-d2">Cztery składniki, cztery&nbsp;liczby.</h2>
+        <p class="t-lead">
+          Wszystkie wartości na tej stronie pochodzą z&nbsp;jednej tabeli —
+          dokumentacji licencyjnej technologii. Nie uśredniamy ich i&nbsp;nie
+          zaokrąglamy w&nbsp;górę.
+        </p>
+      </div>
+
+      <div class="paramgrid">
+        <div data-itp-reveal>
+          <table class="params">
+            <thead>
+              <tr>
+                <th scope="col">Składnik</th>
+                <th scope="col" style="text-align:right">Wzrost biodostępności</th>
+                <th scope="col" style="text-align:right">Mnożnik</th>
+                <th scope="col">W formułach PERSONA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>EllagiSol™<span class="subname">kwas elagowy</span></td>
+                <td class="num">10&nbsp;000&nbsp;%</td>
+                <td class="num">100×</td>
+                <td class="formula-col"><span class="fdot" style="--dot:var(--f4-vital)"></span>VitalCore™</td>
+              </tr>
+              <tr>
+                <td>NADPro™<span class="subname">kwercetyna + niacynamid</span></td>
+                <td class="num">4&nbsp;440&nbsp;%</td>
+                <td class="num">44,4×</td>
+                <td class="formula-col"><span class="fdot" style="--dot:var(--f3-inflam)"></span>InflamShield</td>
+              </tr>
+              <tr>
+                <td>ResveraSol™<span class="subname">resweratrol</span></td>
+                <td class="num">4&nbsp;330&nbsp;%</td>
+                <td class="num">43,3×</td>
+                <td class="formula-col"><span class="fdot" style="--dot:var(--f2-neuro)"></span>NeuroSynapse</td>
+              </tr>
+              <tr>
+                <td>CurcuSol™<span class="subname">kurkumina</span></td>
+                <td class="num">4&nbsp;020&nbsp;%</td>
+                <td class="num">40,2×</td>
+                <td class="formula-col"><span class="fdot" style="--dot:var(--f3-inflam)"></span>InflamShield</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="t-caption paramfoot">
+            Mnożnik wynika wprost z wartości procentowej
+            (<span class="mono">10&nbsp;000&nbsp;% = 100×</span>). Wartości względem
+            standardowej, nieemulgowanej formy składnika. Parametry oceniane
+            w&nbsp;badaniach PAMPA, PK i&nbsp;farmakokinetycznych.
+          </p>
+        </div>
+
+        <aside class="card card--lift meaning" data-itp-reveal>
+          <h3>Co ta liczba oznacza — a&nbsp;czego nie</h3>
+          <div>
+            <div class="meaning__row">
+              <span class="meaning__tag meaning__tag--yes">Oznacza</span>
+              <p>
+                W&nbsp;badaniach porównawczych organizm miał dostęp do wielokrotnie
+                większej ilości składnika niż z&nbsp;formy standardowej — to większy
+                potencjał wykorzystania składników przez organizm.
+              </p>
+            </div>
+            <div class="meaning__row">
+              <span class="meaning__tag meaning__tag--yes">Oznacza</span>
+              <p>
+                Wyższa biodostępność wybranych składników przekłada się na większą
+                skuteczność suplementacji przy tej samej dawce.
+              </p>
+            </div>
+            <div class="meaning__row">
+              <span class="meaning__tag meaning__tag--no">Nie oznacza</span>
+              <p>
+                Stukrotnie silniejszego działania ani gwarancji efektu zdrowotnego.
+                Parametr mówi, jaka część dawki jest dostępna dla organizmu —
+                nie opisuje skutku terapeutycznego.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- ------------------------------------------------ WYKRES -->
+      <div class="abschart" data-itp-reveal>
+        <div class="abschart__rows" role="img"
+             aria-label="Wykres słupkowy wzrostu biodostępności względem formy standardowej: forma standardowa 100 procent (poziom odniesienia), CurcuSol 4020 procent, ResveraSol 4330 procent, NADPro 4440 procent, EllagiSol 10000 procent.">
+          <div class="abschart__row">
+            <span class="abschart__name">Forma standardowa<small>poziom odniesienia</small></span>
+            <div class="abschart__track"><div class="abschart__bar abschart__bar--base" style="--w:1%"></div></div>
+            <span class="abschart__val">100&nbsp;%</span>
+          </div>
+          <div class="abschart__row">
+            <span class="abschart__name">CurcuSol™<small>kurkumina</small></span>
+            <div class="abschart__track"><div class="abschart__bar" style="--w:40.2%"></div></div>
+            <span class="abschart__val">4&nbsp;020&nbsp;%</span>
+          </div>
+          <div class="abschart__row">
+            <span class="abschart__name">ResveraSol™<small>resweratrol</small></span>
+            <div class="abschart__track"><div class="abschart__bar" style="--w:43.3%"></div></div>
+            <span class="abschart__val">4&nbsp;330&nbsp;%</span>
+          </div>
+          <div class="abschart__row">
+            <span class="abschart__name">NADPro™<small>kwercetyna + niacynamid</small></span>
+            <div class="abschart__track"><div class="abschart__bar" style="--w:44.4%"></div></div>
+            <span class="abschart__val">4&nbsp;440&nbsp;%</span>
+          </div>
+          <div class="abschart__row">
+            <span class="abschart__name">EllagiSol™<small>kwas elagowy</small></span>
+            <div class="abschart__track"><div class="abschart__bar abschart__bar--max" style="--w:100%"></div></div>
+            <span class="abschart__val">10&nbsp;000&nbsp;%</span>
+          </div>
+        </div>
+        <div class="abschart__axisrow" aria-hidden="true">
+          <span></span>
+          <div class="abschart__axis mono">
+            <span>0</span><span>2&nbsp;500</span><span>5&nbsp;000</span><span>7&nbsp;500</span><span>10&nbsp;000&nbsp;%</span>
+          </div>
+          <span></span>
+        </div>
+        <p class="t-caption abschart__caption">
+          Względny wzrost biodostępności wobec formy standardowej
+          (<span class="mono">100&nbsp;%</span>), skala liniowa. Parametry oceniane
+          w&nbsp;badaniach PAMPA, PK i&nbsp;farmakokinetycznych. Dane laboratoryjne
+          dostarczone w&nbsp;ramach licencji z&nbsp;laboratorium Verdant Nature.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== STATUS DOWODÓW -->
+  <section class="section section--ivory" id="status-dowodow">
+    <div class="wrap wrap--mid">
+      <div class="section-head" data-itp-reveal>
+        <p class="eyebrow">Status dowodów</p>
+        <h2 class="t-d2">Co jest udokumentowane, a&nbsp;co czeka na&nbsp;publikację.</h2>
+        <p class="t-lead">
+          Dyscyplina naukowa zaczyna się od rozdzielenia tych dwóch kategorii.
+          Dlatego prowadzimy ten rejestr jawnie.
+        </p>
+      </div>
+
+      <ul class="ledger" data-itp-reveal>
+        <li>
+          <span class="ledger__tag ledger__tag--ok">Udokumentowane</span>
+          <div>
+            <h3>Parametry biodostępności czterech składników</h3>
+            <p>
+              Wartości <span class="mono-val">10&nbsp;000&nbsp;%</span> ·
+              <span class="mono-val">4&nbsp;440&nbsp;%</span> ·
+              <span class="mono-val">4&nbsp;330&nbsp;%</span> ·
+              <span class="mono-val">4&nbsp;020&nbsp;%</span> to parametry
+              laboratoryjne z&nbsp;dokumentacji licencyjnej technologii BioSNEDS™,
+              dostarczanej wraz z&nbsp;laboratorium Verdant Nature. Oceniane
+              w&nbsp;badaniach PAMPA, PK i&nbsp;farmakokinetycznych.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="ledger__tag ledger__tag--wait">W przygotowaniu</span>
+          <div>
+            <h3>Referencje publikacyjne</h3>
+            <p>
+              Odnośniki do dokumentacji źródłowej opublikujemy po ich przekazaniu
+              przez licencjodawcę. Do tego czasu na tej stronie nie znajdziesz
+              nazwisk autorów, tytułów czasopism ani numerów certyfikatów —
+              również tam, gdzie wyglądałyby przekonująco.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="ledger__tag ledger__tag--rule">Zasada</span>
+          <div>
+            <h3>Tylko liczby z tabeli parametrów</h3>
+            <p>
+              Każda wartość liczbowa na tej stronie pochodzi z&nbsp;tabeli powyżej
+              albo jest jej bezpośrednim przeliczeniem. Jeśli liczby nie ma
+              w&nbsp;dokumentacji projektu — nie ma jej także tutaj.
+            </p>
+          </div>
+        </li>
+      </ul>
+
+      <p class="disclaimer" style="margin-top:var(--sp-9);max-width:74ch" data-itp-reveal>
+        Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje
+        konsultacji lekarskiej.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================================================== FINAL CTA -->
+  <section class="section section--navy bscta" id="dalej">
+    <div class="wrap">
+      <div class="section-head section-head--center" data-itp-reveal>
+        <p class="eyebrow eyebrow--bare">Następny krok</p>
+        <h2 class="t-d2">Technologia to połowa.<br>Druga połowa to&nbsp;<span class="t-accent">dobór</span>.</h2>
+        <p class="t-lead">
+          Formuły PERSONA korzystają z&nbsp;BioSNEDS™, ale to analiza Twoich
+          potrzeb decyduje, które składniki mają sens właśnie dla Ciebie.
+        </p>
+        <div class="btn-row btn-row--center" style="margin-top:var(--sp-6)">
+          <a class="btn btn--primary btn--lg" href="quiz.html">Sprawdź swoje dopasowanie</a>
+          <a class="btn btn--ghost btn--lg" href="product.html">Poznaj formuły PERSONA</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ------------------------------------- FRAGMENT 4 · FOOTER (doc 7.1 §9) -->
+<footer class="sitefoot">
+  <div class="wrap">
+
+    <div class="grid grid--4" style="gap:var(--sp-9)">
+      <div>
+        <a class="sitehead__brand" href="hero.html" style="color:var(--ivory);margin-bottom:var(--sp-4)">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z"
+                  stroke="#F7F6F1" stroke-width="1.6"/>
+            <circle cx="13" cy="13" r="3.1" fill="#00CFFF"/>
+          </svg>
+          ITP
+        </a>
+        <p class="t-caption" style="color:var(--on-navy-muted);max-width:30ch">
+          Instytut Terapii Personalizowanych. Operator: VHO&nbsp;Sp.&nbsp;z&nbsp;o.o.
+          Jednostka badawcza: AILaBioTech.
+        </p>
+      </div>
+
+      <div>
+        <h4>Platforma</h4>
+        <div class="sitefoot__links">
+          <a href="hero.html#jak-to-dziala">Jak to działa</a>
+          <a href="quiz.html">Analiza zdrowia</a>
+          <a href="product.html">Formuły PERSONA</a>
+          <a href="biosneds.html">Technologia BioSNEDS™</a>
+          <a href="blog.html">Wiedza</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Współpraca</h4>
+        <div class="sitefoot__links">
+          <a href="affiliate.html#specjalisci">Dla specjalistów — 20 %</a>
+          <a href="affiliate.html#partnerzy">Program detaliczny — 10–15 %</a>
+          <a href="affiliate.html#white-label">B2B / white-label — 10 %</a>
+          <a href="hero.html#instytut">Instytut i badania</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Newsletter</h4>
+        <p class="t-caption" style="color:var(--on-navy-muted);margin-bottom:var(--sp-4)">
+          Raz w miesiącu: biodostępność, profilaktyka, badania. Bez sprzedaży.
+        </p>
+        <form class="field" data-itp-newsletter novalidate>
+          <label class="field__label" for="nl-email">Adres e-mail</label>
+          <input class="input" id="nl-email" type="email" name="email"
+                 placeholder="imie@domena.pl" autocomplete="email" required>
+          <button class="btn btn--cyan btn--block" type="submit">Zapisz mnie</button>
+          <p class="t-caption" data-itp-newsletter-msg role="status" aria-live="polite"
+             style="color:var(--on-navy-muted)"></p>
+        </form>
+      </div>
+    </div>
+
+    <hr class="rule" style="margin-block:var(--sp-9)">
+
+    <p class="disclaimer" style="max-width:74ch">
+      Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje
+      konsultacji lekarskiej.
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-5);align-items:center;
+                justify-content:space-between;margin-top:var(--sp-8)">
+      <div class="sitefoot__links" style="grid-auto-flow:column;gap:var(--sp-5)">
+        <a href="hero.html#bezpieczenstwo">Regulamin</a>
+        <a href="hero.html#bezpieczenstwo">Polityka prywatności</a>
+        <a href="hero.html#bezpieczenstwo">RODO i dane zdrowotne</a>
+        <a href="hero.html#kontakt">Kontakt</a>
+      </div>
+      <p class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);
+                            color:var(--on-navy-faint);text-transform:uppercase">
+        Makieta · etap I · bez transakcji
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<script src="../scripts/chrome.js"></script>
+<script>
+/* ======================================================================
+   Mechanism stage controller.
+   Auto-advances every 5.6 s (synced with .mech__timer animation), pauses
+   with the PAUZA control, steps manually via tabs (click / Enter / Space /
+   arrow keys). Reduced motion: no auto-advance, no timer, no transitions —
+   the instrument collapses to a manually stepped viewer.
+   ==================================================================== */
+(function () {
+  'use strict';
+
+  var root = document.querySelector('[data-mech]');
+  if (!root) return;
+
+  var panes = [].slice.call(root.querySelectorAll('[data-mech-pane]'));
+  var tabs  = [].slice.call(root.querySelectorAll('[role="tab"]'));
+  var num   = root.querySelector('[data-mech-num]');
+  var title = root.querySelector('[data-mech-title]');
+  var cap   = root.querySelector('[data-mech-caption]');
+  var pause = root.querySelector('[data-mech-pause]');
+  var pauseLabel = root.querySelector('[data-mech-pause-label]');
+  var pauseIcon  = root.querySelector('[data-mech-icon]');
+  var timer = root.querySelector('[data-mech-timer]');
+
+  var STAGES = [
+    { t: 'Kapsułka z prekoncentratem',
+      c: 'Wewnątrz kapsułki znajduje się bezwodny prekoncentrat: substancja ' +
+         'lipofilowa rozpuszczona w nośniku lipidowym z emulgatorem. Bez ' +
+         'kontaktu z wodą układ pozostaje stabilny.' },
+    { t: 'Kontakt z płynem jelitowym',
+      c: 'Otoczka kapsułki uwalnia prekoncentrat do wodnego środowiska ' +
+         'jelita. To jedyny impuls, jakiego potrzebuje ten układ — żadnej ' +
+         'energii z zewnątrz.' },
+    { t: 'Nanoemulgacja in situ',
+      c: 'Prekoncentrat samorzutnie rozprasza się w nanoemulsję — dokładnie ' +
+         'w miejscu wchłaniania. Stąd „self-nanoemulsifying” w nazwie ' +
+         'technologii.' },
+    { t: 'Spadek wielkości kropli',
+      c: 'Substancja lipofilowa zostaje zamknięta w kroplach o wielokrotnie ' +
+         'mniejszej średnicy. Rośnie łączna powierzchnia kontaktu z barierą ' +
+         'jelitową.' },
+    { t: 'Wchłanianie przez barierę jelitową',
+      c: 'Drobne krople przenoszą składnik przez barierę jelitową do ' +
+         'krążenia. Efekt mierzymy jako wzrost biodostępności: od 40× do ' +
+         '100×, w zależności od składnika.' }
+  ];
+
+  var STEP_MS = 5600;
+  var current = 0;
+  var intervalId = null;
+  var paused = false;
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var PAUSE_SVG  = '<path d="M1 0h2v10H1zM5 0h2v10H5z" fill="currentColor"/>';
+  var RESUME_SVG = '<path d="M1 0l6 5-6 5z" fill="currentColor"/>';
+
+  function show(n, focusTab) {
+    current = ((n % STAGES.length) + STAGES.length) % STAGES.length;
+    panes.forEach(function (pane, i) {
+      pane.classList.toggle('is-active', i === current);
+      if (i === current) pane.removeAttribute('hidden');
+      else pane.setAttribute('hidden', '');
+    });
+    tabs.forEach(function (tab, i) {
+      tab.setAttribute('aria-selected', String(i === current));
+      tab.tabIndex = i === current ? 0 : -1;
+    });
+    num.textContent = '0' + (current + 1);
+    title.textContent = STAGES[current].t;
+    cap.textContent = STAGES[current].c;
+    if (focusTab) tabs[current].focus();
+    restartTimer();
+  }
+
+  function restartTimer() {
+    if (!timer) return;
+    timer.classList.remove('is-run');
+    if (paused || rm.matches) return;
+    void timer.offsetWidth; /* restart the CSS animation */
+    timer.classList.add('is-run');
+  }
+
+  function play() {
+    stop();
+    if (paused || rm.matches) return;
+    intervalId = window.setInterval(function () {
+      if (rm.matches) { stop(); root.classList.add('is-static'); return; }
+      show(current + 1);
+    }, STEP_MS);
+  }
+
+  function stop() {
+    if (intervalId !== null) { window.clearInterval(intervalId); intervalId = null; }
+  }
+
+  pause.addEventListener('click', function () {
+    paused = !paused;
+    root.classList.toggle('is-paused', paused);
+    pause.setAttribute('aria-pressed', String(paused));
+    pauseLabel.textContent = paused ? 'Wznów' : 'Pauza';
+    pauseIcon.innerHTML = paused ? RESUME_SVG : PAUSE_SVG;
+    if (paused) stop(); else play();
+    restartTimer();
+  });
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () {
+      show(i);
+      play(); /* manual jump resets the clock but keeps the mode */
+    });
+  });
+
+  root.querySelector('.mech__tabs').addEventListener('keydown', function (e) {
+    var delta = 0;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') delta = 1;
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') delta = -1;
+    else if (e.key === 'Home') { e.preventDefault(); show(0, true); play(); return; }
+    else if (e.key === 'End') { e.preventDefault(); show(STAGES.length - 1, true); play(); return; }
+    else return;
+    e.preventDefault();
+    show(current + delta, true);
+    play();
+  });
+
+  function onMotionChange() {
+    if (rm.matches) { stop(); root.classList.add('is-static'); }
+    else { root.classList.remove('is-static'); play(); }
+    restartTimer();
+  }
+  if (rm.addEventListener) rm.addEventListener('change', onMotionChange);
+
+  show(0);
+  play();
+  onMotionChange();
+})();
+</script>
+</body>
+</html>

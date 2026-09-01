@@ -1,0 +1,1106 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analiza zdrowia | ITP</title>
+<meta name="description" content="Bezpłatna analiza zdrowia ITP — 12 pytań w 4 blokach, około 5–7 minut, bez konta. Wynik z sześcioma obszarami obciążenia i rekomendacją zatwierdzaną przez specjalistę.">
+<link rel="stylesheet" href="../styles/tokens.css">
+<style>
+/* ==========================================================================
+   quiz.html — page-specific layer only.
+   Everything reusable (buttons, options, progress, fields, chrome) comes from
+   ../styles/tokens.css. Below: the quiz panel, the Q0 honeycomb, the energy
+   slider, and screen transitions.
+   ========================================================================== */
+
+.quiz-stage {
+  position: relative;
+  padding-block: clamp(40px, 6vw, 88px) clamp(64px, 8vw, 120px);
+  overflow: hidden;
+}
+/* Faint structural hex geometry behind the panel — never louder than a hairline */
+.quiz-stage__bg {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  color: var(--ivory-edge);
+}
+.quiz-stage__bg svg { position: absolute; }
+.quiz-stage__bg .bg-hex-a { top: -120px; right: -160px; width: 560px; height: auto; }
+.quiz-stage__bg .bg-hex-b { bottom: -180px; left: -220px; width: 640px; height: auto; }
+
+.quiz-intro {
+  position: relative; z-index: 1;
+  display: grid; justify-items: center; gap: var(--sp-4);
+  margin-bottom: clamp(28px, 4vw, 48px);
+  text-align: center;
+}
+
+.qwrap { position: relative; z-index: 1; max-width: 800px; margin-inline: auto; }
+
+.qpanel {
+  background: var(--ivory-white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-3);
+  padding: clamp(20px, 4vw, 52px);
+  min-height: 640px;
+  display: flex; flex-direction: column;
+}
+
+/* Restored-session notice — cyan because it is the personalization voice */
+.qnotice {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4);
+  justify-content: space-between;
+  background: var(--cyan-wash);
+  border: 1px solid var(--line-cyan);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-5);
+  margin-bottom: var(--sp-7);
+}
+.qnotice p { font-size: var(--t-body-sm); color: var(--cyan-ink); font-weight: var(--w-medium); }
+.qnotice__actions { display: flex; gap: var(--sp-3); }
+
+/* Progress rail — calm and tiny, Function Health voice */
+.qrail { margin-bottom: clamp(32px, 5vw, 56px); }
+.qrail .progress__track { position: relative; }
+.qrail .ptick {
+  position: absolute; top: -2px; width: 1px; height: 7px;
+  background: var(--line-strong);
+}
+
+/* Screens */
+.qscreens { flex: 1 1 auto; }
+/* Explicit display rules below would defeat the hidden attribute otherwise */
+[hidden] { display: none !important; }
+.qscreen h2 { outline: none; }
+.qscreen h2:focus-visible { outline: none; box-shadow: none; }
+.qscreen { animation: qin var(--dur-3) var(--ease-out) both; }
+@keyframes qin {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qscreen { animation: none; }
+}
+.qscreen__sub { margin-top: var(--sp-4); max-width: 52ch; }
+.qscreen__body { margin-top: clamp(24px, 3.6vw, 40px); }
+
+.qopts { display: grid; gap: var(--sp-3); max-width: 560px; }
+.qopts--cols { grid-template-columns: 1fr 1fr; max-width: 620px; }
+@media (max-width: 640px) { .qopts--cols { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------------------
+   Q0 · HONEYCOMB — six priorities as interlocking hexagons.
+   Same clip geometry as the token .hex; positions are pure calc() so one
+   --hx swap re-lays the comb: 3+3 rows on desktop, 2-wide comb on mobile.
+   ------------------------------------------------------------------- */
+.comb {
+  --hx: 168px;                                /* hex width                  */
+  --g: 10px;                                  /* visual gap                 */
+  --hh: calc(var(--hx) * 1.1547);             /* hex height (pointy-top)    */
+  --step: calc(var(--hx) + var(--g));         /* horizontal step            */
+  --vstep: calc(var(--hh) * .75 + 4px);       /* interlocking vertical step */
+  position: relative;
+  width: calc(var(--step) * 2.5 + var(--hx));
+  height: calc(var(--vstep) + var(--hh));
+  margin-inline: auto;
+}
+.combcell {
+  position: absolute;
+  width: var(--hx); height: var(--hh);
+  transition: transform var(--dur-1) var(--ease);
+}
+.combcell:nth-child(1) { left: 0; top: 0; }
+.combcell:nth-child(2) { left: var(--step); top: 0; }
+.combcell:nth-child(3) { left: calc(var(--step) * 2); top: 0; }
+.combcell:nth-child(4) { left: calc(var(--step) * .5); top: var(--vstep); }
+.combcell:nth-child(5) { left: calc(var(--step) * 1.5); top: var(--vstep); }
+.combcell:nth-child(6) { left: calc(var(--step) * 2.5); top: var(--vstep); }
+.combcell:hover { transform: translateY(-3px); }
+
+.combcell__ring, .qhex {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+/* The ring layer doubles as the hexagon's hairline border and its focus ring:
+   clip-path clips outlines and shadows, so focus is a widened solid ring. */
+.combcell__ring {
+  position: absolute; inset: -1px;
+  background: var(--line-strong);
+  transition: background var(--dur-1) var(--ease), inset var(--dur-1) var(--ease);
+}
+.qhex {
+  position: absolute; inset: 0;
+  border: 0; margin: 0; cursor: pointer;
+  background: var(--ivory);
+  color: var(--ink);
+  font: inherit;
+  display: grid; place-content: center; justify-items: center; gap: 6px;
+  text-align: center;
+  padding-inline: calc(var(--hx) * .13);
+  transition: background var(--dur-1) var(--ease);
+}
+.qhex:focus { outline: none; }
+.qhex__key {
+  font-family: var(--font-mono); font-size: 10px; font-weight: var(--w-bold);
+  letter-spacing: var(--ls-mono-wide); color: var(--ink-muted);
+}
+.qhex__label {
+  font-size: 15px; font-weight: var(--w-semi);
+  line-height: 1.22; letter-spacing: -.012em;
+  text-wrap: balance;
+}
+.combcell:hover .combcell__ring { background: var(--cyan-deep); }
+.combcell:has(.qhex:focus-visible) .combcell__ring { background: var(--cyan-deep); inset: -4px; }
+.qhex[aria-checked='true'] { background: var(--cyan); }
+.qhex[aria-checked='true'] .qhex__key { color: var(--navy-800); }
+.qhex[aria-checked='true'] .qhex__label { color: var(--navy-900); font-weight: var(--w-bold); }
+.combcell:has(.qhex[aria-checked='true']) .combcell__ring { background: var(--navy-900); inset: -3px; }
+
+@media (max-width: 760px) {
+  .comb {
+    --hx: clamp(112px, 30vw, 132px);
+    --g: 8px;
+    width: calc(var(--step) * 1.5 + var(--hx));
+    height: calc(var(--vstep) * 2 + var(--hh));
+  }
+  .combcell:nth-child(1) { left: 0; top: 0; }
+  .combcell:nth-child(2) { left: var(--step); top: 0; }
+  .combcell:nth-child(3) { left: calc(var(--step) * .5); top: var(--vstep); }
+  .combcell:nth-child(4) { left: calc(var(--step) * 1.5); top: var(--vstep); }
+  .combcell:nth-child(5) { left: 0; top: calc(var(--vstep) * 2); }
+  .combcell:nth-child(6) { left: var(--step); top: calc(var(--vstep) * 2); }
+  .qhex__label { font-size: 12.5px; }
+  .qhex__key { font-size: 9px; }
+}
+
+/* ------------------------------------------------------------------------
+   Q1 · SLIDER — live mono readout, cyan progress on a hairline track
+   ------------------------------------------------------------------- */
+.qslider { max-width: 560px; display: grid; gap: var(--sp-6); }
+.qslider__readout { display: grid; justify-items: start; gap: 2px; }
+.qslider__value { display: flex; align-items: baseline; gap: var(--sp-2); }
+.qslider__num {
+  font-family: var(--font-mono); font-weight: var(--w-bold);
+  font-size: clamp(3rem, 6vw, 4.25rem); line-height: 1;
+  letter-spacing: -.04em; font-feature-settings: 'tnum' 1;
+  color: var(--ink);
+}
+.qslider__den {
+  font-family: var(--font-mono); font-size: var(--t-body-sm);
+  color: var(--ink-muted); letter-spacing: var(--ls-mono);
+}
+.qslider__desc {
+  font-size: var(--t-body); font-weight: var(--w-semi); color: var(--cyan-ink);
+  min-height: 1.6em;
+}
+.qslider.is-untouched .qslider__num { color: var(--ink-faint); }
+.qslider.is-untouched .qslider__desc { color: var(--ink-muted); font-weight: var(--w-regular); }
+
+.qrange {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 44px; background: transparent; cursor: pointer;
+  --pct: 44.44%;
+}
+.qrange::-webkit-slider-runnable-track {
+  height: 4px; border-radius: var(--r-pill);
+  background: linear-gradient(to right,
+    var(--cyan) 0 var(--pct), var(--line) var(--pct) 100%);
+}
+.qrange::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy-900);
+  border: 3px solid var(--ivory-white);
+  box-shadow: 0 0 0 1px var(--line-strong), var(--sh-2);
+  margin-top: -12px;
+  transition: box-shadow var(--dur-1) var(--ease);
+}
+.qrange:focus-visible::-webkit-slider-thumb { box-shadow: var(--ring); }
+.qrange:focus-visible { outline: none; box-shadow: none; }
+.qrange::-moz-range-track { height: 4px; border-radius: var(--r-pill); background: var(--line); }
+.qrange::-moz-range-progress { height: 4px; border-radius: var(--r-pill); background: var(--cyan); }
+.qrange::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--navy-900); border: 3px solid var(--ivory-white);
+  box-shadow: 0 0 0 1px var(--line-strong), var(--sh-2);
+}
+.qrange:focus { outline: none; }
+.qslider__ends {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  font-weight: var(--w-bold); letter-spacing: var(--ls-mono);
+  text-transform: uppercase; color: var(--ink-muted);
+}
+
+/* Q12 · body weight */
+.qkg { display: flex; align-items: center; gap: var(--sp-3); max-width: 260px; }
+.qkg .input { font-family: var(--font-mono); font-feature-settings: 'tnum' 1; }
+.qkg__unit {
+  font-family: var(--font-mono); font-size: var(--t-body-sm);
+  font-weight: var(--w-bold); color: var(--ink-muted);
+  letter-spacing: var(--ls-mono);
+}
+
+/* Error + navigation */
+.qerror {
+  min-height: 1.5em;
+  font-size: var(--t-body-sm); font-weight: var(--w-medium);
+  color: var(--alert);
+  margin-top: var(--sp-7);
+}
+.qnav {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-4);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--line);
+}
+.qnav__fwd { display: flex; align-items: center; gap: var(--sp-5); margin-left: auto; }
+.qnav__hint {
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  font-weight: var(--w-bold); letter-spacing: var(--ls-mono);
+  text-transform: uppercase; color: var(--ink-faint);
+}
+#q-back.is-hidden { visibility: hidden; }
+@media (max-width: 480px) { .qnav__hint { display: none; } }
+
+.quiz-legal {
+  position: relative; z-index: 1;
+  max-width: 800px; margin: var(--sp-7) auto 0;
+  display: grid; gap: var(--sp-4);
+}
+.quiz-legal__meta {
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  font-weight: var(--w-bold); letter-spacing: var(--ls-mono-wide);
+  text-transform: uppercase; color: var(--ink-muted);
+}
+</style>
+</head>
+<body>
+
+<!-- --------------------------------------------------- FRAGMENT 1 · SKIP -->
+<a class="skip-link" href="#main">Przejdź do treści</a>
+
+<!-- ------------------------------------- FRAGMENT 2 · TRUST BAR (doc 7.1 §0) -->
+<div class="trustbar">
+  <div class="trustbar__inner">
+    <span>Rekomendacje zatwierdzane przez <b>specjalistę</b></span>
+    <span class="trustbar__dot" aria-hidden="true">·</span>
+    <span>Technologia <b>BioSNEDS™</b></span>
+    <span class="trustbar__dot" aria-hidden="true">·</span>
+    <span>Wysyłka w <b>24–48 h</b></span>
+  </div>
+</div>
+
+<!-- ------------------------------------------------- FRAGMENT 3 · HEADER -->
+<header class="sitehead">
+  <div class="wrap">
+    <div class="sitehead__bar">
+      <a class="sitehead__brand" href="hero.html">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z"
+                stroke="#0B1F3A" stroke-width="1.6"/>
+          <circle cx="13" cy="13" r="3.1" fill="#00CFFF"/>
+        </svg>
+        ITP
+      </a>
+      <nav class="sitehead__nav" aria-label="Główna nawigacja">
+        <a href="hero.html#jak-to-dziala">Jak to działa</a>
+        <a href="product.html">PERSONA</a>
+        <a href="biosneds.html">BioSNEDS™</a>
+        <a href="blog.html">Wiedza</a>
+        <a href="affiliate.html">Program poleceń</a>
+      </nav>
+      <div class="sitehead__actions">
+        <a class="btn btn--ghost btn--sm btn--nav-hide" href="hero.html#instytut">Instytut</a>
+        <a class="btn btn--primary btn--sm" href="quiz.html" aria-current="page">Twoja analiza</a>
+      </div>
+      <button class="menu-toggle" type="button"
+              data-itp-menu-toggle
+              aria-expanded="false"
+              aria-controls="itp-menu-panel"
+              aria-label="Otwórz menu"
+              data-label-open="Otwórz menu"
+              data-label-close="Zamknij menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M0 1h18M0 6h18M0 11h18" stroke="#0B1F3A" stroke-width="1.6"/>
+        </svg>
+      </button>
+    </div>
+    <div class="menu-panel" id="itp-menu-panel">
+      <a href="hero.html#jak-to-dziala">Jak to działa</a>
+      <a href="product.html">PERSONA</a>
+      <a href="biosneds.html">BioSNEDS™</a>
+      <a href="blog.html">Wiedza</a>
+      <a href="affiliate.html">Program poleceń</a>
+      <a href="hero.html#instytut">Instytut</a>
+      <a class="btn btn--primary btn--block" href="quiz.html" aria-current="page">Twoja analiza</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="quiz-stage section--ivory">
+    <div class="quiz-stage__bg" aria-hidden="true">
+      <svg class="bg-hex-a" viewBox="0 0 100 116" fill="none">
+        <path d="M50 1 99 29.5v57L50 115 1 86.5v-57L50 1Z" stroke="currentColor" stroke-width=".7"/>
+      </svg>
+      <svg class="bg-hex-b" viewBox="0 0 100 116" fill="none">
+        <path d="M50 1 99 29.5v57L50 115 1 86.5v-57L50 1Z" stroke="currentColor" stroke-width=".7"/>
+      </svg>
+    </div>
+
+    <div class="wrap">
+      <div class="quiz-intro">
+        <h1 class="visually-hidden">Analiza zdrowia ITP</h1>
+        <p class="eyebrow eyebrow--bare">Analiza zdrowia · bezpłatnie · ok.&nbsp;5–7&nbsp;minut</p>
+      </div>
+
+      <div class="qwrap">
+        <div class="qpanel">
+
+          <div class="qnotice" id="q-notice" hidden>
+            <p id="q-notice-text">Wracasz do analizy — przywróciliśmy Twoje odpowiedzi.</p>
+            <div class="qnotice__actions">
+              <a class="btn btn--primary btn--sm" id="q-notice-result" href="result.html" hidden>Zobacz wynik</a>
+              <button class="btn btn--ghost btn--sm" id="q-restart" type="button">Zacznij od nowa</button>
+            </div>
+          </div>
+
+          <div class="qrail progress">
+            <div class="progress__meta">
+              <span id="q-block">Priorytet</span>
+              <span id="q-counter">Start</span>
+            </div>
+            <div class="progress__track">
+              <span class="ptick" style="left:25%" aria-hidden="true"></span>
+              <span class="ptick" style="left:50%" aria-hidden="true"></span>
+              <span class="ptick" style="left:75%" aria-hidden="true"></span>
+              <div class="progress__fill" id="q-fill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="qscreens">
+
+            <!-- ============================================= Q0 · PRIORITY -->
+            <section class="qscreen" id="s0" data-type="priority" aria-labelledby="s0-h">
+              <h2 class="t-d2" id="s0-h" tabindex="-1">Jaki jest Twój <span class="t-accent">priorytet</span> na&nbsp;najbliższe 90&nbsp;dni?</h2>
+              <p class="t-lead qscreen__sub">Wybierz jeden obszar — stanie się osią Twojej analizy.
+                Pozostałe obszary również zbadamy.</p>
+              <p class="t-caption qscreen__sub" style="margin-top:var(--sp-3)">
+                Bez konta i logowania · odpowiedzi zostają w&nbsp;Twojej przeglądarce.</p>
+              <div class="qscreen__body">
+                <div class="comb" role="radiogroup" aria-labelledby="s0-h">
+                  <div class="combcell"><span class="combcell__ring"></span>
+                    <button class="qhex" type="button" role="radio" aria-checked="false" data-value="energia">
+                      <span class="qhex__key">01</span><span class="qhex__label">Więcej energii</span>
+                    </button></div>
+                  <div class="combcell"><span class="combcell__ring"></span>
+                    <button class="qhex" type="button" role="radio" aria-checked="false" data-value="sen">
+                      <span class="qhex__key">02</span><span class="qhex__label">Lepszy sen</span>
+                    </button></div>
+                  <div class="combcell"><span class="combcell__ring"></span>
+                    <button class="qhex" type="button" role="radio" aria-checked="false" data-value="koncentracja">
+                      <span class="qhex__key">03</span><span class="qhex__label">Większa koncentracja</span>
+                    </button></div>
+                  <div class="combcell"><span class="combcell__ring"></span>
+                    <button class="qhex" type="button" role="radio" aria-checked="false" data-value="odpornosc">
+                      <span class="qhex__key">04</span><span class="qhex__label">Wsparcie odporności</span>
+                    </button></div>
+                  <div class="combcell"><span class="combcell__ring"></span>
+                    <button class="qhex" type="button" role="radio" aria-checked="false" data-value="trawienie">
+                      <span class="qhex__key">05</span><span class="qhex__label">Lepsze trawienie</span>
+                    </button></div>
+                  <div class="combcell"><span class="combcell__ring"></span>
+                    <button class="qhex" type="button" role="radio" aria-checked="false" data-value="regeneracja">
+                      <span class="qhex__key">06</span><span class="qhex__label">Regeneracja i&nbsp;relaks</span>
+                    </button></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ================================== BLOK 1 · STAN OBECNY -->
+            <section class="qscreen" id="s1" data-type="slider" hidden aria-labelledby="s1-h">
+              <h2 class="t-d2" id="s1-h" tabindex="-1">Poranny poziom energii</h2>
+              <p class="t-lead qscreen__sub">Jak zwykle czujesz się w&nbsp;pierwszej godzinie po&nbsp;przebudzeniu?</p>
+              <div class="qscreen__body">
+                <div class="qslider is-untouched" id="q1-slider">
+                  <div class="qslider__readout">
+                    <span class="qslider__value" aria-hidden="true">
+                      <span class="qslider__num" id="q1-num">05</span>
+                      <span class="qslider__den">/ 10</span>
+                    </span>
+                    <span class="qslider__desc" id="q1-desc">Przesuń suwak lub użyj strzałek</span>
+                  </div>
+                  <input class="qrange" id="q1-range" type="range" min="1" max="10" step="1" value="5"
+                         aria-labelledby="s1-h" aria-describedby="q1-desc"
+                         aria-valuetext="5 z 10">
+                  <div class="qslider__ends" aria-hidden="true">
+                    <span>1 · Wyczerpany</span><span>10 · Pełnia sił</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="qscreen" id="s2" data-type="radio" data-q="q2" hidden aria-labelledby="s2-h">
+              <h2 class="t-d2" id="s2-h" tabindex="-1">Jakość snu</h2>
+              <p class="t-lead qscreen__sub">Oceń ostatnie 2–4 tygodnie.</p>
+              <div class="qscreen__body">
+                <div class="qopts" role="radiogroup" aria-labelledby="s2-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Dobra"><span class="option__key">1</span>Dobra</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Przeciętna"><span class="option__key">2</span>Przeciętna</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Słaba"><span class="option__key">3</span>Słaba</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="qscreen" id="s3" data-type="radio" data-q="q3" hidden aria-labelledby="s3-h">
+              <h2 class="t-d2" id="s3-h" tabindex="-1">Częstotliwość stresu</h2>
+              <p class="t-lead qscreen__sub">Jak często odczuwasz napięcie, które utrudnia funkcjonowanie?</p>
+              <div class="qscreen__body">
+                <div class="qopts" role="radiogroup" aria-labelledby="s3-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Rzadko"><span class="option__key">1</span>Rzadko</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Kilka razy w tygodniu"><span class="option__key">2</span>Kilka razy w&nbsp;tygodniu</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Prawie codziennie"><span class="option__key">3</span>Prawie codziennie</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===================== BLOK 2 · FIZJOLOGIA I STYL ŻYCIA -->
+            <section class="qscreen" id="s4" data-type="radio" data-q="q4" hidden aria-labelledby="s4-h">
+              <h2 class="t-d2" id="s4-h" tabindex="-1">Trudności trawienne</h2>
+              <p class="t-lead qscreen__sub">Wzdęcia, ciężkość, nieregularność — jak często się pojawiają?</p>
+              <div class="qscreen__body">
+                <div class="qopts" role="radiogroup" aria-labelledby="s4-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Brak"><span class="option__key">1</span>Brak</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Łagodne"><span class="option__key">2</span>Łagodne</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Wyraźne"><span class="option__key">3</span>Wyraźne</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="qscreen" id="s5" data-type="radio" data-q="q5" hidden aria-labelledby="s5-h">
+              <h2 class="t-d2" id="s5-h" tabindex="-1">Aktywność fizyczna</h2>
+              <p class="t-lead qscreen__sub">Świadomy ruch: trening, szybki spacer, basen, rower.</p>
+              <div class="qscreen__body">
+                <div class="qopts" role="radiogroup" aria-labelledby="s5-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Prawie żadna"><span class="option__key">1</span>Prawie żadna</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="1–2× w tygodniu"><span class="option__key">2</span>1–2× w&nbsp;tygodniu</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="3+× w tygodniu"><span class="option__key">3</span>3+× w&nbsp;tygodniu</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="qscreen" id="s6" data-type="radio" data-q="q6" hidden aria-labelledby="s6-h">
+              <h2 class="t-d2" id="s6-h" tabindex="-1">Model diety</h2>
+              <p class="t-lead qscreen__sub">Wybierz model najbliższy Twojej codzienności.</p>
+              <div class="qscreen__body">
+                <div class="qopts qopts--cols" role="radiogroup" aria-labelledby="s6-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Standardowa"><span class="option__key">1</span>Standardowa</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Wegetariańska"><span class="option__key">2</span>Wegetariańska</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Keto"><span class="option__key">3</span>Keto</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Bezglutenowa"><span class="option__key">4</span>Bezglutenowa</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Inna"><span class="option__key">5</span>Inna</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ==================== BLOK 3 · STYMULANTY I RÓWNOWAGA -->
+            <section class="qscreen" id="s7" data-type="radio" data-q="q7" hidden aria-labelledby="s7-h">
+              <h2 class="t-d2" id="s7-h" tabindex="-1">Kofeina</h2>
+              <p class="t-lead qscreen__sub">Kawa, herbata, napoje energetyczne — typowy dzień.</p>
+              <div class="qscreen__body">
+                <div class="qopts" role="radiogroup" aria-labelledby="s7-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Brak"><span class="option__key">1</span>Brak</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Umiarkowana"><span class="option__key">2</span>Umiarkowana</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Wysoka"><span class="option__key">3</span>Wysoka</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="qscreen" id="s8" data-type="radio" data-q="q8" hidden aria-labelledby="s8-h">
+              <h2 class="t-d2" id="s8-h" tabindex="-1">Alkohol</h2>
+              <p class="t-lead qscreen__sub">Typowy tydzień, szczerze.</p>
+              <div class="qscreen__body">
+                <div class="qopts" role="radiogroup" aria-labelledby="s8-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Brak"><span class="option__key">1</span>Brak</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Okazjonalnie"><span class="option__key">2</span>Okazjonalnie</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Często"><span class="option__key">3</span>Często</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="qscreen" id="s9" data-type="radio" data-q="q9" hidden aria-labelledby="s9-h">
+              <h2 class="t-d2" id="s9-h" tabindex="-1">Obecna suplementacja</h2>
+              <p class="t-lead qscreen__sub">To pomaga uniknąć dublowania składników.</p>
+              <div class="qscreen__body">
+                <div class="qopts" role="radiogroup" aria-labelledby="s9-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Nie"><span class="option__key">1</span>Nie</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Tak, pojedyncze produkty"><span class="option__key">2</span>Tak, pojedyncze produkty</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Tak, złożony schemat"><span class="option__key">3</span>Tak, złożony schemat</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ==================================== BLOK 4 · METRYKI -->
+            <section class="qscreen" id="s10" data-type="radio" data-q="q10" hidden aria-labelledby="s10-h">
+              <h2 class="t-d2" id="s10-h" tabindex="-1">Ostatnie badania krwi</h2>
+              <p class="t-lead qscreen__sub">Morfologia, lipidogram, glukoza lub szersze panele.</p>
+              <div class="qscreen__body">
+                <div class="qopts qopts--cols" role="radiogroup" aria-labelledby="s10-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Do 3 miesięcy"><span class="option__key">1</span>Do 3&nbsp;miesięcy</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="3–12 miesięcy"><span class="option__key">2</span>3–12 miesięcy</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Ponad rok"><span class="option__key">3</span>Ponad rok</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="Nie pamiętam"><span class="option__key">4</span>Nie pamiętam</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="qscreen" id="s11" data-type="radio" data-q="q11" hidden aria-labelledby="s11-h">
+              <h2 class="t-d2" id="s11-h" tabindex="-1">Wiek</h2>
+              <p class="t-lead qscreen__sub">Przedział wystarczy — nie potrzebujemy dokładnej daty.</p>
+              <div class="qscreen__body">
+                <div class="qopts qopts--cols" role="radiogroup" aria-labelledby="s11-h">
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="18–29"><span class="option__key">1</span>18–29</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="30–39"><span class="option__key">2</span>30–39</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="40–49"><span class="option__key">3</span>40–49</button>
+                  <button class="option" type="button" role="radio" aria-checked="false" data-value="50+"><span class="option__key">4</span>50+</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="qscreen" id="s12" data-type="number" hidden aria-labelledby="s12-h">
+              <h2 class="t-d2" id="s12-h" tabindex="-1">Masa ciała</h2>
+              <p class="t-lead qscreen__sub">Używamy jej wyłącznie do oszacowania dawek.
+                Zostaje w&nbsp;Twojej przeglądarce.</p>
+              <div class="qscreen__body">
+                <div class="field">
+                  <label class="field__label" for="q12-in">Masa ciała (kg)</label>
+                  <div class="qkg">
+                    <input class="input" id="q12-in" type="text" inputmode="decimal"
+                           autocomplete="off" placeholder="np. 72"
+                           aria-describedby="q12-help q-error">
+                    <span class="qkg__unit" aria-hidden="true">kg</span>
+                  </div>
+                  <p class="t-caption" id="q12-help">Wartość od 30 do 250 kg. Możesz użyć przecinka, np. 72,5.</p>
+                </div>
+                <p class="t-caption" style="margin-top:var(--sp-7);max-width:52ch">
+                  Wynik obliczamy prostą, jawną heurystyką — oszacowanie obciążeń
+                  oczekuje walidacji specjalisty (odpowiedź do 48&nbsp;h).
+                  Analiza nie zastępuje konsultacji lekarskiej.</p>
+              </div>
+            </section>
+
+          </div>
+
+          <p class="qerror" id="q-error" role="status" aria-live="polite"></p>
+
+          <div class="qnav">
+            <button class="btn btn--ghost is-hidden" id="q-back" type="button">← Wstecz</button>
+            <div class="qnav__fwd">
+              <span class="qnav__hint" id="q-hint" aria-hidden="true">1–6 · wybór&ensp;↵ · dalej</span>
+              <button class="btn btn--primary" id="q-next" type="button">Rozpocznij analizę</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="quiz-legal">
+          <p class="disclaimer">Platforma ma charakter edukacyjny i rekomendacyjny
+            i nie zastępuje konsultacji lekarskiej.</p>
+          <p class="quiz-legal__meta">Bez konta · dane pozostają w tej przeglądarce ·
+            rekomendację zatwierdza specjalista</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ------------------------------------- FRAGMENT 4 · FOOTER (doc 7.1 §9) -->
+<footer class="sitefoot">
+  <div class="wrap">
+
+    <div class="grid grid--4" style="gap:var(--sp-9)">
+      <div>
+        <a class="sitehead__brand" href="hero.html" style="color:var(--ivory);margin-bottom:var(--sp-4)">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z"
+                  stroke="#F7F6F1" stroke-width="1.6"/>
+            <circle cx="13" cy="13" r="3.1" fill="#00CFFF"/>
+          </svg>
+          ITP
+        </a>
+        <p class="t-caption" style="color:var(--on-navy-muted);max-width:30ch">
+          Instytut Terapii Personalizowanych. Operator: VHO&nbsp;Sp.&nbsp;z&nbsp;o.o.
+          Jednostka badawcza: AILaBioTech.
+        </p>
+      </div>
+
+      <div>
+        <h4>Platforma</h4>
+        <div class="sitefoot__links">
+          <a href="hero.html#jak-to-dziala">Jak to działa</a>
+          <a href="quiz.html">Analiza zdrowia</a>
+          <a href="product.html">Formuły PERSONA</a>
+          <a href="biosneds.html">Technologia BioSNEDS™</a>
+          <a href="blog.html">Wiedza</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Współpraca</h4>
+        <div class="sitefoot__links">
+          <a href="affiliate.html#specjalisci">Dla specjalistów — 20 %</a>
+          <a href="affiliate.html#partnerzy">Program detaliczny — 10–15 %</a>
+          <a href="affiliate.html#white-label">B2B / white-label — 10 %</a>
+          <a href="hero.html#instytut">Instytut i badania</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Newsletter</h4>
+        <p class="t-caption" style="color:var(--on-navy-muted);margin-bottom:var(--sp-4)">
+          Raz w miesiącu: biodostępność, profilaktyka, badania. Bez sprzedaży.
+        </p>
+        <form class="field" data-itp-newsletter novalidate>
+          <label class="field__label" for="nl-email">Adres e-mail</label>
+          <input class="input" id="nl-email" type="email" name="email"
+                 placeholder="imie@domena.pl" autocomplete="email" required>
+          <button class="btn btn--cyan btn--block" type="submit">Zapisz mnie</button>
+          <p class="t-caption" data-itp-newsletter-msg role="status" aria-live="polite"
+             style="color:var(--on-navy-muted)"></p>
+        </form>
+      </div>
+    </div>
+
+    <hr class="rule" style="margin-block:var(--sp-9)">
+
+    <p class="disclaimer" style="max-width:74ch">
+      Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje
+      konsultacji lekarskiej.
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-5);align-items:center;
+                justify-content:space-between;margin-top:var(--sp-8)">
+      <div class="sitefoot__links" style="grid-auto-flow:column;gap:var(--sp-5)">
+        <a href="hero.html#bezpieczenstwo">Regulamin</a>
+        <a href="hero.html#bezpieczenstwo">Polityka prywatności</a>
+        <a href="hero.html#bezpieczenstwo">RODO i dane zdrowotne</a>
+        <a href="hero.html#kontakt">Kontakt</a>
+      </div>
+      <p class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);
+                            color:var(--on-navy-faint);text-transform:uppercase">
+        Makieta · etap I · bez transakcji
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<script src="../scripts/chrome.js"></script>
+<script>
+/* ==========================================================================
+   quiz.html — quiz engine.
+   13 screens (Q0 priority + 12 questions in 4 blocks), persisted to
+   localStorage['itp-quiz'] on every answer, restored on load, finished by a
+   redirect to result.html with a payload result.html consumes:
+   { priority, answers: {q1..q12}, scores: {6 domains 0–100}, completedAt }.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var KEY = 'itp-quiz';
+  var TOTAL = 12;
+
+  var BLOCKS = [
+    { label: 'Priorytet', from: 0, to: 0 },
+    { label: 'Blok 1 · Stan obecny', from: 1, to: 3 },
+    { label: 'Blok 2 · Fizjologia i styl życia', from: 4, to: 6 },
+    { label: 'Blok 3 · Stymulanty i równowaga', from: 7, to: 9 },
+    { label: 'Blok 4 · Metryki', from: 10, to: 12 }
+  ];
+
+  var DESCRIPTORS = ['Wyczerpany', 'Bardzo nisko', 'Nisko', 'Poniżej średniej',
+    'Umiarkowanie', 'Przyzwoicie', 'Dobrze', 'Bardzo dobrze', 'Wysoko', 'Pełnia sił'];
+
+  var screens = Array.prototype.slice.call(document.querySelectorAll('.qscreen'));
+  var elBlock = document.getElementById('q-block');
+  var elCounter = document.getElementById('q-counter');
+  var elFill = document.getElementById('q-fill');
+  var elError = document.getElementById('q-error');
+  var elBack = document.getElementById('q-back');
+  var elNext = document.getElementById('q-next');
+  var elHint = document.getElementById('q-hint');
+  var elNotice = document.getElementById('q-notice');
+  var elNoticeText = document.getElementById('q-notice-text');
+  var elNoticeResult = document.getElementById('q-notice-result');
+  var elRestart = document.getElementById('q-restart');
+  var slider = document.getElementById('q1-range');
+  var sliderBox = document.getElementById('q1-slider');
+  var sliderNum = document.getElementById('q1-num');
+  var sliderDesc = document.getElementById('q1-desc');
+  var kgInput = document.getElementById('q12-in');
+
+  var state = { priority: null, answers: {}, pos: 0 };
+  var finishing = false;
+
+  /* ------------------------------------------------------ persistence */
+  function save(extra) {
+    var payload = {
+      v: 1,
+      priority: state.priority,
+      answers: state.answers,
+      pos: state.pos,
+      updatedAt: new Date().toISOString()
+    };
+    if (extra) for (var k in extra) payload[k] = extra[k];
+    try { localStorage.setItem(KEY, JSON.stringify(payload)); } catch (e) { /* private mode */ }
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return null;
+      var d = JSON.parse(raw);
+      if (!d || typeof d !== 'object') return null;
+      return d;
+    } catch (e) { return null; }
+  }
+
+  /* ------------------------------------------------------------ rail */
+  function blockFor(i) {
+    for (var b = 0; b < BLOCKS.length; b++) {
+      if (i >= BLOCKS[b].from && i <= BLOCKS[b].to) return BLOCKS[b];
+    }
+    return BLOCKS[0];
+  }
+
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  function updateRail() {
+    var i = state.pos;
+    elBlock.textContent = blockFor(i).label;
+    elCounter.textContent = i === 0 ? 'Start' : 'Pytanie ' + pad2(i) + ' / ' + TOTAL;
+    elFill.style.width = (i / TOTAL * 100) + '%';
+  }
+
+  function updateNav() {
+    var i = state.pos;
+    elBack.classList.toggle('is-hidden', i === 0);
+    elNext.textContent = i === 0 ? 'Rozpocznij analizę'
+      : i === TOTAL ? 'Zobacz wynik' : 'Dalej';
+    var type = screens[i].getAttribute('data-type');
+    elHint.hidden = (type === 'number' || type === 'slider');
+    if (type === 'priority') elHint.textContent = '1–6 · wybór\u2002↵ · dalej';
+    else if (type === 'radio') elHint.textContent = '1–' +
+      screens[i].querySelectorAll('.option').length + ' · wybór\u2002↵ · dalej';
+  }
+
+  /* ----------------------------------------------------- navigation */
+  function setError(msg) {
+    /* clear then set so repeated identical errors re-announce */
+    elError.textContent = '';
+    if (msg) requestAnimationFrame(function () { elError.textContent = msg; });
+  }
+
+  function goTo(i, focusHeading) {
+    i = Math.max(0, Math.min(TOTAL, i));
+    screens.forEach(function (s, idx) { s.hidden = idx !== i; });
+    state.pos = i;
+    setError('');
+    updateRail();
+    updateNav();
+    save();
+    var h = screens[i].querySelector('h2');
+    if (focusHeading !== false && h) {
+      h.focus({ preventScroll: true });
+      var panel = document.querySelector('.qpanel');
+      var top = panel.getBoundingClientRect().top + window.pageYOffset - 96;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+    }
+  }
+
+  function validate() {
+    var s = screens[state.pos];
+    var type = s.getAttribute('data-type');
+    if (type === 'priority') {
+      return state.priority ? null : 'Wybierz jeden obszar, aby rozpocząć analizę.';
+    }
+    if (type === 'slider') {
+      return ('q1' in state.answers) ? null
+        : 'Przesuń suwak (lub użyj strzałek), aby ocenić poziom energii.';
+    }
+    if (type === 'radio') {
+      var q = s.getAttribute('data-q');
+      return (q in state.answers) ? null : 'Wybierz jedną odpowiedź, aby przejść dalej.';
+    }
+    if (type === 'number') {
+      var v = parseKg(kgInput.value);
+      if (v === null) return 'Podaj masę ciała w kilogramach — liczba od 30 do 250.';
+      state.answers.q12 = v;
+      return null;
+    }
+    return null;
+  }
+
+  function parseKg(raw) {
+    var t = String(raw || '').trim().replace(',', '.');
+    if (!/^\d{1,3}(\.\d{1,2})?$/.test(t)) return null;
+    var v = parseFloat(t);
+    if (isNaN(v) || v < 30 || v > 250) return null;
+    return v;
+  }
+
+  function next() {
+    var err = validate();
+    if (err) { setError(err); return; }
+    if (state.pos === TOTAL) { finish(); return; }
+    goTo(state.pos + 1);
+  }
+
+  function back() { if (state.pos > 0) goTo(state.pos - 1); }
+
+  /* ------------------------------------------------------------ scores
+     Transparent heuristic — NOT a clinical algorithm. Labelled as such in
+     the UI; every derived score awaits specialist validation (Stage I:
+     manual review within 48 h). Rules:
+       · Six domains, 0–100, HIGHER = greater estimated burden.
+       · Base values come from each domain's primary question:
+           energia      90 − (q1−1)·10          (slider 1..10, inverted)
+           sen          q2: Dobra 20 / Przeciętna 55 / Słaba 85
+           stres        q3: Rzadko 20 / Kilka razy w tygodniu 55 / Prawie codziennie 85
+           trawienie    q4: Brak 15 / Łagodne 50 / Wyraźne 82
+           koncentracja mean of the energy and stress bases
+           odpornosc    30 flat base
+       · Modifiers (added):
+           q5 aktywność   Prawie żadna: energia+8, odpornosc+15
+                          1–2×/tydz.:   odpornosc+8
+                          3+×/tydz.:    energia−5, odpornosc−5
+           q7 kofeina     Umiarkowana: sen+5
+                          Wysoka:      sen+12, stres+8, energia+5, koncentracja+5
+           q8 alkohol     Okazjonalnie: sen+4
+                          Często:       sen+10, trawienie+8, odpornosc+6
+           q11 wiek       40–49: energia+3, odpornosc+3 · 50+: energia+6, odpornosc+6
+           priorytet      +8 to the chosen domain (self-reported concern);
+                          "regeneracja" → stres+5 i sen+5
+       · q6 (dieta), q9 (suplementacja), q10 (badania), q12 (masa ciała) are
+         recorded verbatim for the specialist and do not move the scores.
+       · Result clamped to 5..95 and rounded. */
+  function computeScores(a, priority) {
+    function pick(v, map, dflt) { return (v in map) ? map[v] : dflt; }
+    var ene = 90 - ((a.q1 || 5) - 1) * 10;
+    var sen = pick(a.q2, { 'Dobra': 20, 'Przeciętna': 55, 'Słaba': 85 }, 50);
+    var str = pick(a.q3, { 'Rzadko': 20, 'Kilka razy w tygodniu': 55, 'Prawie codziennie': 85 }, 50);
+    var tra = pick(a.q4, { 'Brak': 15, 'Łagodne': 50, 'Wyraźne': 82 }, 50);
+    var kon = (ene + str) / 2;
+    var odp = 30;
+
+    if (a.q5 === 'Prawie żadna') { ene += 8; odp += 15; }
+    else if (a.q5 === '1–2× w tygodniu') { odp += 8; }
+    else if (a.q5 === '3+× w tygodniu') { ene -= 5; odp -= 5; }
+
+    if (a.q7 === 'Umiarkowana') { sen += 5; }
+    else if (a.q7 === 'Wysoka') { sen += 12; str += 8; ene += 5; kon += 5; }
+
+    if (a.q8 === 'Okazjonalnie') { sen += 4; }
+    else if (a.q8 === 'Często') { sen += 10; tra += 8; odp += 6; }
+
+    if (a.q11 === '40–49') { ene += 3; odp += 3; }
+    else if (a.q11 === '50+') { ene += 6; odp += 6; }
+
+    var s = { energia: ene, sen: sen, stres: str, trawienie: tra, koncentracja: kon, odpornosc: odp };
+    if (priority === 'regeneracja') { s.stres += 5; s.sen += 5; }
+    else if (priority && (priority in s)) { s[priority] += 8; }
+
+    for (var k in s) s[k] = Math.round(Math.max(5, Math.min(95, s[k])));
+    return s;
+  }
+
+  function finish() {
+    if (finishing) return;
+    finishing = true;
+    elNext.disabled = true;
+    save({
+      scores: computeScores(state.answers, state.priority),
+      completedAt: new Date().toISOString()
+    });
+    window.location.href = 'result.html';
+  }
+
+  /* ------------------------------------------------- radio groups */
+  function groupButtons(group) {
+    return Array.prototype.slice.call(group.querySelectorAll('[role="radio"]'));
+  }
+
+  function selectRadio(group, btn) {
+    var buttons = groupButtons(group);
+    buttons.forEach(function (b) {
+      var on = b === btn;
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+      b.tabIndex = on ? 0 : -1;
+    });
+    var screen = group.closest('.qscreen');
+    var value = btn.getAttribute('data-value');
+    if (screen.getAttribute('data-type') === 'priority') state.priority = value;
+    else state.answers[screen.getAttribute('data-q')] = value;
+    setError('');
+    save();
+  }
+
+  function initGroup(group) {
+    var buttons = groupButtons(group);
+    buttons.forEach(function (b, idx) {
+      b.tabIndex = idx === 0 ? 0 : -1;
+      b.addEventListener('click', function () { selectRadio(group, b); });
+    });
+    group.addEventListener('keydown', function (e) {
+      var idx = buttons.indexOf(document.activeElement);
+      if (idx < 0) return;
+      var to = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') to = (idx + 1) % buttons.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') to = (idx - 1 + buttons.length) % buttons.length;
+      else if (e.key === 'Home') to = 0;
+      else if (e.key === 'End') to = buttons.length - 1;
+      if (to === null) return;
+      e.preventDefault();
+      buttons[to].focus();
+      selectRadio(group, buttons[to]);
+    });
+  }
+
+  function restoreGroup(group) {
+    var screen = group.closest('.qscreen');
+    var want = screen.getAttribute('data-type') === 'priority'
+      ? state.priority : state.answers[screen.getAttribute('data-q')];
+    if (want == null) return;
+    var btn = groupButtons(group).filter(function (b) {
+      return b.getAttribute('data-value') === want;
+    })[0];
+    if (btn) {
+      groupButtons(group).forEach(function (b) {
+        var on = b === btn;
+        b.setAttribute('aria-checked', on ? 'true' : 'false');
+        b.tabIndex = on ? 0 : -1;
+      });
+    }
+  }
+
+  /* ----------------------------------------------------- Q1 slider */
+  function renderSlider(markTouched) {
+    var v = parseInt(slider.value, 10);
+    sliderNum.textContent = pad2(v);
+    slider.style.setProperty('--pct',
+      (((v - 1) / 9) * 100).toFixed(2) + '%');
+    if (markTouched || ('q1' in state.answers)) {
+      sliderBox.classList.remove('is-untouched');
+      sliderDesc.textContent = DESCRIPTORS[v - 1];
+      slider.setAttribute('aria-valuetext', v + ' z 10 — ' + DESCRIPTORS[v - 1]);
+    } else {
+      slider.setAttribute('aria-valuetext', v + ' z 10');
+    }
+  }
+
+  slider.addEventListener('input', function () {
+    state.answers.q1 = parseInt(slider.value, 10);
+    renderSlider(true);
+    setError('');
+    save();
+  });
+
+  /* -------------------------------------------------- Q12 weight */
+  kgInput.addEventListener('input', function () {
+    var v = parseKg(kgInput.value);
+    if (v === null) { delete state.answers.q12; }
+    else { state.answers.q12 = v; setError(''); }
+    save();
+  });
+  kgInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); next(); }
+  });
+
+  /* ----------------------------------------------- global wiring */
+  elNext.addEventListener('click', next);
+  elBack.addEventListener('click', back);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+    var t = e.target;
+    var typing = t === kgInput || t.closest('input, textarea, select');
+    /* number keys select the matching option on radio screens */
+    if (!typing && /^[1-9]$/.test(e.key)) {
+      var group = screens[state.pos].querySelector('[role="radiogroup"]');
+      if (group) {
+        var buttons = groupButtons(group);
+        var idx = parseInt(e.key, 10) - 1;
+        if (buttons[idx]) {
+          e.preventDefault();
+          buttons[idx].focus();
+          selectRadio(group, buttons[idx]);
+        }
+      }
+      return;
+    }
+    if (e.key === 'Enter' && !typing && !t.closest('button, a')) {
+      e.preventDefault();
+      next();
+    }
+  });
+
+  screens.forEach(function (s) {
+    var g = s.querySelector('[role="radiogroup"]');
+    if (g) initGroup(g);
+  });
+
+  /* --------------------------------------------------- restore */
+  function restart() {
+    try { localStorage.removeItem(KEY); } catch (e) { /* noop */ }
+    state = { priority: null, answers: {}, pos: 0 };
+    finishing = false;
+    elNext.disabled = false;
+    screens.forEach(function (s) {
+      var g = s.querySelector('[role="radiogroup"]');
+      if (g) groupButtons(g).forEach(function (b, idx) {
+        b.setAttribute('aria-checked', 'false');
+        b.tabIndex = idx === 0 ? 0 : -1;
+      });
+    });
+    slider.value = 5;
+    sliderBox.classList.add('is-untouched');
+    sliderDesc.textContent = 'Przesuń suwak lub użyj strzałek';
+    renderSlider(false);
+    kgInput.value = '';
+    elNotice.hidden = true;
+    goTo(0);
+  }
+  elRestart.addEventListener('click', restart);
+
+  var saved = load();
+  if (saved) {
+    if (saved.priority) state.priority = saved.priority;
+    if (saved.answers && typeof saved.answers === 'object') state.answers = saved.answers;
+    var hasAny = state.priority || Object.keys(state.answers).length > 0;
+    if (hasAny) {
+      elNotice.hidden = false;
+      if (saved.completedAt) {
+        elNoticeText.textContent =
+          'Twoja analiza jest już ukończona — możesz zobaczyć wynik lub zacząć od nowa.';
+        elNoticeResult.hidden = false;
+        state.pos = TOTAL;
+      } else {
+        var p = parseInt(saved.pos, 10);
+        state.pos = (p >= 0 && p <= TOTAL) ? p : 0;
+      }
+      screens.forEach(function (s) {
+        var g = s.querySelector('[role="radiogroup"]');
+        if (g) restoreGroup(g);
+      });
+      if ('q1' in state.answers) slider.value = state.answers.q1;
+      if ('q12' in state.answers) kgInput.value = String(state.answers.q12).replace('.', ',');
+    }
+  }
+  renderSlider(false);
+  goTo(state.pos, false);
+})();
+</script>
+</body>
+</html>

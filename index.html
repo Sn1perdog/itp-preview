@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITP — makiety Etap I</title>
+<link rel="stylesheet" href="styles/tokens.css">
+<style>
+  body { background: var(--ivory-bright); color: var(--ink); }
+  .wrap { max-width: 980px; margin-inline: auto; padding: var(--sp-9) var(--sp-gutter) var(--sp-12); }
+  .grid { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); margin-top: var(--sp-8); }
+  .tile { display: block; padding: var(--sp-5); border: 1px solid var(--line); border-radius: var(--r-md, 10px); background: var(--ivory); text-decoration: none; color: inherit; transition: transform .15s ease, box-shadow .15s ease; }
+  .tile:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(11,31,58,.10); }
+  .tile b { display: block; font-size: var(--t-h5, 1.05rem); margin-bottom: var(--sp-2); }
+  .tile span { font-size: var(--t-small, .875rem); color: var(--ink-muted); }
+  .k { font-family: var(--ff-mono, monospace); text-transform: uppercase; letter-spacing: var(--ls-mono, .08em); font-size: var(--t-micro, .72rem); color: var(--ink-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="k">Instytut Terapii Personalizowanych · Etap I</p>
+  <h1>Makiety statyczne</h1>
+  <p>Podgląd roboczy. Wszystkie ekrany są statyczne, dane przykładowe.</p>
+  <div class="grid">
+    <a class="tile" href="mockups/hero.html"><b>Strona główna</b><span>hero · jak to działa · ekosystem</span></a>
+    <a class="tile" href="mockups/quiz.html"><b>Analiza zdrowia</b><span>12 pytań · 4 bloki</span></a>
+    <a class="tile" href="mockups/result.html"><b>Wynik analizy</b><span>Mapa Zdrowia · plan PERSONA</span></a>
+    <a class="tile" href="mockups/product.html"><b>Formuły PERSONA</b><span>4 produkty · składy · ceny</span></a>
+    <a class="tile" href="mockups/biosneds.html"><b>BioSNEDS™</b><span>technologia wchłaniania</span></a>
+    <a class="tile" href="mockups/blog.html"><b>Wiedza</b><span>biblioteka artykułów</span></a>
+    <a class="tile" href="mockups/affiliate.html"><b>Program poleceń</b><span>3 poziomy współpracy</span></a>
+  </div>
+</div>
+</body>
+</html>

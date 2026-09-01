@@ -1,0 +1,174 @@
+<!-- ==========================================================================
+     ITP — CANONICAL PAGE CHROME. Not a page; a contract.
+     Every mockup in mockups/ MUST paste these four fragments verbatim, changing
+     only: (a) the aria-current marker on the active nav item, (b) the CTA label
+     on quiz.html/result.html where "Rozpocznij analizę" would be circular.
+     Do not fork the markup. Do not restyle it locally.
+     ========================================================================== -->
+
+<!-- ---------------------------------------------------------------- HEAD -->
+<!--
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>… | ITP</title>
+<meta name="description" content="…">
+<link rel="stylesheet" href="../styles/tokens.css">
+<style> /* page-specific only */ </style>
+</head>
+<body>
+-->
+
+<!-- --------------------------------------------------- FRAGMENT 1 · SKIP -->
+<a class="skip-link" href="#main">Przejdź do treści</a>
+
+<!-- ------------------------------------- FRAGMENT 2 · TRUST BAR (doc 7.1 §0) -->
+<div class="trustbar">
+  <div class="trustbar__inner">
+    <span>Rekomendacje zatwierdzane przez <b>specjalistę</b></span>
+    <span class="trustbar__dot" aria-hidden="true">·</span>
+    <span>Technologia <b>BioSNEDS™</b></span>
+    <span class="trustbar__dot" aria-hidden="true">·</span>
+    <span>Wysyłka w <b>24–48 h</b></span>
+  </div>
+</div>
+
+<!-- ------------------------------------------------- FRAGMENT 3 · HEADER -->
+<header class="sitehead">
+  <div class="wrap">
+    <div class="sitehead__bar">
+      <a class="sitehead__brand" href="hero.html">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z"
+                stroke="#0B1F3A" stroke-width="1.6"/>
+          <circle cx="13" cy="13" r="3.1" fill="#00CFFF"/>
+        </svg>
+        ITP
+      </a>
+      <nav class="sitehead__nav" aria-label="Główna nawigacja">
+        <a href="hero.html#jak-to-dziala">Jak to działa</a>
+        <a href="product.html">PERSONA</a>
+        <a href="biosneds.html">BioSNEDS™</a>
+        <a href="blog.html">Wiedza</a>
+        <a href="affiliate.html">Program poleceń</a>
+      </nav>
+      <div class="sitehead__actions">
+        <a class="btn btn--ghost btn--sm btn--nav-hide" href="hero.html#instytut">Instytut</a>
+        <a class="btn btn--primary btn--sm" href="quiz.html">Rozpocznij analizę</a>
+      </div>
+      <button class="menu-toggle" type="button"
+              data-itp-menu-toggle
+              aria-expanded="false"
+              aria-controls="itp-menu-panel"
+              aria-label="Otwórz menu"
+              data-label-open="Otwórz menu"
+              data-label-close="Zamknij menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M0 1h18M0 6h18M0 11h18" stroke="#0B1F3A" stroke-width="1.6"/>
+        </svg>
+      </button>
+    </div>
+    <div class="menu-panel" id="itp-menu-panel">
+      <a href="hero.html#jak-to-dziala">Jak to działa</a>
+      <a href="product.html">PERSONA</a>
+      <a href="biosneds.html">BioSNEDS™</a>
+      <a href="blog.html">Wiedza</a>
+      <a href="affiliate.html">Program poleceń</a>
+      <a href="hero.html#instytut">Instytut</a>
+      <a class="btn btn--primary btn--block" href="quiz.html">Rozpocznij analizę</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- page content -->
+</main>
+
+<!-- ------------------------------------- FRAGMENT 4 · FOOTER (doc 7.1 §9) -->
+<footer class="sitefoot">
+  <div class="wrap">
+
+    <div class="grid grid--4" style="gap:var(--sp-9)">
+      <div>
+        <a class="sitehead__brand" href="hero.html" style="color:var(--ivory);margin-bottom:var(--sp-4)">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z"
+                  stroke="#F7F6F1" stroke-width="1.6"/>
+            <circle cx="13" cy="13" r="3.1" fill="#00CFFF"/>
+          </svg>
+          ITP
+        </a>
+        <p class="t-caption" style="color:var(--on-navy-muted);max-width:30ch">
+          Instytut Terapii Personalizowanych. Operator: VHO&nbsp;Sp.&nbsp;z&nbsp;o.o.
+          Jednostka badawcza: AILaBioTech.
+        </p>
+      </div>
+
+      <div>
+        <h4>Platforma</h4>
+        <div class="sitefoot__links">
+          <a href="hero.html#jak-to-dziala">Jak to działa</a>
+          <a href="quiz.html">Analiza zdrowia</a>
+          <a href="product.html">Formuły PERSONA</a>
+          <a href="biosneds.html">Technologia BioSNEDS™</a>
+          <a href="blog.html">Wiedza</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Współpraca</h4>
+        <div class="sitefoot__links">
+          <a href="affiliate.html#specjalisci">Dla specjalistów — 20 %</a>
+          <a href="affiliate.html#partnerzy">Program detaliczny — 10–15 %</a>
+          <a href="affiliate.html#white-label">B2B / white-label — 10 %</a>
+          <a href="hero.html#instytut">Instytut i badania</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Newsletter</h4>
+        <p class="t-caption" style="color:var(--on-navy-muted);margin-bottom:var(--sp-4)">
+          Raz w miesiącu: biodostępność, profilaktyka, badania. Bez sprzedaży.
+        </p>
+        <form class="field" data-itp-newsletter novalidate>
+          <label class="field__label" for="nl-email">Adres e-mail</label>
+          <input class="input" id="nl-email" type="email" name="email"
+                 placeholder="imie@domena.pl" autocomplete="email" required>
+          <button class="btn btn--cyan btn--block" type="submit">Zapisz mnie</button>
+          <p class="t-caption" data-itp-newsletter-msg role="status" aria-live="polite"
+             style="color:var(--on-navy-muted)"></p>
+        </form>
+      </div>
+    </div>
+
+    <hr class="rule" style="margin-block:var(--sp-9)">
+
+    <p class="disclaimer" style="max-width:74ch">
+      Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje
+      konsultacji lekarskiej.
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-5);align-items:center;
+                justify-content:space-between;margin-top:var(--sp-8)">
+      <div class="sitefoot__links" style="grid-auto-flow:column;gap:var(--sp-5)">
+        <a href="hero.html#bezpieczenstwo">Regulamin</a>
+        <a href="hero.html#bezpieczenstwo">Polityka prywatności</a>
+        <a href="hero.html#bezpieczenstwo">RODO i dane zdrowotne</a>
+        <a href="hero.html#kontakt">Kontakt</a>
+      </div>
+      <p class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);
+                            color:var(--on-navy-faint);text-transform:uppercase">
+        Makieta · etap I · bez transakcji
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<script src="../scripts/chrome.js"></script>
+<!--
+</body>
+</html>
+-->

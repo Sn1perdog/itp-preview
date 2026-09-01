@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wiedza — biblioteka Instytutu | ITP</title>
+<meta name="description" content="Biblioteka Wiedza Instytutu Terapii Personalizowanych: biodostępność, suplementacja personalizowana, profilaktyka i sztuka czytania własnych wyników.">
+<link rel="stylesheet" href="../styles/tokens.css">
+<style>
+/* ==========================================================================
+   blog.html — page-specific styles only. Everything token-driven.
+   ========================================================================== */
+
+/* ------------------------------------------------------------- MASTHEAD */
+.masthead { background: var(--ivory-bright); padding-block: clamp(64px, 8vw, 128px) clamp(40px, 5vw, 72px); }
+.masthead__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+                  gap: clamp(40px, 6vw, 96px); align-items: end; }
+.masthead h1 { max-width: 14ch; }
+.masthead .t-lead { max-width: 52ch; margin-top: var(--sp-6); }
+.masthead__stats { margin-top: clamp(32px, 4vw, 56px); }
+
+/* Rubryka index — mono ledger, each row applies the library filter */
+.rubx-head { display: flex; justify-content: space-between; align-items: baseline;
+             padding-bottom: var(--sp-3); border-bottom: 1px solid var(--line-strong); }
+.rubx-list { list-style: none; margin: 0; padding: 0; }
+.rubx { display: flex; width: 100%; align-items: baseline; gap: var(--sp-4);
+        padding: var(--sp-4) 0; background: none; border: 0; border-bottom: 1px solid var(--line);
+        cursor: pointer; text-align: left; color: var(--ink);
+        transition: color var(--dur-1) var(--ease); }
+.rubx:hover .rubx__name { color: var(--cyan-ink); }
+.rubx__num { font-family: var(--font-mono); font-size: var(--t-micro);
+             letter-spacing: var(--ls-mono); color: var(--ink-faint); }
+.rubx__name { font-weight: var(--w-semi); font-size: var(--t-body); letter-spacing: -.01em; }
+.rubx__count { margin-left: auto; font-family: var(--font-mono); font-size: var(--t-micro);
+               letter-spacing: var(--ls-mono); color: var(--ink-muted); }
+.rubx__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dot, var(--navy-500));
+             flex: none; align-self: center; }
+
+/* -------------------------------------------------------- LEAD FEATURE */
+.feature-band { background: var(--ivory); border-top: 1px solid var(--line); }
+.feature-rule { display: flex; justify-content: space-between; align-items: baseline;
+                gap: var(--sp-4); padding-block: var(--sp-5); border-bottom: 1px solid var(--line); }
+.feature { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+           gap: clamp(40px, 5.5vw, 88px); align-items: center;
+           padding-block: clamp(48px, 6vw, 96px) clamp(64px, 8vw, 128px); }
+.feature__kicker { display: flex; align-items: center; gap: var(--sp-3); }
+.feature h2 { max-width: 18ch; margin-top: var(--sp-5); }
+.feature__stand { margin-top: var(--sp-6); max-width: 58ch; }
+.feature__byline { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3);
+                   margin-top: var(--sp-7); }
+.feature__visual { background: var(--navy-900); border-radius: var(--r-lg);
+                   padding: clamp(20px, 2.4vw, 36px); box-shadow: var(--sh-3); }
+.feature__visual svg { width: 100%; height: auto; }
+
+/* ------------------------------------------------------------- TOOLBAR */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-5);
+           padding-block: var(--sp-5); margin-block: clamp(28px, 3vw, 44px) clamp(32px, 4vw, 56px);
+           border-block: 1px solid var(--line-strong); }
+.toolbar__filters { display: flex; flex-wrap: wrap; gap: var(--sp-2); flex: 1 1 460px; }
+.fpill { display: inline-flex; align-items: center; gap: 8px;
+         padding: 9px 15px; border: 1px solid var(--line-strong); border-radius: var(--r-pill);
+         background: transparent; cursor: pointer;
+         font-family: var(--font-mono); font-size: var(--t-micro);
+         letter-spacing: var(--ls-mono); text-transform: uppercase; color: var(--ink-2);
+         transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease),
+                     color var(--dur-1) var(--ease); }
+.fpill:hover { border-color: var(--navy-900); color: var(--ink); }
+.fpill[aria-pressed='true'] { background: var(--navy-900); border-color: var(--navy-900);
+                              color: var(--ivory); }
+.fpill__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot, var(--navy-500)); }
+.fpill[aria-pressed='true'] .fpill__dot { box-shadow: 0 0 0 2px rgba(247, 246, 241, .25); }
+.toolbar__right { display: grid; gap: var(--sp-2); flex: 0 1 320px; margin-left: auto; }
+.toolbar__right .input { min-width: 0; -webkit-appearance: none; appearance: none; }
+.toolbar__count { font-size: var(--t-micro); letter-spacing: var(--ls-mono);
+                  text-transform: uppercase; color: var(--ink-muted); text-align: right; }
+
+/* -------------------------------------------------------- LIBRARY GRID */
+.lib { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+       grid-auto-flow: dense; gap: var(--sp-6); }
+.art { grid-column: span 4; display: flex; flex-direction: column; gap: var(--sp-4);
+       background: var(--ivory-white); border: 1px solid var(--line);
+       border-radius: var(--r-md); padding: clamp(24px, 2.4vw, 32px); }
+.art__kicker { display: flex; align-items: center; gap: 10px;
+               font-family: var(--font-mono); font-size: var(--t-micro);
+               letter-spacing: var(--ls-mono); text-transform: uppercase;
+               color: var(--ink-muted); }
+.art__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dot, var(--navy-500)); flex: none; }
+.art__title { font-size: var(--t-display-4); font-weight: var(--w-extra);
+              letter-spacing: var(--ls-head); line-height: 1.14; text-wrap: balance; }
+.art__lede { font-size: var(--t-body-sm); line-height: 1.58; color: var(--ink-2); }
+.art--hero { grid-column: span 8; background: var(--navy-900); border-color: var(--navy-900);
+             padding: clamp(28px, 3vw, 44px); gap: var(--sp-5); justify-content: center; }
+.art--hero .art__title { color: var(--on-navy); font-size: var(--t-display-3);
+                         font-weight: var(--w-black); line-height: 1.05; max-width: 22ch; }
+.art--hero .art__lede { color: var(--on-navy-soft); font-size: var(--t-body); max-width: 52ch; }
+.art--hero .art__kicker { color: var(--cyan-soft); }
+.art--hero .art__kicker .art__dot { --dot: var(--on-navy-soft); }
+.art--wide { grid-column: span 8; box-shadow: var(--sh-2);
+             padding: clamp(28px, 3vw, 44px); gap: var(--sp-5); justify-content: center; }
+.art--wide .art__title { font-size: var(--t-display-3); font-weight: var(--w-black);
+                         line-height: 1.05; max-width: 22ch; }
+.art--wide .art__lede { font-size: var(--t-body); max-width: 56ch; }
+.art--tech { background: var(--cyan-wash); border-color: var(--line-cyan); }
+.art--tech .art__kicker { color: var(--cyan-ink); }
+.art--half { grid-column: span 6; box-shadow: var(--sh-1); padding: clamp(26px, 2.6vw, 36px); }
+.lib-span { grid-column: 1 / -1; }
+
+/* Empty state */
+.lib-empty { display: grid; justify-items: center; gap: var(--sp-4); text-align: center;
+             padding: clamp(48px, 6vw, 88px) var(--sp-6);
+             border: 1px dashed var(--line-strong); border-radius: var(--r-md);
+             background: var(--ivory-bright); }
+.lib-empty[hidden] { display: none; }
+.lib-empty h3 { font-size: var(--t-display-4); font-weight: var(--w-extra);
+                letter-spacing: var(--ls-head); }
+.lib-empty p { max-width: 44ch; color: var(--ink-2); font-size: var(--t-body-sm); }
+
+/* In-body newsletter — navy panel closing the library */
+.lib-news { margin-top: clamp(40px, 5vw, 72px); background: var(--navy-900);
+            border-radius: var(--r-lg); padding: clamp(32px, 4vw, 56px);
+            display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+            gap: clamp(32px, 4vw, 64px); align-items: center; box-shadow: var(--sh-3); }
+.lib-news h3 { color: var(--on-navy); font-size: var(--t-display-3);
+               font-weight: var(--w-black); letter-spacing: var(--ls-head);
+               line-height: 1.04; max-width: 18ch; margin-top: var(--sp-4); }
+.lib-news p { color: var(--on-navy-soft); }
+.lib-news form .btn { justify-self: start; }
+
+/* ------------------------------------------------------------ EXPLAINER */
+.explain__grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+                 gap: clamp(40px, 5.5vw, 96px); align-items: start; }
+.explain__figure { margin-top: clamp(32px, 4vw, 56px); display: grid; gap: var(--sp-2); }
+.explain__range { font-family: var(--font-mono); font-weight: var(--w-bold);
+                  font-size: clamp(2.7rem, 5.8vw, 5rem); letter-spacing: -.045em;
+                  white-space: nowrap;
+                  line-height: 1; color: var(--cyan); font-feature-settings: 'tnum' 1; }
+.explain__rangelabel { font-size: var(--t-body-sm); color: var(--on-navy-soft); max-width: 40ch; }
+.explain__tablecard { background: var(--navy-800); border: 1px solid var(--line-navy);
+                      border-radius: var(--r-md); padding: clamp(20px, 2.4vw, 32px); }
+.explain__note { margin-top: var(--sp-5); font-size: var(--t-caption); color: var(--on-navy-muted);
+                 line-height: 1.55; }
+
+/* -------------------------------------------------------------- AUTORZY */
+.authors__intro { max-width: 64ch; }
+.author { display: flex; flex-direction: column; gap: var(--sp-4);
+          background: var(--ivory-white); border: 1px solid var(--line);
+          border-radius: var(--r-md); padding: clamp(24px, 2.6vw, 32px); }
+.author__mark { width: 72px; height: 80px; display: grid; place-items: center;
+                clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+                background: var(--navy-900); color: var(--on-navy);
+                font-family: var(--font-mono); font-weight: var(--w-bold);
+                font-size: var(--t-body-sm); letter-spacing: .06em; }
+.author__mark--outline { background: var(--ivory-sunk); color: var(--ink-2); }
+.author h3 { font-size: var(--t-display-4); font-weight: var(--w-extra);
+             letter-spacing: var(--ls-head); }
+.author p { font-size: var(--t-body-sm); color: var(--ink-2); line-height: 1.58; }
+.author .chip { align-self: flex-start; }
+.author__foot { margin-top: auto; padding-top: var(--sp-4); border-top: 1px solid var(--line);
+                font-family: var(--font-mono); font-size: var(--t-micro);
+                letter-spacing: var(--ls-mono); text-transform: uppercase;
+                color: var(--ink-muted); }
+
+/* ------------------------------------------------------------ CTA CLOSE */
+.cta-close { text-align: center; display: grid; justify-items: center; gap: var(--sp-6); }
+.cta-close h2 { max-width: 20ch; }
+.cta-close .t-lead { max-width: 48ch; }
+
+/* ----------------------------------------------------------- RESPONSIVE */
+@media (max-width: 1080px) {
+  .masthead__grid { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .feature { grid-template-columns: minmax(0, 1fr); }
+  .lib { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .art { grid-column: span 3; }
+  .art--hero, .art--wide, .art--half { grid-column: span 6; }
+  .explain__grid { grid-template-columns: minmax(0, 1fr); }
+  .lib-news { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 680px) {
+  .lib { grid-template-columns: minmax(0, 1fr); }
+  .art, .art--hero, .art--wide, .art--half { grid-column: auto; }
+  .toolbar__right { flex-basis: 100%; margin-left: 0; }
+  .toolbar__count { text-align: left; }
+  .feature-rule { flex-direction: column; gap: var(--sp-2); }
+}
+</style>
+</head>
+<body>
+
+<!-- --------------------------------------------------- FRAGMENT 1 · SKIP -->
+<a class="skip-link" href="#main">Przejdź do treści</a>
+
+<!-- ------------------------------------- FRAGMENT 2 · TRUST BAR (doc 7.1 §0) -->
+<div class="trustbar">
+  <div class="trustbar__inner">
+    <span>Rekomendacje zatwierdzane przez <b>specjalistę</b></span>
+    <span class="trustbar__dot" aria-hidden="true">·</span>
+    <span>Technologia <b>BioSNEDS™</b></span>
+    <span class="trustbar__dot" aria-hidden="true">·</span>
+    <span>Wysyłka w <b>24–48 h</b></span>
+  </div>
+</div>
+
+<!-- ------------------------------------------------- FRAGMENT 3 · HEADER -->
+<header class="sitehead">
+  <div class="wrap">
+    <div class="sitehead__bar">
+      <a class="sitehead__brand" href="hero.html">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z"
+                stroke="#0B1F3A" stroke-width="1.6"/>
+          <circle cx="13" cy="13" r="3.1" fill="#00CFFF"/>
+        </svg>
+        ITP
+      </a>
+      <nav class="sitehead__nav" aria-label="Główna nawigacja">
+        <a href="hero.html#jak-to-dziala">Jak to działa</a>
+        <a href="product.html">PERSONA</a>
+        <a href="biosneds.html">BioSNEDS™</a>
+        <a href="blog.html" aria-current="page">Wiedza</a>
+        <a href="affiliate.html">Program poleceń</a>
+      </nav>
+      <div class="sitehead__actions">
+        <a class="btn btn--ghost btn--sm btn--nav-hide" href="hero.html#instytut">Instytut</a>
+        <a class="btn btn--primary btn--sm" href="quiz.html">Rozpocznij analizę</a>
+      </div>
+      <button class="menu-toggle" type="button"
+              data-itp-menu-toggle
+              aria-expanded="false"
+              aria-controls="itp-menu-panel"
+              aria-label="Otwórz menu"
+              data-label-open="Otwórz menu"
+              data-label-close="Zamknij menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true">
+          <path d="M0 1h18M0 6h18M0 11h18" stroke="#0B1F3A" stroke-width="1.6"/>
+        </svg>
+      </button>
+    </div>
+    <div class="menu-panel" id="itp-menu-panel">
+      <a href="hero.html#jak-to-dziala">Jak to działa</a>
+      <a href="product.html">PERSONA</a>
+      <a href="biosneds.html">BioSNEDS™</a>
+      <a href="blog.html" aria-current="page">Wiedza</a>
+      <a href="affiliate.html">Program poleceń</a>
+      <a href="hero.html#instytut">Instytut</a>
+      <a class="btn btn--primary btn--block" href="quiz.html">Rozpocznij analizę</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================================================ MASTHEAD -->
+  <section class="masthead">
+    <div class="wrap">
+      <div class="masthead__grid">
+        <div>
+          <p class="eyebrow">Wiedza · Biblioteka Instytutu</p>
+          <h1 class="t-d1">Zrozum swój organizm, <span class="t-accent">zanim</span> mu cokolwiek podasz.</h1>
+          <p class="t-lead">Biodostępność, suplementacja personalizowana, profilaktyka
+             i sztuka czytania własnych wyników. Piszemy tak, żeby uzasadnienie każdej
+             rekomendacji dało się zrozumieć — nie po to, żeby sprzedawać.</p>
+          <div class="stat-row masthead__stats" data-itp-reveal>
+            <div class="stat">
+              <span class="stat__num">13</span>
+              <span class="stat__label">artykułów w bibliotece</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num">6</span>
+              <span class="stat__label">rubryk tematycznych</span>
+            </div>
+            <div class="stat">
+              <span class="stat__num">110</span>
+              <span class="stat__label">minut czytania łącznie</span>
+            </div>
+          </div>
+        </div>
+        <div data-itp-reveal>
+          <div class="rubx-head">
+            <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);text-transform:uppercase;color:var(--ink-muted)">Rubryki</span>
+            <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);color:var(--ink-faint)">01–06</span>
+          </div>
+          <ul class="rubx-list">
+            <li><button type="button" class="rubx" data-jump="biodostepnosc">
+              <span class="rubx__num">01</span><span class="rubx__dot" style="--dot:var(--cyan)"></span>
+              <span class="rubx__name">Biodostępność</span><span class="rubx__count">02</span></button></li>
+            <li><button type="button" class="rubx" data-jump="sen">
+              <span class="rubx__num">02</span><span class="rubx__dot" style="--dot:var(--f2-neuro)"></span>
+              <span class="rubx__name">Sen i regeneracja</span><span class="rubx__count">02</span></button></li>
+            <li><button type="button" class="rubx" data-jump="zapalny">
+              <span class="rubx__num">03</span><span class="rubx__dot" style="--dot:var(--f3-inflam)"></span>
+              <span class="rubx__name">Stan zapalny</span><span class="rubx__count">02</span></button></li>
+            <li><button type="button" class="rubx" data-jump="trawienie">
+              <span class="rubx__num">04</span><span class="rubx__dot" style="--dot:var(--f1-digest)"></span>
+              <span class="rubx__name">Trawienie i mikrobiom</span><span class="rubx__count">02</span></button></li>
+            <li><button type="button" class="rubx" data-jump="diagnostyka">
+              <span class="rubx__num">05</span><span class="rubx__dot" style="--dot:var(--navy-500)"></span>
+              <span class="rubx__name">Diagnostyka</span><span class="rubx__count">02</span></button></li>
+            <li><button type="button" class="rubx" data-jump="dlugowiecznosc">
+              <span class="rubx__num">06</span><span class="rubx__dot" style="--dot:var(--f4-vital)"></span>
+              <span class="rubx__name">Długowieczność</span><span class="rubx__count">02</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== LEAD FEATURE -->
+  <section class="feature-band" aria-labelledby="feature-title">
+    <div class="wrap">
+      <div class="feature-rule">
+        <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono-wide);text-transform:uppercase;color:var(--ink)">Artykuł przewodni</span>
+        <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);text-transform:uppercase;color:var(--ink-muted)">Sierpień 2026 · nr 01</span>
+      </div>
+      <article class="feature">
+        <div data-itp-reveal>
+          <p class="feature__kicker mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);text-transform:uppercase;color:var(--cyan-ink)">
+            <span class="art__dot" style="--dot:var(--cyan)"></span>
+            Biodostępność · 12 min · 21.08.2026
+          </p>
+          <h2 class="t-d2" id="feature-title">Dlaczego większość kurkuminy nigdy nie trafia do Twojej krwi</h2>
+          <p class="t-lead feature__stand">Kurkumina jest lipofilowa: nie rozpuszcza się w wodzie,
+             więc układ pokarmowy przyswaja jedynie ułamek tego, co połykasz. Wyjaśniamy, czym
+             naprawdę jest biodostępność, jak mierzy się ją w badaniach PAMPA i farmakokinetycznych —
+             i dlaczego forma podania potrafi znaczyć więcej niż dawka na etykiecie.</p>
+          <div class="feature__byline">
+            <span class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);text-transform:uppercase;color:var(--ink-muted)">Zespół redakcyjny Instytutu</span>
+            <span class="chip">Konsultacja: specjalista ITP — nazwisko w akceptacji</span>
+          </div>
+        </div>
+        <div class="feature__visual" data-itp-reveal>
+          <svg viewBox="0 0 640 400" role="img"
+               aria-label="Schemat poglądowy: substancja lipofilowa przechodzi w nanoemulsję in situ i zostaje wchłonięta przez nabłonek jelita.">
+            <defs>
+              <pattern id="dg" width="24" height="24" patternUnits="userSpaceOnUse">
+                <circle cx="1" cy="1" r="1" fill="rgba(247,246,241,.08)"/>
+              </pattern>
+              <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 0 8 4 0 8Z" fill="#00CFFF"/>
+              </marker>
+            </defs>
+            <rect x="0" y="0" width="640" height="400" fill="url(#dg)"/>
+            <g font-family="'Space Mono', monospace" font-size="10" letter-spacing="1.4">
+              <text x="58" y="52" fill="#00CFFF" font-size="11">01</text>
+              <text x="58" y="70" fill="rgba(247,246,241,.62)">SUBSTANCJA LIPOFILOWA</text>
+              <text x="262" y="52" fill="#00CFFF" font-size="11">02</text>
+              <text x="262" y="70" fill="rgba(247,246,241,.62)">NANOEMULSJA IN SITU</text>
+              <text x="484" y="52" fill="#00CFFF" font-size="11">03</text>
+              <text x="484" y="70" fill="rgba(247,246,241,.62)">WCHŁANIANIE</text>
+            </g>
+            <!-- 01 · big lipophilic droplet -->
+            <circle cx="110" cy="210" r="52" fill="#102A4C" stroke="rgba(247,246,241,.42)" stroke-width="1.4"/>
+            <g stroke="rgba(247,246,241,.22)" stroke-width="1.2">
+              <path d="M78 192c14-12 50-14 64 2"/>
+              <path d="M74 212c18-10 56-10 72 0"/>
+              <path d="M80 232c16 10 46 10 60 0"/>
+            </g>
+            <!-- connector 1 -->
+            <line x1="172" y1="210" x2="230" y2="210" stroke="#00CFFF" stroke-width="1.6"
+                  stroke-dasharray="2 7" opacity=".75" marker-end="url(#arr)"/>
+            <!-- 02 · nanoemulsion cluster inside hex -->
+            <path d="M398 210 359 277.5 281 277.5 242 210 281 142.5 359 142.5Z"
+                  fill="none" stroke="rgba(0,207,255,.35)" stroke-width="1.3"/>
+            <g stroke="#00CFFF" stroke-width="1.3" fill="none">
+              <circle cx="300" cy="185" r="8"/>
+              <circle cx="331" cy="168" r="5"/>
+              <circle cx="352" cy="198" r="7"/>
+              <circle cx="286" cy="222" r="5"/>
+              <circle cx="318" cy="238" r="8"/>
+              <circle cx="349" cy="234" r="4"/>
+              <circle cx="272" cy="192" r="4"/>
+            </g>
+            <g fill="rgba(0,207,255,.34)">
+              <circle cx="317" cy="206" r="4"/>
+              <circle cx="338" cy="216" r="3"/>
+              <circle cx="296" cy="248" r="3"/>
+              <circle cx="304" cy="160" r="3"/>
+              <circle cx="342" cy="252" r="3"/>
+            </g>
+            <!-- connector 2 -->
+            <line x1="404" y1="210" x2="452" y2="210" stroke="#00CFFF" stroke-width="1.6"
+                  stroke-dasharray="2 7" opacity=".75" marker-end="url(#arr)"/>
+            <!-- 03 · epithelium membrane -->
+            <g stroke="rgba(247,246,241,.4)" stroke-width="1.4" fill="none">
+              <path d="M506 118c10 16-10 30 0 46s-10 30 0 46-10 30 0 46-10 30 0 46"/>
+              <path d="M520 118c10 16-10 30 0 46s-10 30 0 46-10 30 0 46-10 30 0 46"/>
+            </g>
+            <g stroke="#00CFFF" stroke-width="1.3" opacity=".9">
+              <line x1="527" y1="164" x2="566" y2="164" marker-end="url(#arr)"/>
+              <line x1="527" y1="212" x2="580" y2="212" marker-end="url(#arr)"/>
+              <line x1="527" y1="260" x2="560" y2="260" marker-end="url(#arr)"/>
+            </g>
+            <g fill="rgba(0,207,255,.55)">
+              <circle cx="500" cy="164" r="4"/>
+              <circle cx="512" cy="212" r="4"/>
+              <circle cx="503" cy="260" r="4"/>
+              <circle cx="592" cy="164" r="3"/>
+              <circle cx="606" cy="212" r="3"/>
+              <circle cx="586" cy="260" r="3"/>
+            </g>
+            <text x="58" y="366" font-family="'Space Mono', monospace" font-size="9.5"
+                  letter-spacing="1.2" fill="rgba(247,246,241,.45)">SCHEMAT POGLĄDOWY — NIE PRZEDSTAWIA DANYCH POMIAROWYCH</text>
+          </svg>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================= LIBRARY -->
+  <section class="section section--ivory" id="biblioteka" aria-labelledby="lib-title" style="padding-top:clamp(56px,7vw,104px)">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Biblioteka</p>
+        <h2 class="t-d2" id="lib-title" tabindex="-1">Czytaj według rubryki<br>albo szukaj po hasłach.</h2>
+      </div>
+
+      <div class="toolbar" data-itp-reveal>
+        <div class="toolbar__filters" role="group" aria-label="Filtruj artykuły według rubryki">
+          <button type="button" class="fpill" data-rub="all" aria-pressed="true">Wszystkie</button>
+          <button type="button" class="fpill" data-rub="biodostepnosc" aria-pressed="false">
+            <span class="fpill__dot" style="--dot:var(--cyan)"></span>Biodostępność</button>
+          <button type="button" class="fpill" data-rub="sen" aria-pressed="false">
+            <span class="fpill__dot" style="--dot:var(--f2-neuro)"></span>Sen i regeneracja</button>
+          <button type="button" class="fpill" data-rub="zapalny" aria-pressed="false">
+            <span class="fpill__dot" style="--dot:var(--f3-inflam)"></span>Stan zapalny</button>
+          <button type="button" class="fpill" data-rub="trawienie" aria-pressed="false">
+            <span class="fpill__dot" style="--dot:var(--f1-digest)"></span>Trawienie i mikrobiom</button>
+          <button type="button" class="fpill" data-rub="diagnostyka" aria-pressed="false">
+            <span class="fpill__dot" style="--dot:var(--navy-500)"></span>Diagnostyka</button>
+          <button type="button" class="fpill" data-rub="dlugowiecznosc" aria-pressed="false">
+            <span class="fpill__dot" style="--dot:var(--f4-vital)"></span>Długowieczność</button>
+        </div>
+        <div class="toolbar__right">
+          <label class="visually-hidden" for="lib-q">Szukaj w tytułach i zajawkach</label>
+          <input class="input" type="search" id="lib-q" name="q" autocomplete="off"
+                 placeholder="Szukaj: melatonina, maślan, NF-κB…">
+          <p class="toolbar__count mono" id="lib-count" role="status" aria-live="polite">12 / 12 artykułów</p>
+        </div>
+      </div>
+
+      <div class="lib" id="lib">
+
+        <article class="art art--hero" data-rub="diagnostyka" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot"></span>Diagnostyka · 11 min · 25.08.2026</p>
+          <h3 class="art__title">Jak czytać własne wyniki badań: zakres referencyjny to nie werdykt</h3>
+          <p class="art__lede">„W normie” znaczy tyle, co „typowe dla populacji” — a nie „optymalne
+             dla Ciebie”. Od czego zacząć czytanie wyników, czym różni się pojedynczy pomiar od
+             trendu i dlaczego dwa laboratoria mogą podać dwa różne zakresy dla tej samej krwi.</p>
+        </article>
+
+        <article class="art" data-rub="sen" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f2-neuro)"></span>Sen i regeneracja · 7 min · 18.08.2026</p>
+          <h3 class="art__title">Melatonina nie jest tabletką nasenną. Jest sygnałem ciemności</h3>
+          <p class="art__lede">Wieczorny wzrost melatoniny to informacja dla całego organizmu, nie
+             środek usypiający. O chronobiologii, świetle po zmroku i tym, dlaczego pora przyjęcia
+             znaczy więcej niż dawka.</p>
+        </article>
+
+        <article class="art" data-rub="trawienie" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f1-digest)"></span>Trawienie i mikrobiom · 7 min · 11.08.2026</p>
+          <h3 class="art__title">Maślan: paliwo, które jelito grube woli wyprodukować samo</h3>
+          <p class="art__lede">Krótkołańcuchowy kwas tłuszczowy, który odżywia kolonocyty i
+             uszczelnia barierę jelitową. Skąd się bierze, dlaczego bywa go za mało i co ma do
+             tego błonnik, którego nie trawisz.</p>
+        </article>
+
+        <article class="art art--tech" data-rub="biodostepnosc" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--cyan)"></span>Biodostępność · 8 min · 07.08.2026</p>
+          <h3 class="art__title">Nanoemulsja in situ: co dzieje się z kapsułką w jelicie cienkim</h3>
+          <p class="art__lede">Krok po kroku: jak system samonanoemulgujący zamienia lipofilową
+             substancję w mikroskopijne krople, które nabłonek jelita potrafi przyjąć. Bez chemii
+             ponad poziom liceum.</p>
+        </article>
+
+        <article class="art" data-rub="zapalny" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f3-inflam)"></span>Stan zapalny · 10 min · 29.07.2026</p>
+          <h3 class="art__title">NF-κB: przełącznik zapalny, który styl życia zostawia włączony</h3>
+          <p class="art__lede">Ostry stan zapalny leczy. Przewlekły — wyniszcza. Jak działa czynnik
+             transkrypcyjny NF-κB i co w codziennych nawykach utrzymuje go w pozycji „on”.</p>
+        </article>
+
+        <article class="art" data-rub="dlugowiecznosc" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f4-vital)"></span>Długowieczność · 9 min · 30.06.2026</p>
+          <h3 class="art__title">Mitofagia: wielkie sprzątanie w elektrowniach komórki</h3>
+          <p class="art__lede">Stare mitochondria produkują mniej energii i więcej szkód. Jak
+             organizm je rozpoznaje i utylizuje — i dlaczego ten proces zwalnia z wiekiem.</p>
+        </article>
+
+        <article class="art" data-rub="sen" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f2-neuro)"></span>Sen i regeneracja · 9 min · 03.07.2026</p>
+          <h3 class="art__title">GABA: hamulec, którego układ nerwowy używa częściej niż gazu</h3>
+          <p class="art__lede">Większość neuronów w mózgu słucha sygnałów hamujących. Co aktywuje
+             szlaki GABA, jak wygląda ich dobowy rytm i dlaczego „spokój” jest zjawiskiem
+             biochemicznym, a nie cechą charakteru.</p>
+        </article>
+
+        <article class="art art--wide" data-rub="zapalny" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f3-inflam)"></span>Stan zapalny · 8 min · 15.05.2026</p>
+          <h3 class="art__title">COX, LOX i kaskada, którą czujesz jako ból</h3>
+          <p class="art__lede">Dwie rodziny enzymów zamieniają tłuszcze błon komórkowych w cząsteczki
+             sygnałowe zapalenia. Wyjaśniamy mechanizm kaskady — i czym różni się hamowanie
+             selektywne od siłowego wyłączania wszystkiego naraz.</p>
+        </article>
+
+        <article class="art" data-rub="trawienie" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f1-digest)"></span>Trawienie i mikrobiom · 9 min · 20.06.2026</p>
+          <h3 class="art__title">Bariera jelitowa: jedna warstwa komórek między światem a Twoją krwią</h3>
+          <p class="art__lede">Nabłonek jelita ma grubość pojedynczej komórki, a decyduje o
+             odporności, tolerancji pokarmowej i przewlekłym zmęczeniu. O tym, co go uszczelnia,
+             a co rozszczelnia.</p>
+        </article>
+
+        <article class="art" data-rub="diagnostyka" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--navy-500)"></span>Diagnostyka · 6 min · 09.07.2026</p>
+          <h3 class="art__title">Dlaczego ankieta zdrowotna pyta o kofeinę, alkohol i porę badań</h3>
+          <p class="art__lede">Anatomia dobrego wywiadu: co każde pytanie analizy ITP mówi o Twojej
+             fizjologii i jak z odpowiedzi powstaje uzasadniona rekomendacja — zawsze zatwierdzana
+             przez specjalistę, nie przez algorytm.</p>
+        </article>
+
+        <article class="art art--half" data-rub="biodostepnosc" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--cyan)"></span>Biodostępność · 6 min · 12.06.2026</p>
+          <h3 class="art__title">PAMPA, PK, AUC: słownik, który pozwala czytać badania wchłaniania</h3>
+          <p class="art__lede">Trzy skróty wracają w każdej publikacji o biodostępności. Tłumaczymy,
+             co naprawdę mierzą, czym różni się model od organizmu i które z nich mówi cokolwiek
+             o Tobie.</p>
+        </article>
+
+        <article class="art art--half" data-rub="dlugowiecznosc" data-itp-reveal>
+          <p class="art__kicker"><span class="art__dot" style="--dot:var(--f4-vital)"></span>Długowieczność · 8 min · 02.06.2026</p>
+          <h3 class="art__title">Kwas elagowy i urolityny: co owoc granatu wie o starzeniu</h3>
+          <p class="art__lede">Kwas elagowy sam w sobie słabo się wchłania; część pracy wykonuje za
+             nas mikrobiom, przetwarzając go w urolityny. O jednym z ciekawszych łańcuchów
+             zależności w żywieniu.</p>
+        </article>
+
+        <div class="lib-empty lib-span" id="lib-empty" role="status" hidden>
+          <p class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono-wide);text-transform:uppercase;color:var(--ink-muted)">0 wyników</p>
+          <h3>Nic nie pasuje do tego zapytania.</h3>
+          <p>Spróbuj krótszego hasła — na przykład „sen”, „jelito” albo „zapalny” —
+             lub wybierz inną rubrykę.</p>
+          <button type="button" class="btn btn--ghost" id="lib-reset">Wyczyść filtr i wyszukiwanie</button>
+        </div>
+
+      </div>
+
+      <!-- In-body newsletter (not a popup) -->
+      <div class="lib-news navy" data-itp-reveal>
+        <div>
+          <p class="eyebrow">Prenumerata</p>
+          <h3>Nowe artykuły prosto do skrzynki</h3>
+          <p style="margin-top:var(--sp-4);max-width:44ch">Raz w miesiącu: biodostępność,
+             profilaktyka, badania. Bez sprzedaży i bez „okazji tylko dziś”.</p>
+        </div>
+        <form class="field" data-itp-newsletter novalidate>
+          <label class="field__label" for="wz-email">Adres e-mail</label>
+          <input class="input" id="wz-email" type="email" name="email"
+                 placeholder="imie@domena.pl" autocomplete="email" required>
+          <button class="btn btn--cyan" type="submit">Zapisz mnie</button>
+          <p class="t-caption" data-itp-newsletter-msg role="status" aria-live="polite"
+             style="color:var(--on-navy-muted)"></p>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================== EXPLAINER -->
+  <section class="section section--navy" id="jak-czytamy" aria-labelledby="explain-title">
+    <div class="wrap">
+      <div class="explain__grid">
+        <div data-itp-reveal>
+          <p class="eyebrow">Zasada redakcyjna</p>
+          <h2 class="t-d2" id="explain-title">Jak czytamy liczby biodostępności</h2>
+          <p class="t-lead" style="margin-top:var(--sp-6);max-width:52ch">W bibliotece obowiązuje
+             jedna zasada: liczba pojawia się tylko wtedy, gdy stoi za nią udokumentowany pomiar.
+             Dla technologii BioSNEDS™ oznacza to cztery wartości zbadane dla konkretnych
+             składników — i ani jednej więcej.</p>
+          <p style="margin-top:var(--sp-5);max-width:56ch;color:var(--on-navy-soft)">Wyższa
+             biodostępność wybranych składników przekłada się na większą skuteczność: to większy
+             potencjał wykorzystania składników przez organizm, a nie obietnica efektu klinicznego.
+             Nie cytujemy badań, których nie możemy pokazać, i nie uśredniamy wyników między
+             składnikami.</p>
+          <div class="explain__figure">
+            <span class="explain__range">40×–100×</span>
+            <span class="explain__rangelabel">od 40× do 100× wzrost wchłaniania, w zależności od składnika</span>
+          </div>
+        </div>
+        <div data-itp-reveal>
+          <div class="explain__tablecard">
+            <p class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono-wide);text-transform:uppercase;color:var(--cyan-soft);margin-bottom:var(--sp-5)">Wartości udokumentowane · BioSNEDS™</p>
+            <table class="params">
+              <thead>
+                <tr><th scope="col">Składnik</th><th scope="col" style="text-align:right">Wzrost biodostępności</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>EllagiSol™ <span class="t-caption" style="color:var(--on-navy-muted)">kwas elagowy</span></td>
+                    <td class="num">10 000 % (100×)</td></tr>
+                <tr><td>NADPro™ <span class="t-caption" style="color:var(--on-navy-muted)">kwercetyna + niacynamid</span></td>
+                    <td class="num">4 440 %</td></tr>
+                <tr><td>ResveraSol™ <span class="t-caption" style="color:var(--on-navy-muted)">resweratrol</span></td>
+                    <td class="num">4 330 %</td></tr>
+                <tr><td>CurcuSol™ <span class="t-caption" style="color:var(--on-navy-muted)">kurkumina</span></td>
+                    <td class="num">4 020 %</td></tr>
+              </tbody>
+            </table>
+            <p class="explain__note">Parametry oceniane w badaniach PAMPA, PK i
+               farmakokinetycznych. Technologia licencjonowana, dostarczana wraz z laboratorium
+               Verdant Nature.</p>
+          </div>
+          <div class="btn-row" style="margin-top:var(--sp-6)">
+            <a class="btn btn--primary" href="biosneds.html">Poznaj technologię BioSNEDS™</a>
+            <a class="btn btn--ghost" href="product.html">Zobacz formuły PERSONA</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= AUTORZY -->
+  <section class="section section--bright" id="autorzy" aria-labelledby="authors-title">
+    <div class="wrap">
+      <div class="section-head authors__intro">
+        <p class="eyebrow">O autorach</p>
+        <h2 class="t-d2" id="authors-title">Kto pisze i kto sprawdza</h2>
+        <p class="t-lead">Teksty biblioteki Wiedza powstają w Instytucie Terapii
+           Personalizowanych — jednostce badawczej AILaBioTech — we współpracy z ośrodkami
+           akademickimi. Każdy artykuł przechodzi przegląd merytoryczny, a rekomendacje na
+           platformie zatwierdza człowiek, nie algorytm.</p>
+      </div>
+      <div class="grid grid--3" style="margin-top:clamp(40px,5vw,64px)">
+        <div class="author" data-itp-reveal>
+          <span class="author__mark" aria-hidden="true">ITP</span>
+          <h3>Zespół redakcyjny Instytutu</h3>
+          <p>Instytut Terapii Personalizowanych · jednostka badawcza AILaBioTech. Redakcja,
+             dobór źródeł i język bez marketingu — od pierwszego szkicu po korektę.</p>
+          <p class="author__foot">Operator platformy: VHO Sp. z o.o.</p>
+        </div>
+        <div class="author" data-itp-reveal>
+          <span class="author__mark author__mark--outline" aria-hidden="true">SGGW</span>
+          <h3>Konsultacja naukowa — SGGW</h3>
+          <p>Współpraca akademicka ze Szkołą Główną Gospodarstwa Wiejskiego w Warszawie:
+             żywienie człowieka i technologia żywności.</p>
+          <span class="chip">Sylwetka w przygotowaniu · nazwisko oczekuje na zgodę</span>
+          <p class="author__foot">Współpraca uczelniana · Warszawa</p>
+        </div>
+        <div class="author" data-itp-reveal>
+          <span class="author__mark author__mark--outline" aria-hidden="true">UPWR</span>
+          <h3>Konsultacja naukowa — UP Wrocław</h3>
+          <p>Współpraca akademicka z Uniwersytetem Przyrodniczym we Wrocławiu: biotechnologia
+             i nauki o zdrowiu.</p>
+          <span class="chip">Sylwetka w przygotowaniu · nazwisko oczekuje na zgodę</span>
+          <p class="author__foot">Współpraca uczelniana · Wrocław</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================== CTA CLOSE -->
+  <section class="section section--ivory" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="cta-close" data-itp-reveal>
+        <p class="eyebrow eyebrow--bare">Od wiedzy do planu</p>
+        <h2 class="t-d2" id="cta-title">Wiedza jest bezpłatna. Wnioski są <span class="t-accent">personalizowane</span>.</h2>
+        <p class="t-lead">Analiza potrzeb organizmu kończy się uzasadnionym wynikiem,
+           który zatwierdza specjalista.</p>
+        <div class="btn-row btn-row--center">
+          <a class="btn btn--primary btn--lg" href="quiz.html">Rozpocznij analizę</a>
+          <a class="btn btn--ghost btn--lg" href="hero.html#jak-to-dziala">Zobacz, jak działa ITP</a>
+        </div>
+        <p class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);text-transform:uppercase;color:var(--ink-muted)">Bezpłatnie · ok. 5–7 min · uzasadniony wynik</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ------------------------------------- FRAGMENT 4 · FOOTER (doc 7.1 §9) -->
+<footer class="sitefoot">
+  <div class="wrap">
+
+    <div class="grid grid--4" style="gap:var(--sp-9)">
+      <div>
+        <a class="sitehead__brand" href="hero.html" style="color:var(--ivory);margin-bottom:var(--sp-4)">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z"
+                  stroke="#F7F6F1" stroke-width="1.6"/>
+            <circle cx="13" cy="13" r="3.1" fill="#00CFFF"/>
+          </svg>
+          ITP
+        </a>
+        <p class="t-caption" style="color:var(--on-navy-muted);max-width:30ch">
+          Instytut Terapii Personalizowanych. Operator: VHO&nbsp;Sp.&nbsp;z&nbsp;o.o.
+          Jednostka badawcza: AILaBioTech.
+        </p>
+      </div>
+
+      <div>
+        <h4>Platforma</h4>
+        <div class="sitefoot__links">
+          <a href="hero.html#jak-to-dziala">Jak to działa</a>
+          <a href="quiz.html">Analiza zdrowia</a>
+          <a href="product.html">Formuły PERSONA</a>
+          <a href="biosneds.html">Technologia BioSNEDS™</a>
+          <a href="blog.html">Wiedza</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Współpraca</h4>
+        <div class="sitefoot__links">
+          <a href="affiliate.html#specjalisci">Dla specjalistów — 20 %</a>
+          <a href="affiliate.html#partnerzy">Program detaliczny — 10–15 %</a>
+          <a href="affiliate.html#white-label">B2B / white-label — 10 %</a>
+          <a href="hero.html#instytut">Instytut i badania</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Newsletter</h4>
+        <p class="t-caption" style="color:var(--on-navy-muted);margin-bottom:var(--sp-4)">
+          Raz w miesiącu: biodostępność, profilaktyka, badania. Bez sprzedaży.
+        </p>
+        <form class="field" data-itp-newsletter novalidate>
+          <label class="field__label" for="nl-email">Adres e-mail</label>
+          <input class="input" id="nl-email" type="email" name="email"
+                 placeholder="imie@domena.pl" autocomplete="email" required>
+          <button class="btn btn--cyan btn--block" type="submit">Zapisz mnie</button>
+          <p class="t-caption" data-itp-newsletter-msg role="status" aria-live="polite"
+             style="color:var(--on-navy-muted)"></p>
+        </form>
+      </div>
+    </div>
+
+    <hr class="rule" style="margin-block:var(--sp-9)">
+
+    <p class="disclaimer" style="max-width:74ch">
+      Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje
+      konsultacji lekarskiej.
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-5);align-items:center;
+                justify-content:space-between;margin-top:var(--sp-8)">
+      <div class="sitefoot__links" style="grid-auto-flow:column;gap:var(--sp-5)">
+        <a href="hero.html#bezpieczenstwo">Regulamin</a>
+        <a href="hero.html#bezpieczenstwo">Polityka prywatności</a>
+        <a href="hero.html#bezpieczenstwo">RODO i dane zdrowotne</a>
+        <a href="hero.html#kontakt">Kontakt</a>
+      </div>
+      <p class="mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);
+                            color:var(--on-navy-faint);text-transform:uppercase">
+        Makieta · etap I · bez transakcji
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<script src="../scripts/chrome.js"></script>
+<script>
+/* ==========================================================================
+   blog.html — library filter + search with URL-hash state.
+   Hash grammar: #r=<rubryka>&q=<query>. Default state clears the hash.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var errs = window.__errs = [];
+  window.addEventListener('error', function (e) { errs.push(String(e.message)); });
+
+  var cards = Array.prototype.map.call(
+    document.querySelectorAll('#lib .art'),
+    function (el) {
+      return { el: el, rub: el.getAttribute('data-rub') || '', text: '' };
+    }
+  );
+  var pills = Array.prototype.slice.call(document.querySelectorAll('.fpill'));
+  var input = document.getElementById('lib-q');
+  var count = document.getElementById('lib-count');
+  var empty = document.getElementById('lib-empty');
+  var reset = document.getElementById('lib-reset');
+  var libTitle = document.getElementById('lib-title');
+  var total = cards.length;
+  var VALID = ['biodostepnosc', 'sen', 'zapalny', 'trawienie', 'diagnostyka', 'dlugowiecznosc'];
+
+  /* Fold Polish diacritics so "maslan" finds "maślan". */
+  function fold(s) {
+    return s.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/ł/g, 'l');
+  }
+  cards.forEach(function (c) { c.text = fold(c.el.textContent || ''); });
+
+  var state = { r: 'all', q: '' };
+
+  function apply(writeHash) {
+    var q = fold(state.q.trim());
+    var shown = 0;
+    cards.forEach(function (c) {
+      var ok = (state.r === 'all' || c.rub === state.r) &&
+               (!q || c.text.indexOf(q) !== -1);
+      c.el.hidden = !ok;
+      if (ok) shown++;
+    });
+    count.textContent = shown + ' / ' + total + ' artykułów';
+    empty.hidden = shown > 0;
+    pills.forEach(function (p) {
+      var on = p.getAttribute('data-rub') === state.r;
+      p.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    if (input.value !== state.q) input.value = state.q;
+    if (writeHash !== false) syncHash();
+  }
+
+  function syncHash() {
+    var parts = [];
+    if (state.r !== 'all') parts.push('r=' + state.r);
+    if (state.q.trim()) parts.push('q=' + encodeURIComponent(state.q.trim()));
+    var hash = parts.length ? '#' + parts.join('&') : '';
+    try {
+      history.replaceState(null, '', location.pathname + location.search + hash);
+    } catch (e) {
+      if (hash) location.hash = hash;
+    }
+  }
+
+  function readHash() {
+    var raw = location.hash.slice(1);
+    if (!/(^|&)[rq]=/.test(raw)) return false;
+    var next = { r: 'all', q: '' };
+    raw.split('&').forEach(function (pair) {
+      var i = pair.indexOf('=');
+      if (i < 1) return;
+      var k = pair.slice(0, i);
+      var v = decodeURIComponent(pair.slice(i + 1));
+      if (k === 'r' && VALID.indexOf(v) !== -1) next.r = v;
+      if (k === 'q') next.q = v;
+    });
+    state = next;
+    return true;
+  }
+
+  pills.forEach(function (p) {
+    p.addEventListener('click', function () {
+      state.r = p.getAttribute('data-rub');
+      apply();
+    });
+  });
+
+  var deb;
+  input.addEventListener('input', function () {
+    clearTimeout(deb);
+    deb = setTimeout(function () {
+      state.q = input.value;
+      apply();
+    }, 140);
+  });
+
+  reset.addEventListener('click', function () {
+    state = { r: 'all', q: '' };
+    apply();
+    input.focus();
+  });
+
+  /* Masthead rubryka ledger: filter, then travel to the library. */
+  var reduce = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  Array.prototype.forEach.call(document.querySelectorAll('.rubx'), function (b) {
+    b.addEventListener('click', function () {
+      state.r = b.getAttribute('data-jump');
+      state.q = '';
+      apply();
+      document.getElementById('biblioteka')
+        .scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+      if (libTitle) libTitle.focus({ preventScroll: true });
+    });
+  });
+
+  window.addEventListener('hashchange', function () {
+    if (readHash()) apply(false);
+  });
+
+  readHash();
+  apply(false);
+})();
+</script>
+</body>
+</html>
