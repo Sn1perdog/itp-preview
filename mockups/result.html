@@ -816,8 +816,9 @@ main [hidden] { display: none !important; }
         <p class="t-caption hexmap-caption">
           Każdy obszar ma jedną wartość w skali <span class="mono">0–100%</span>.
           Wyższa wartość oznacza więcej uwagi dla obszaru w&nbsp;planie.
-          Poranną energię podajesz na suwaku od 1 do 10. Sen i&nbsp;stres wybierasz
-          z&nbsp;trzech odpowiedzi. Wartości zaokrąglamy do liczb całkowitych.
+          Ta wartość powstaje z&nbsp;dwunastu odpowiedzi analizy i&nbsp;jest znormalizowana tak,
+          żeby jeden skrajny wybór nie przesunął całej mapy ani nie zdominował doboru trzech
+          formuł. Zaokrąglamy ją do liczb całkowitych.
           Przy dwóch identycznych wynikach pierwszeństwo dostaje obszar zgodny
           z&nbsp;Twoim priorytetem na najbliższe 90&nbsp;dni.
         </p>
@@ -1366,29 +1367,39 @@ main [hidden] { display: none !important; }
 
   /* ------------------------------------------------------------ rationale */
 
+  /* Each bullet must tell the visitor something their own answer did not: what
+     the answer feeds, what it is read alongside, or what it changes in the plan.
+     Every number below is the scoring model in quiz.html or the mapping rule
+     above; nothing here is a claim about the visitor's health. */
   function rationale() {
     var out = [], a = profile.answers || {};
-    out.push('<b>' + mainArea.label + ' <span class="mono">' + profile.scores[mainArea.k] +
-      '%</span></b> i <b>' + supportArea.label + ' <span class="mono">' +
-      profile.scores[supportArea.k] + '%</span></b> to dwa najwyżej obciążone obszary ' +
-      'Twojego profilu. Trzecia formuła wchodzi z kolejnego obszaru na tej liście.');
+    out.push('Twoje sześć obszarów ustawia się od najwyżej obciążonego do najniżej. ' +
+      'Na czele stoją <b>' + mainArea.label + ' <span class="mono">' +
+      profile.scores[mainArea.k] + '%</span></b> i <b>' + supportArea.label +
+      ' <span class="mono">' + profile.scores[supportArea.k] + '%</span></b>. ' +
+      'Formuła już wybrana dopisuje sobie kolejny obszar wtedy, gdy ten ma co najmniej ' +
+      '<span class="mono">40%</span>.');
     var q1 = Number(a.q1);
     if (isFinite(q1) && q1 >= 1 && q1 <= 10) {
       out.push(q1 <= 4
-        ? 'Rano startujesz z poziomu <b>' + q1 + '/10</b>. To deficyt regeneracji jeszcze przed pierwszym zadaniem dnia.'
+        ? 'Na suwaku porannej energii jedno oczko waży dziesięć punktów obciążenia. Twoje <b>' +
+          q1 + '/10</b> zostawia energię w górnej części skali.'
         : (q1 >= 8
-          ? 'Poranna energia <b>' + q1 + '/10</b> jest bazą do pracy nad pozostałymi obszarami.'
-          : 'Poranna energia <b>' + q1 + '/10</b> zostawia umiarkowaną rezerwę do odbudowania.'));
+          ? 'Energię i koncentrację prowadzi w regule jedna formuła PERSONA. Jest nią VitalCore™ ' +
+            'z <b>OmegaSol DHA™ 260 mg</b> na funkcje poznawcze. Twoje <b>' + q1 +
+            '/10</b> obniża obciążenie w obu tych obszarach mapy.'
+          : 'O koncentrację nie pytamy wprost. Liczymy ją jako średnią obciążenia energii ' +
+            'i stresu. Twoje <b>' + q1 + '/10</b> wchodzi zatem do dwóch wartości na mapie.'));
     }
-    if (a.q2 === 'Słaba') out.push('<b>Słaba jakość snu</b> ogranicza nocną regenerację.');
-    else if (a.q2 === 'Przeciętna') out.push('Sen wypada <b>przeciętnie</b>.');
-    if (a.q3 === 'Prawie codziennie') out.push('<b>Stres niemal codziennie</b> utrzymuje stałe obciążenie regeneracji.');
-    if (a.q4 === 'Wyraźne') out.push('<b>Wyraźne trudności trawienne</b> stawiają barierę jelitową na pierwszym miejscu.');
-    else if (a.q4 === 'Łagodne') out.push('Trudności trawienne są <b>łagodne</b>. DigestEase Pro pracuje tu profilaktycznie na mikrobiomie.');
-    if (a.q7 === 'Wysoka') out.push('<b>Wysoka podaż kofeiny</b> może maskować zmęczenie i spłycać sen, zwłaszcza przy dawkach po południu.');
-    if (a.q8 === 'Często') out.push('<b>Częsty alkohol</b> dodatkowo obciąża regenerację i jakość snu.');
-    if (a.q9 === 'Tak, złożony schemat') out.push('Masz <b>złożony schemat suplementacji</b>. Plan ograniczamy do trzech formuł, żeby nie dublować składników.');
-    if (a.q10 === 'Ponad rok' || a.q10 === 'Nie pamiętam') out.push('<b>Badania krwi ponad rok temu</b>. Panel podstawowy warto odświeżyć przed konsultacją.');
+    if (a.q2 === 'Słaba') out.push('Sen prowadzi w regule do NeuroSynapse. Odpowiedź „Słaba” daje mu wartość bazową <span class="mono">85</span> na sto. Ta formuła celuje w optymalizację faz snu i zawiera <b>MelaXorb™ 30 mg</b>.');
+    else if (a.q2 === 'Przeciętna') out.push('Przeciętny sen wchodzi na mapę z wartością bazową <span class="mono">55</span> na sto. Kofeina i alkohol dopisują do niej kolejne punkty.');
+    if (a.q3 === 'Prawie codziennie') out.push('Stres prawie codzienny wchodzi na mapę z wartością bazową <span class="mono">85</span> na sto. W regule prowadzi do NeuroSynapse i sen prowadzi tam również. Jeśli oba stoją u Ciebie wysoko, zajmują w planie jedno miejsce.');
+    if (a.q4 === 'Wyraźne') out.push('Trawienie jako jedyny obszar prowadzi do DigestEase Pro. Twoje wyraźne trudności dają mu <span class="mono">82</span> punkty startowe. W składzie tej formuły stoją <b>ThymoPro 170 mg</b> oraz tributyryna BioButyrin™.');
+    else if (a.q4 === 'Łagodne') out.push('Łagodne trudności zostawiają trawienie na <span class="mono">50</span> punktach. Ten obszar jako jedyny prowadzi do DigestEase Pro. Formuła wchodzi wtedy do planu zapobiegawczo, na mikrobiom i barierę jelitową.');
+    if (a.q7 === 'Wysoka') out.push('Wysoka podaż kofeiny rusza cztery Twoje obszary naraz. Dolicza <span class="mono">+12</span> do snu, <span class="mono">+8</span> do stresu oraz <span class="mono">+5</span> do energii i koncentracji.');
+    if (a.q8 === 'Często') out.push('Częsty alkohol dopisuje <span class="mono">+10</span> do snu, <span class="mono">+8</span> do trawienia i <span class="mono">+6</span> do odporności. Odporność startuje w modelu od <span class="mono">30</span> punktów u każdego.');
+    if (a.q9 === 'Tak, złożony schemat') out.push('Złożony schemat suplementacji nie zmienia ani jednej wartości na Twojej mapie. Zapisujemy go dosłownie dla specjalisty. Trzy formuły PERSONA i tak nie powtarzają między sobą składników.');
+    if (a.q10 === 'Ponad rok' || a.q10 === 'Nie pamiętam') out.push('Badania krwi starsze niż rok nie wchodzą do wyliczenia obciążenia. Tę odpowiedź specjalista widzi przy weryfikacji planu. Panel podstawowy możesz odświeżyć przed konsultacją.');
     return out.slice(0, 5);
   }
 

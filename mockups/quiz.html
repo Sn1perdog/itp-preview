@@ -405,7 +405,7 @@
         <div class="qpanel">
 
           <div class="qnotice" id="q-notice" hidden>
-            <p id="q-notice-text">Twoje odpowiedzi czekały w&nbsp;pamięci tej przeglądarki razem z&nbsp;priorytetem i&nbsp;numerem pytania. Klucz nazywa się itp-quiz i&nbsp;nic z&nbsp;niego nie wychodzi do&nbsp;sieci. Wracasz dokładnie do&nbsp;tego miejsca, w&nbsp;którym analiza się zatrzymała.</p>
+            <p id="q-notice-text">Wracasz dokładnie do&nbsp;pytania, na&nbsp;którym analiza się zatrzymała. Każdą wcześniejszą odpowiedź zobaczysz zaznaczoną na&nbsp;swoim ekranie.</p>
             <div class="qnotice__actions">
               <a class="btn btn--primary btn--sm" id="q-notice-result" href="result.html" hidden>Zobacz wynik</a>
               <button class="btn btn--ghost btn--sm" id="q-restart" type="button">Zacznij od nowa</button>
@@ -430,7 +430,7 @@
             <!-- ============================================= Q0 · PRIORITY -->
             <section class="qscreen" id="s0" data-type="priority" aria-labelledby="s0-h">
               <h2 class="t-d2" id="s0-h" tabindex="-1">Jaki jest Twój <span class="t-accent">priorytet</span> na&nbsp;najbliższe 90&nbsp;dni?</h2>
-              <p class="t-lead qscreen__sub">Wybierz jeden obszar. Wynik nazwie potem obszar główny i&nbsp;obszar wspierający.</p>
+              <p class="t-lead qscreen__sub">Wybierz jeden obszar. Obszar główny i&nbsp;wspierający zobaczysz potem na&nbsp;ekranie wyniku.</p>
               <div class="qscreen__body">
                 <div class="comb" role="radiogroup" aria-labelledby="s0-h">
                   <div class="combcell"><span class="combcell__ring"></span>
@@ -482,9 +482,9 @@
                   </div>
                 </div>
                 <p class="t-caption" style="margin-top:var(--sp-7);max-width:52ch">
-                  Suwak podpisuje każdy stopień słowem i&nbsp;pokazuje je, gdy
-                  ruszysz go myszką albo strzałkami. Piątka to&nbsp;Umiarkowanie,
-                  ósemka Bardzo dobrze.</p>
+                  Przy każdym stopniu skali zobaczysz jego słowo pod liczbą.
+                  Na&nbsp;piątce przeczytasz Umiarkowanie, na&nbsp;ósemce Bardzo
+                  dobrze.</p>
               </div>
             </section>
 
@@ -539,7 +539,7 @@
 
             <section class="qscreen" id="s6" data-type="radio" data-q="q6" hidden aria-labelledby="s6-h">
               <h2 class="t-d2" id="s6-h" tabindex="-1">Model diety</h2>
-              <p class="t-lead qscreen__sub">Wybierz to, co najbliżej opisuje Twój zwykły tydzień. Dieta nie zmienia punktacji. Trafia do&nbsp;specjalisty jako kontekst.</p>
+              <p class="t-lead qscreen__sub">Wybierz to, co najbliżej opisuje Twój zwykły tydzień. Ten wybór nie wchodzi do&nbsp;punktacji i&nbsp;trafia do&nbsp;specjalisty jako kontekst.</p>
               <div class="qscreen__body">
                 <div class="qopts qopts--cols" role="radiogroup" aria-labelledby="s6-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Standardowa"><span class="option__key">1</span>Standardowa</button>
@@ -578,7 +578,7 @@
 
             <section class="qscreen" id="s9" data-type="radio" data-q="q9" hidden aria-labelledby="s9-h">
               <h2 class="t-d2" id="s9-h" tabindex="-1">Obecna suplementacja</h2>
-              <p class="t-lead qscreen__sub">Pojedyncze produkty to witamina D albo magnez kupiony w&nbsp;aptece bez żadnego planu. Złożony schemat zaczyna się przy kilku preparatach dziennie.</p>
+              <p class="t-lead qscreen__sub">Specjalista zobaczy, co już bierzesz, i&nbsp;nie dobierze formuły z&nbsp;tym samym składnikiem w&nbsp;podwójnej dawce. Licz też pojedynczą witaminę D albo magnez z&nbsp;apteki. Złożony schemat zaczyna się przy kilku preparatach dziennie.</p>
               <div class="qscreen__body">
                 <div class="qopts" role="radiogroup" aria-labelledby="s9-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Nie"><span class="option__key">1</span>Nie</button>
@@ -591,7 +591,7 @@
             <!-- ==================================== BLOK 4 · METRYKI -->
             <section class="qscreen" id="s10" data-type="radio" data-q="q10" hidden aria-labelledby="s10-h">
               <h2 class="t-d2" id="s10-h" tabindex="-1">Ostatnie badania krwi</h2>
-              <p class="t-lead qscreen__sub">Wystarczy zwykła morfologia, lipidogram, glukoza albo szerszy panel z&nbsp;laboratorium. Zaznaczasz samą datę i&nbsp;żadnych liczb z&nbsp;badania nie wpisujesz. Etap&nbsp;I obywa się bez skanów, OCR i&nbsp;plików.</p>
+              <p class="t-lead qscreen__sub">Morfologia, lipidogram, glukoza lub szersze panele. Zaznaczasz tylko, jak dawno były, i&nbsp;żadnej liczby z&nbsp;badania tu nie wpisujesz.</p>
               <div class="qscreen__body">
                 <div class="qopts qopts--cols" role="radiogroup" aria-labelledby="s10-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Do 3 miesięcy"><span class="option__key">1</span>Do 3&nbsp;miesięcy</button>
@@ -617,8 +617,7 @@
 
             <section class="qscreen" id="s12" data-type="number" hidden aria-labelledby="s12-h">
               <h2 class="t-d2" id="s12-h" tabindex="-1">Masa ciała</h2>
-              <p class="t-lead qscreen__sub">Podajesz masę ciała tylko po&nbsp;to, żebyśmy oszacowali dawki.
-                Liczba zostaje w&nbsp;pamięci tej przeglądarki razem z&nbsp;resztą odpowiedzi i&nbsp;znika w&nbsp;chwili, gdy ją stąd usuniesz.</p>
+              <p class="t-lead qscreen__sub">Podajesz masę ciała tylko po&nbsp;to, żebyśmy oszacowali dawki.</p>
               <div class="qscreen__body">
                 <div class="field">
                   <label class="field__label" for="q12-in">Masa ciała (kg)</label>
@@ -632,10 +631,13 @@
                 </div>
                 <p class="t-caption" style="margin-top:var(--sp-7);max-width:52ch">
                   Wynik powstaje z&nbsp;jawnej heurystyki, czyli ze&nbsp;spisanego
-                  z&nbsp;góry zestawu reguł punktowych. Zestaw formuł ogląda potem
-                  specjalista z&nbsp;Instytutu. Ręcznie. Potwierdza go albo zmienia
-                  i&nbsp;w&nbsp;ciągu 48&nbsp;h pisze do&nbsp;Ciebie z&nbsp;uzasadnieniem
-                  doboru każdej formuły.</p>
+                  z&nbsp;góry zestawu reguł punktowych. Priorytet z&nbsp;pierwszego
+                  ekranu dopisuje osiem punktów do&nbsp;swojego obszaru, przy
+                  regeneracji po&nbsp;pięć do&nbsp;stresu i&nbsp;snu. Zestaw formuł
+                  z&nbsp;tej heurystyki obejrzy potem ręcznie specjalista
+                  z&nbsp;Instytutu, potwierdzi go albo zmieni i&nbsp;w&nbsp;ciągu
+                  48&nbsp;h dostaniesz od&nbsp;niego uzasadnienie doboru każdej
+                  formuły.</p>
               </div>
             </section>
 
@@ -672,11 +674,12 @@
               <span class="stat__label">na zatwierdzenie przez specjalistę</span>
             </div>
           </div>
-          <p class="t-caption" style="max-width:74ch">Sześć poziomów obciążenia
-            zobaczysz zaraz po&nbsp;dwunastym pytaniu, pełny plan i&nbsp;mini-raport&nbsp;PDF
-            odblokowuje dopiero podany e-mail. Wstecz wraca do&nbsp;każdego pytania
-            z&nbsp;zaznaczoną odpowiedzią i&nbsp;możesz ją zmienić do&nbsp;samego końca
-            analizy.</p>
+          <p class="t-caption" style="max-width:74ch">Zaraz po&nbsp;dwunastym
+            pytaniu zobaczysz sześć poziomów obciążenia w&nbsp;procentach: energia,
+            sen, stres, trawienie, koncentracja i&nbsp;odporność. Pełny plan
+            i&nbsp;mini-raport&nbsp;PDF otworzysz po&nbsp;podaniu e-maila.
+            Zanim tam dojdziesz, przyciskiem Wstecz wrócisz do&nbsp;każdej
+            odpowiedzi i&nbsp;zmienisz ją.</p>
           <p class="disclaimer">Platforma ma charakter edukacyjny i rekomendacyjny
             i nie zastępuje konsultacji lekarskiej.</p>
         </div>

@@ -57,14 +57,14 @@ The properties below were read off Function Health's live DOM. Calibrate the moc
 
 ## 2 · VISUAL SYSTEM (doc §7.2)
 
-Every value in this section already ships in `styles/tokens.css`. Every mockup links it as `../styles/tokens.css`. **Use the tokens and the component layer. Do not invent a parallel palette, and do not hardcode a hex value that a token already covers.**
+Every value in this section already ships in `styles/tokens.css`. Every mockup must link it as `../styles/tokens.css`. **Use the tokens and the component layer. Do not invent a parallel palette, and do not hardcode a hex value that a token already covers.**
 
 - Primary background: off-white and ivory, `#F7F6F1` (`--ivory`) and `#FAF9F5` (`--ivory-bright`).
 - Deep colour for text and structures: corporate navy `#0B1F3A` (`--navy-900`) and charcoal `#202124` (`--charcoal`).
 - Electric cyan `#00CFFF` (`--cyan`) is the technology accent and it signals personalization. Cyan never carries body text on off-white and never fills a panel behind off-white text. Small cyan text uses `--cyan-deep` and `--cyan-ink`. The primary CTA is navy on light grounds and cyan with navy ink on navy grounds.
-- Headings are **Inter Black or ExtraBold**, body copy is Inter Regular or Medium, and every **digital identifier, code fragment and technical parameter** sits in Space Mono (`--font-mono`). Mono is mandatory for doses in mg, percentages, `×` multipliers, prices, PLN amounts, question counters, dates, SKUs, lab parameters, eyebrows and micro-labels.
+- Headings must be **Inter Black or ExtraBold**, body copy is Inter Regular or Medium, and every **digital identifier, code fragment and technical parameter** sits in Space Mono (`--font-mono`). Mono is mandatory for doses in mg, percentages, `×` multipliers, prices, PLN amounts, question counters, dates, SKUs, lab parameters, eyebrows and micro-labels.
 - Each formula carries its own colour code. `--f1-digest` `#E5943C`, `--f2-neuro` `#7C6CF5`, `--f3-inflam` `#F2635A`, `--f4-vital` `#00C39A`. Use them as identity marks on rules, dots and packshot tints. They never serve as a page or section ground.
-- There is no CDN and no `<link>` to Google anywhere in the repo. The fonts are **self-hosted** in `fonts/`. Pages must render identically offline.
+- No page may load a font from a CDN or `<link>` to Google. The fonts are **self-hosted** in `fonts/`. Every page must render identically offline.
 
 Read `styles/tokens.css` before you duplicate any of these: `.wrap`, `.section`, `.section--navy`, `.section-head`, `.t-d1`…`.t-d4`, `.t-lead`, `.eyebrow`, `.index-num`, `.mono`, `.btn`/`.btn--primary`/`.btn--ghost`/`.btn--cyan`, `.card`/`.card--lift`/`.card--navy`/`.card--tech`, `.chip`, `.stat`/`.stat-row`, `.params`, `.hex`, `.trustbar`, `.sitehead`, `.sitefoot`, `.disclaimer`, `.price`, `.field`/`.input`, `.option`, `.progress`, `.skip-link`, `.visually-hidden`.
 
@@ -209,9 +209,9 @@ The platform is not a medical diagnosis system, a marketplace or an autonomous A
 
 ## 5 · QUIZ · EXACT QUESTION SET (doc §8.1)
 
-The quiz runs without an account and its state persists to `localStorage`.
+The quiz must run without an account and must persist its state to `localStorage`.
 
-The start screen is **Question 0**, *"Jaki jest Twój priorytet na najbliższe 90 dni?"*, and its answers sit in a **hexagonal layout**. Więcej energii / Lepszy sen / Większa koncentracja / Wsparcie odporności / Lepsze trawienie / Regeneracja i relaks.
+The start screen is **Question 0**, *"Jaki jest Twój priorytet na najbliższe 90 dni?"*, and its answers must sit in a **hexagonal layout**. Więcej energii / Lepszy sen / Większa koncentracja / Wsparcie odporności / Lepsze trawienie / Regeneracja i relaks.
 
 Twelve questions run in four blocks.
 
@@ -254,16 +254,16 @@ Twelve questions run in four blocks.
 1. The processing view, **"Analizujemy Twoje odpowiedzi…"**, with pulsating hexagons and the teaser *"Widzimy obszar główny i obszar wspierający."*
 2. **Only after that** the sign-up gate appears: **"Podaj e-mail, aby odblokować pełny wynik i mini-raport PDF."**
 3. **Six small hexagons** complete the screen, showing percentage burden levels for **Energia · Sen · Stres · Trawienie · Koncentracja · Odporność** in mono percentages.
-4. The full result stays *behind* the gate and before the email is submitted the visitor sees the teaser, the six hexagons and a blurred or locked plan. After submit the plan unlocks. It comes with its rationale, the mini-report affordance and the set price of 179 zł/szt. The §3.5 disclaimer sits beside the result. The screen also states that in Stage I the specialist reply is manual and arrives within 48 h.
+4. The full result must stay *behind* the gate and before the email is submitted the visitor sees the teaser, the six hexagons and a blurred or locked plan. The plan text itself must stay hidden, and a blur that leaves it legible counts as a broken gate. After submit the plan unlocks. It comes with its rationale, the mini-report affordance and the set price of 179 zł/szt. The §3.5 disclaimer sits beside the result. The screen also states that in Stage I the specialist reply is manual and arrives within 48 h.
 
 ---
 
 ## 7 · TECHNICAL RULES FOR EVERY MOCKUP
 
 - Self-contained static HTML in `mockups/`, one file per page, opened directly via `file://`. Shared CSS is `../styles/tokens.css`. Shared JS is `../scripts/chrome.js` for the mobile menu, and page-specific CSS and JS stay inline.
-- The pages have no build step, no framework and no network request of any kind; all fonts are local.
+- No page may add a build step, a framework or a network request of any kind; all fonts stay local.
 - Pages must render correctly at **1440×900** and at **390×844**, mobile-first. The doc has the radial ecosystem map becoming a vertical pathway or scrollable cards on mobile.
-- Each anchor points either to a real `#id` on the page or to another mockup file that exists. Every anchor must resolve. An anchor pointing at `href="#"` counts as a broken page.
+- Every anchor must resolve. It points either to a real `#id` on the page or to another mockup file that exists. An anchor pointing at `href="#"` counts as a broken page.
 - Keyboard reachable, visible focus (`--ring`), `prefers-reduced-motion` honoured for the molecular hero and for every animation.
 - Interactive things must actually work: quiz validation and persistence, the email gate, cart and quantity mocks, accordions, the mobile menu.
 - Cross-link the seven pages and keep the chrome identical.

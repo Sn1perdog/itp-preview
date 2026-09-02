@@ -79,6 +79,12 @@ the first seven could not see, which is the whole history of this campaign.
 | 14 | `front%` blocks opening on a punch | ≤ bar + 8 | 22.6 | 16.0 |
 | 15 | `load%` sentences of 16+ words | **≥ bar − 4** (a floor) | 10.7 | 16.8 |
 | 16 | `medial%` 3+ sentence blocks peaking in the middle | ≤ bar + 12 | 29.8 | 30.1 |
+| 17 | `addr%` blocks that speak to the reader | **≥ bar − 8** (floor, Polish only) | 47.9 | 61.8 |
+
+Gate 17 is scoped to the seven customer-facing Polish mockups. `BRIEF.md` is a
+spec and `state.js` is a status board; neither addresses a visitor, and holding
+an internal document to apple.com's 61.8 % would be a dishonest ruler rather
+than a strict one. It is reported for those two files and not gated.
 
 Gates are necessary, never sufficient. Round 1 cleared all seven and lost six of
 nine. Round 2 cleared all nine and lost nine of nine. A piece is done when the
@@ -159,6 +165,59 @@ does:
 > `I to bez iPhone'a.`, four words sitting in a paragraph whose other sentences
 > run 15, 24 and 21, in one breath. Our short units are all titles, chips and
 > captions. A histogram cannot tell the difference. A reader can.
+
+---
+
+## 2d · THE NINTH HABIT: THE PAGE TALKS TO NOBODY
+
+Round 5 obeyed the no-padding rule and still lost eight of eight, but two pieces
+won the blind read 4-0 and lost only on information. Two critics then found the
+same fault from opposite ends, and both measured it.
+
+**Address.** Counting a multi-sentence block as addressing the reader if any
+sentence carries a second-person pronoun, a second-person verb inflection or an
+imperative, across all ten saved Polish bar pages against `biosneds.html`:
+
+| | blocks | sentences |
+|---|---|---|
+| apple.com/pl | **57.3 %** | **36.8 %** |
+| ours | 21.4 % | 8.6 % |
+
+P(≤3 of 14 blocks, given p = 0.573) = **0.0045**. Corpus-wide we run 31.4 %
+against 47.9 %. It was invisible to all sixteen preceding gates. The critic's
+words: *the page describes a mechanism to nobody.*
+
+Every guard clause on that page was in the third person. `Parametr mówi, jaka
+część dawki jest dostępna dla organizmu` says *dla organizmu* where the bar
+says *dla Ciebie*. Exactly one sentence turned to the reader inside a boundary,
+and it was the line that beat privacy.html in a hand-built pair.
+
+**Cohesion.** In Apple's multi-sentence Polish paragraphs, **33 of 35
+non-initial sentences continue the previous sentence's subject or topic**, by
+zero-subject continuation, a pronoun, or a connective. That device is what lets
+`I to bez iPhone'a.` work as a sentence. Ours frequently start a new topic
+instead. The verdict on round 5's own fix: *the short sentence is now inside the
+paragraph but not inside the thought.*
+
+These are one fault. Our copy is a sequence of true statements addressed to no
+one, each starting fresh. The instruction is not to sprinkle `Twój`. It is to
+write from the reader's side of the transaction and let each sentence pick up
+the subject the last one left.
+
+**Two displacement mechanisms round 5 invented, now banned by name:**
+- *The deictic back-reference.* Drop a term, then explain it in a separate
+  sentence opening `Tyle …`. The gloss with its comma promoted to a full stop,
+  invisible to gate 11, and it flatters the histogram by looking like a register
+  jump. 3.68 per 1000 on the product page.
+- *The permutation.* Rotate sentences inside a block so the extreme one leaves
+  the tightly gated slot for a loosely gated one, with zero information change.
+  Four of six medial peaks in the brief were resolved this way, one by simply
+  truncating a tail so the peak became a crescendo.
+
+**And the standing lesson from two rounds of over-deletion:** deletion is not
+automatically safe. Round 3 cut facts along with clinchers, and round 5 did it
+again in three pieces. Before cutting a sentence, ask what it carries that
+nothing else on the page carries.
 
 The underlying fault, named independently by five critics in round 2:
 
