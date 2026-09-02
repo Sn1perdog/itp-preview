@@ -4,51 +4,53 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="refresh" content="20">
-<title>ITP prose refactor, live progress</title>
+<title>PERSONA product pages, restyled onto organimo.com/seamoss, live progress</title>
 <link rel="stylesheet" href="../styles/tokens.css">
 <style>
   body { background: var(--navy-950); color: var(--on-navy); }
-  .page { max-width: 1180px; margin-inline: auto; padding: var(--sp-9) var(--sp-gutter) var(--sp-12); }
-
+  .page { max-width: 1180px; margin-inline: auto;
+          padding: var(--sp-9) var(--sp-gutter) var(--sp-12); }
   .masthead { display: grid; gap: var(--sp-4); padding-bottom: var(--sp-7);
               border-bottom: 1px solid var(--line-navy); }
-  .masthead h1 { font-size: clamp(1.9rem, 3.6vw, 3rem); letter-spacing: var(--ls-display-tight); }
-  .masthead .t-lead { color: var(--on-navy-soft); max-width: 68ch; }
+  .masthead h1 { font-size: clamp(1.9rem, 3.6vw, 3rem);
+                 letter-spacing: var(--ls-display-tight); }
+  .masthead .t-lead { color: var(--on-navy-soft); max-width: 74ch; }
   .meta { display: flex; flex-wrap: wrap; gap: var(--sp-6); align-items: center;
           font-family: var(--font-mono); font-size: var(--t-micro);
           letter-spacing: var(--ls-mono-wide); text-transform: uppercase;
           color: var(--on-navy-muted); }
   .meta b { color: var(--cyan); font-weight: var(--w-bold); }
   .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan);
-           box-shadow: 0 0 0 0 var(--cyan-glow); animation: pulse 2s infinite; }
+           animation: pulse 2s infinite; }
   @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,207,255,.5); }
                      70% { box-shadow: 0 0 0 12px rgba(0,207,255,0); }
                      100% { box-shadow: 0 0 0 0 rgba(0,207,255,0); } }
-
   h2.block { font-size: var(--t-display-4); margin: var(--sp-11) 0 var(--sp-5); }
   h2.block .index-num { color: var(--cyan-soft); margin-right: var(--sp-3); }
-
   table.board { width: 100%; border-collapse: collapse; }
   table.board th, table.board td { text-align: left; vertical-align: top;
-                                   padding: var(--sp-4) var(--sp-4);
+                                   padding: var(--sp-4);
                                    border-bottom: 1px solid var(--line-navy); }
   table.board thead th { font-family: var(--font-mono); font-size: var(--t-micro);
                          font-weight: var(--w-bold); letter-spacing: var(--ls-mono-wide);
                          text-transform: uppercase; color: var(--on-navy-muted);
                          border-bottom-color: var(--line-navy-hi); }
-  table.board td:first-child { width: 22%; }
-  .piece-title { font-weight: var(--w-black); letter-spacing: var(--ls-head); font-size: 1.05rem; }
-  .piece-file { font-family: var(--font-mono); font-size: var(--t-micro);
-                color: var(--on-navy-muted); letter-spacing: .04em; }
+  table.board td:first-child { width: 21%; }
+  table.board td:nth-child(3) { width: 17%; }
+  .piece-title { display: block; font-weight: var(--w-black);
+                 letter-spacing: var(--ls-head); font-size: 1.05rem; }
+  .piece-file { display: block; font-family: var(--font-mono);
+                font-size: var(--t-micro); color: var(--on-navy-muted);
+                letter-spacing: .04em; margin-top: 4px; }
   .scope { font-size: var(--t-body-sm); color: var(--on-navy-soft); line-height: 1.5; }
-  .note { font-size: var(--t-body-sm); color: var(--on-navy-soft); line-height: 1.55; }
+  .note { display: block; font-size: var(--t-body-sm); color: var(--on-navy-soft);
+          line-height: 1.55; }
   .gap { display: block; margin-top: var(--sp-3); padding-left: var(--sp-4);
          border-left: 2px solid var(--f3-inflam); font-size: var(--t-caption);
          color: var(--on-navy-soft); }
   .gap b { color: var(--f3-inflam); font-family: var(--font-mono);
            font-size: var(--t-micro); letter-spacing: var(--ls-mono-wide);
            text-transform: uppercase; display: block; margin-bottom: 3px; }
-
   .badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px;
            border-radius: var(--r-pill); border: 1px solid var(--line-navy-hi);
            font-family: var(--font-mono); font-size: var(--t-micro);
@@ -62,243 +64,201 @@
                  background: rgba(242,99,90,.10); }
   .badge--won { color: var(--f4-vital); border-color: rgba(0,195,154,.5);
                 background: rgba(0,195,154,.12); }
-  .rnd { font-family: var(--font-mono); font-size: var(--t-micro);
-         color: var(--on-navy-faint); letter-spacing: var(--ls-mono); }
-
+  .rnd { display: block; margin-top: 6px; font-family: var(--font-mono);
+         font-size: var(--t-micro); color: var(--on-navy-faint);
+         letter-spacing: var(--ls-mono); }
   ul.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-4); }
   .found { display: grid; grid-template-columns: 22px 1fr; gap: var(--sp-4);
            align-items: start; }
-  .found__tick { color: var(--cyan); font-family: var(--font-mono); font-weight: var(--w-bold); }
-  .found__label { font-weight: var(--w-bold); letter-spacing: var(--ls-head); }
-  .found__detail { font-size: var(--t-body-sm); color: var(--on-navy-soft); line-height: 1.5; }
-
-  .rules { display: grid; gap: var(--sp-3); }
-  .rules li { padding-left: var(--sp-4); border-left: 2px solid var(--cyan);
-              font-size: var(--t-body-sm); color: var(--on-navy-soft); line-height: 1.55; }
-
-  .log { display: grid; gap: 0; }
-  .log li { display: grid; grid-template-columns: 64px 1fr; gap: var(--sp-4);
-            padding: var(--sp-3) 0; border-bottom: 1px solid var(--line-navy);
-            font-size: var(--t-body-sm); color: var(--on-navy-soft); }
-  .log time { font-family: var(--font-mono); font-size: var(--t-micro);
-              color: var(--cyan-soft); letter-spacing: var(--ls-mono); padding-top: 3px; }
-
-  .tally { display: flex; flex-wrap: wrap; gap: clamp(20px,3vw,44px); margin-top: var(--sp-7);
-           padding-top: var(--sp-6); border-top: 1px solid var(--line-navy-hi); }
-
-  .links { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
-  .links a { text-decoration: none; }
-
-  table.metrics { width: 100%; border-collapse: collapse; font-family: var(--font-mono);
-                  font-size: var(--t-micro); letter-spacing: .02em; }
-  table.metrics th, table.metrics td { text-align: right; padding: 7px 9px;
-                                       border-bottom: 1px solid var(--line-navy); }
-  table.metrics th:first-child, table.metrics td:first-child { text-align: left; }
-  table.metrics thead th { color: var(--on-navy-muted); text-transform: uppercase;
-                           font-weight: var(--w-bold); border-bottom-color: var(--line-navy-hi); }
-  table.metrics tr.bar td { color: var(--cyan); border-bottom-color: var(--line-cyan); }
-  table.metrics tr.total td { color: var(--on-navy); font-weight: var(--w-bold); }
-  .ok { color: var(--f4-vital); }
-  .bad { color: var(--f3-inflam); }
-  .metric-note { font-size: var(--t-caption); color: var(--on-navy-soft);
-                 line-height: 1.55; margin-top: var(--sp-4); max-width: 74ch; }
-
-  @media (max-width: 820px) {
-    table.board thead { display: none; }
-    table.board tr { display: grid; gap: var(--sp-3); padding: var(--sp-5) 0;
-                     border-bottom: 1px solid var(--line-navy); }
-    table.board td { border: 0; padding: 0; }
-    table.board td:first-child { width: auto; }
-  }
+  .found__tick { color: var(--cyan); font-family: var(--font-mono);
+                 font-weight: var(--w-bold); }
+  .found__label { display: block; font-weight: var(--w-bold);
+                  letter-spacing: var(--ls-head); }
+  .found__detail { display: block; font-size: var(--t-body-sm);
+                   color: var(--on-navy-soft); line-height: 1.5; margin-top: 3px; }
+  .score { font-family: var(--font-mono); font-size: var(--t-display-4);
+           color: var(--cyan); letter-spacing: var(--ls-mono); }
+  a { color: var(--cyan-soft); }
 </style>
 </head>
-<body class="navy">
-<main class="page">
+<body>
+<div class="page">
 
   <header class="masthead">
-    <p class="eyebrow">Live progress · auto-refresh 20 s</p>
-    <h1 id="campaign">…</h1>
-    <p class="t-lead" id="bar">…</p>
-    <div class="meta">
+    <p class="eyebrow">Instytut Terapii Personalizowanych &middot; live board</p>
+    <h1>PERSONA product pages, restyled onto organimo.com/seamoss</h1>
+    <p class="t-lead">The bar is organimo.com/seamoss, captured on disk at 1440 and 390. Every piece below is built by one agent and judged by a separate agent with fresh context, which puts our render next to theirs blind, with the labels stripped, and says which one reads as the better-built commerce page. If ours does not win, the piece goes back to the builder. The loop ends when every critic picks ours.</p>
+    <p class="meta">
       <span class="pulse" aria-hidden="true"></span>
-      <span>Round <b id="round">&hellip;</b></span>
-      <span id="phase">&hellip;</span>
-      <span>Updated <b id="updated">&hellip;</b></span>
-    </div>
+      <span>runda <b>7</b></span>
+      <span>faza <b>Complete · every blind critic picked ours</b></span>
+      <span>pieces won <b>8 / 8</b></span>
+      <span>bar <a href="https://organimo.com/seamoss/">https://organimo.com/seamoss/</a></span>
+      <span>updated 2026-09-02 11:32 UTC</span>
+    </p>
   </header>
 
-  <section aria-labelledby="h-board">
-    <h2 class="block" id="h-board"><span class="index-num">01</span>The board</h2>
-    <table class="board">
-      <thead>
-        <tr><th scope="col">Piece</th><th scope="col">Scope</th><th scope="col">Status</th><th scope="col">Critic</th></tr>
-      </thead>
-      <tbody id="board"></tbody>
-    </table>
-    <div class="tally" id="tally"></div>
-    <div class="links" id="links"></div>
-  </section>
+  <h2 class="block"><span class="index-num">00</span>Foundation</h2>
+  <ul class="plain">
+        <li class="found">
+          <span class="found__tick">x</span>
+          <span>
+            <span class="found__label">Reference captured</span>
+            <span class="found__detail">8 desktop slices at 1440x900, 8 more on a 450px half-offset, 17 with every accordion forced open, 9 mobile slices at 390x844 dsf2. The page runs a Lenis scroll container, so it only captures by driving main.scroll-container.scrollTop.</span>
+          </span>
+        </li>
+        <li class="found">
+          <span class="found__tick">x</span>
+          <span>
+            <span class="found__label">Reference measured</span>
+            <span class="found__detail">ref/organimo/spec.json and geometry.json hold the computed type ramp, colour census, radius census, hairline census, section padding and 32-column grid offsets read off the live DOM. Nothing in this refactor is calibrated against a memory of the page.</span>
+          </span>
+        </li>
+        <li class="found">
+          <span class="found__tick">x</span>
+          <span>
+            <span class="found__label">Shared ground truth</span>
+            <span class="found__detail">progress/PDP-BRIEF.md: what organimo does, measured; the devices to steal; where we deliberately diverge; the frozen content rules; file ownership per section; the class contract.</span>
+          </span>
+        </li>
+        <li class="found">
+          <span class="found__tick">x</span>
+          <span>
+            <span class="found__label">Core stylesheet</span>
+            <span class="found__detail">styles/pdp-core.css. 72.8 / 56 / 37.3 / 22.4px display ramp at -0.05em, 1px full-strength ink hairlines, 32-column full-bleed grid, 112px medallions, 999px pills, 62px sticky buy bar.</span>
+          </span>
+        </li>
+        <li class="found">
+          <span class="found__tick">x</span>
+          <span>
+            <span class="found__label">Generated pages</span>
+            <span class="found__detail">scripts/assemble_pdp.py builds the four product pages and one standalone preview harness per section from mockups/parts/*.html, so the layout can never drift between the four formulas and every piece can be judged on its own.</span>
+          </span>
+        </li>
+        <li class="found">
+          <span class="found__tick">x</span>
+          <span>
+            <span class="found__label">Frozen content</span>
+            <span class="found__detail">scripts/pdp_data.py. Prices, doses, absorption figures and the legal line are lifted verbatim and never bend to a layout.</span>
+          </span>
+        </li>
+  </ul>
 
-  <section aria-labelledby="h-found">
-    <h2 class="block" id="h-found"><span class="index-num">02</span>Foundation</h2>
-    <ul class="plain" id="foundation"></ul>
-  </section>
+  <h2 class="block"><span class="index-num">01</span>The pieces, and who is judging them</h2>
+  <table class="board">
+    <thead>
+      <tr><th>Piece</th><th>Scope</th><th>State</th><th>Critic</th></tr>
+    </thead>
+    <tbody>
+          <tr>
+            <td>
+              <span class="piece-title">Chrome</span>
+              <span class="piece-file">parts/chrome-head.html · parts/chrome-foot.html · pdp-chrome.css</span>
+            </td>
+            <td class="scope">Promo bar, floating pill navigation, the 62px sticky bottom buy bar carrying both documented prices, and the dark footer with the closing marquee and the legal line.</td>
+            <td><span class="badge badge--won">critic picked ours</span>
+              <span class="rnd">runda 4</span></td>
+            <td><span class="note">Critic picked ours at desktop and mobile.</span><span class="gap"><b>biggest remaining gap</b>Residual: simplify the two-message promo and unify footer alignment.</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="piece-title">Buy box</span>
+              <span class="piece-file">parts/buybox.html · pdp-buybox.css</span>
+            </td>
+            <td class="scope">The 536x536 gallery with thumbnail strip and dot pager, the trust line where organimo puts a star rating we do not have, the 72.8px display title, three icon bullets, the price block and one dominant CTA.</td>
+            <td><span class="badge badge--won">critic picked ours</span>
+              <span class="rnd">runda 2</span></td>
+            <td><span class="note">Critic picked ours at desktop and mobile.</span><span class="gap"><b>biggest remaining gap</b>Residual: photographic atmosphere remains deliberately synthetic rather than invented product photography.</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="piece-title">Story split</span>
+              <span class="piece-file">parts/story.html · pdp-story.css</span>
+            </td>
+            <td class="scope">The two-column chapter divided edge to edge by a vertical ink hairline: 56px headline, body at a 46ch measure, a 2x3 grid of hairline medallion badges, and a product visual that bleeds off an edge.</td>
+            <td><span class="badge badge--won">critic picked ours</span>
+              <span class="rnd">runda 2</span></td>
+            <td><span class="note">Critic picked ours at desktop and mobile.</span><span class="gap"><b>biggest remaining gap</b>Residual: fixed buy bar can intersect long section-only captures; live-page spacing is clear.</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="piece-title">Statement</span>
+              <span class="piece-file">parts/statement.html · pdp-statement.css</span>
+            </td>
+            <td class="scope">The oversized 37.3px weight-600 statement paragraph under a micro-label whose last word is boxed in an outline pill. The smallest piece and the one most likely to be underbuilt.</td>
+            <td><span class="badge badge--won">critic picked ours</span>
+              <span class="rnd">runda 7</span></td>
+            <td><span class="note">Critic picked ours at desktop and mobile.</span><span class="gap"><b>biggest remaining gap</b>Residual: the final mobile line remains shorter after the mono absorption phrase.</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="piece-title">Accordion</span>
+              <span class="piece-file">parts/accordion.html · pdp-accordion.css</span>
+            </td>
+            <td class="scope">Three full-bleed rows with 37.3px centred titles: Korzysci as a two-column 112px medallion grid, Sklad i dawki as hairline dose tables, and FAQ. All closed by default, all keyboard operable.</td>
+            <td><span class="badge badge--won">critic picked ours</span>
+              <span class="rnd">runda 2</span></td>
+            <td><span class="note">Critic picked ours at desktop and mobile.</span><span class="gap"><b>biggest remaining gap</b>Residual: desktop open benefits remain copy-dense, but hierarchy and table grammar won.</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="piece-title">Technology</span>
+              <span class="piece-file">parts/tech.html · pdp-tech.css</span>
+            </td>
+            <td class="scope">The full-bleed navy BioSNEDS chapter, the edge-to-edge display marquee, the four documented absorption figures drawn truthfully rather than smoothed, and the two-price split with its four pillars.</td>
+            <td><span class="badge badge--won">critic picked ours</span>
+              <span class="rnd">runda 2</span></td>
+            <td><span class="note">Critic picked ours at desktop and mobile.</span><span class="gap"><b>biggest remaining gap</b>Residual: abstract capsule remains illustrative, with no invented microscopy or study imagery.</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="piece-title">Social proof</span>
+              <span class="piece-file">parts/social.html · pdp-social.css</span>
+            </td>
+            <td class="scope">Expert voices with the quote set at the 37.3px statement scale and role-only attribution behind a makieta chip, the other three formulas as hairline-split cards, and the closing route band.</td>
+            <td><span class="badge badge--won">critic picked ours</span>
+              <span class="rnd">runda 2</span></td>
+            <td><span class="note">Critic picked ours at desktop and mobile.</span><span class="gap"><b>biggest remaining gap</b>Residual: expert quotes remain explicitly marked as mockup content.</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="piece-title">Store index</span>
+              <span class="piece-file">parts/index.html · pdp-index.css</span>
+            </td>
+            <td class="scope">mockups/product.html rebuilt in the same language: display hero, a hairline stat row, the four formulas as full-bleed hairline cards, a statement band and a proof badge row.</td>
+            <td><span class="badge badge--won">critic picked ours</span>
+              <span class="rnd">runda 2</span></td>
+            <td><span class="note">Critic picked ours at desktop and mobile.</span><span class="gap"><b>biggest remaining gap</b>Residual: catalogue packshots are intentionally diagrammatic rather than photographic.</span></td>
+          </tr>
+    </tbody>
+  </table>
 
-  <section aria-labelledby="h-rules">
-    <h2 class="block" id="h-rules"><span class="index-num">03</span>Standing rules</h2>
-    <ul class="plain rules" id="rules"></ul>
-  </section>
+  <h2 class="block"><span class="index-num">02</span>Lines that never bend</h2>
+  <ul class="plain">
+        <li class="found"><span class="found__tick">!</span><span class="found__detail">Never bend a documented price, dose or legal line to fit a layout. 249 zl open store, 179 zl/szt. in a personalized set. Doses exactly as documented; etykieta* where the document gives no milligrams.</span></li>
+        <li class="found"><span class="found__tick">!</span><span class="found__detail">Absorption is od 40x do 100x, w zaleznosci od skladnika, plus the four per-ingredient figures. Never 43x.</span></li>
+        <li class="found"><span class="found__tick">!</span><span class="found__detail">Organimo&#x27;s hero carries a 4.8/5 star rating. We have no ratings, so that slot takes the documented specialist and shipping line instead. No invented rating, review, customer name, study or journal anywhere.</span></li>
+        <li class="found"><span class="found__tick">!</span><span class="found__detail">Expert voices only, attributed by role, behind a visible makieta chip. Stage I sells nothing and every cart says so.</span></li>
+        <li class="found"><span class="found__tick">!</span><span class="found__detail">Palette and typefaces stay ITP: navy, ivory, electric cyan, Inter, Space Mono. We take organimo&#x27;s structure, rhythm, scale and devices, not its lavender.</span></li>
+  </ul>
 
-  <section aria-labelledby="h-log">
-    <h2 class="block" id="h-log"><span class="index-num">04</span>Log</h2>
-    <ul class="plain log" id="log"></ul>
-  </section>
+  <h2 class="block"><span class="index-num">03</span>Round log</h2>
+  <table class="board">
+    <thead><tr><th>When</th><th>What happened</th></tr></thead>
+    <tbody>
+          <tr><td class="piece-file">2026-09-02 11:32 UTC</td><td class="scope">Gauntlet closed. Buy box, story, accordion, technology, social proof and store index passed in round 2; corrected chrome capture passed in round 4; the statement passed in round 7 after restoring the 37.28px five-line desktop declaration while preserving the mobile winner. Frozen-fact verification is clean on all five generated pages. Browser smoke at 390px confirmed correct titles, both prices, legal copy, buy boxes, and zero horizontal overflow; the mobile menu opens and updates aria-expanded.</td></tr>
+          <tr><td class="piece-file">2026-09-02 10:12 UTC</td><td class="scope">Round 1 judged blind. Every critic picked organimo, so all eight pieces go back to their builders. Three defects in the judging rig fixed first: sections are now cropped from the real assembled page instead of a preview harness whose floating nav has nothing to float over, blind composites are cut into 1500px bands at native width after one critic judged a 390px page from a 200px thumbnail, and organimo&#x27;s mobile accordions were recaptured open, because round 1 compared our open panel against their closed rows.</td></tr>
+          <tr><td class="piece-file">2026-09-02 09:59 UTC</td><td class="scope">All eight pieces built. Frozen-fact guard clean on all five pages: both prices, every documented dose, the four absorption figures and the legal line survive the restyle, and 43x appears nowhere. No horizontal overflow at 390 on any surface. Blind A/B composites cut against the matching organimo region; eight critics dispatched.</td></tr>
+          <tr><td class="piece-file">2026-09-02 09:13 UTC</td><td class="scope">Foundation closed. organimo.com/seamoss captured at both widths and measured off its live DOM. Eight builders dispatched in parallel, one per judgeable piece.</td></tr>
+    </tbody>
+  </table>
 
-  <section aria-labelledby="h-metrics">
-    <h2 class="block" id="h-metrics"><span class="index-num">05</span>The meter</h2>
-    <table class="metrics">
-      <thead>
-        <tr><th scope="col">Corpus</th><th scope="col">Words</th><th scope="col">Em/1k</th>
-            <th scope="col">Dash/1k</th><th scope="col">Banned</th><th scope="col">Soft/1k</th>
-            <th scope="col">Mean</th><th scope="col">SD</th><th scope="col">Colon%</th>
-            <th scope="col">Opener%</th><th scope="col">EMD</th><th scope="col">Gate</th></tr>
-      </thead>
-      <tbody id="metrics"></tbody>
-    </table>
-    <p class="metric-note" id="metric-note"></p>
-  </section>
+  <p class="note" style="margin-top:var(--sp-11)">
+    Shared ground truth: <a href="PDP-BRIEF.md">PDP-BRIEF.md</a> &middot;
+    project ground truth: <a href="BRIEF.md">BRIEF.md</a> &middot;
+    the earlier prose round: <a href="prose-round.html">prose-round.html</a>
+  </p>
 
-</main>
-
-<script src="state.js"></script>
-<script src="metrics.js"></script>
-<script>
-(function () {
-  var S = window.ITP_STATE;
-  if (!S) return;
-  var $ = function (id) { return document.getElementById(id); };
-  var esc = function (s) {
-    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
-    });
-  };
-
-  $('campaign').textContent = S.campaign;
-  $('bar').textContent = 'Bar: ' + S.bar;
-  $('round').textContent = S.round;
-  $('phase').textContent = S.phase;
-  $('updated').textContent = S.updated;
-  document.title = 'ITP prose refactor, round ' + S.round;
-
-  var LABEL = {
-    building: 'Builder running',
-    reviewing: 'Critic running',
-    lost: 'Critic picked theirs',
-    won: 'Critic picked ours'
-  };
-
-  $('board').innerHTML = S.pieces.map(function (p) {
-    var st = S.status[p.id] || { state: 'building', round: S.round };
-    var critic = '';
-    if (st.verdict) {
-      critic += '<span class="note">' + esc(st.verdict) + '</span>';
-    }
-    if (st.gap) {
-      critic += '<span class="gap"><b>Biggest remaining gap</b>' + esc(st.gap) + '</span>';
-    }
-    if (!critic) { critic = '<span class="note" style="color:var(--on-navy-faint)">Awaiting verdict</span>'; }
-    return '<tr>' +
-      '<td><span class="piece-title">' + esc(p.title) + '</span><br>' +
-        '<span class="piece-file">' + esc(p.file) + '</span></td>' +
-      '<td class="scope">' + esc(p.scope) + '</td>' +
-      '<td><span class="badge badge--' + esc(st.state) + '">' + esc(LABEL[st.state] || st.state) + '</span>' +
-        '<br><span class="rnd">round ' + esc(st.round) + '</span>' +
-        (st.note ? '<br><span class="note" style="font-size:var(--t-caption)">' + esc(st.note) + '</span>' : '') + '</td>' +
-      '<td>' + critic + '</td>' +
-    '</tr>';
-  }).join('');
-
-  var counts = { won: 0, lost: 0, building: 0, reviewing: 0 };
-  S.pieces.forEach(function (p) {
-    var s = (S.status[p.id] || {}).state || 'building';
-    counts[s] = (counts[s] || 0) + 1;
-  });
-  $('tally').innerHTML =
-    stat(counts.won + ' / ' + S.pieces.length, 'Pieces the critic picked') +
-    stat(counts.building, 'Builders running') +
-    stat(counts.reviewing, 'Critics running') +
-    stat(counts.lost, 'Sent back to the builder');
-
-  function stat(n, label) {
-    return '<div class="stat"><span class="stat__num">' + esc(n) + '</span>' +
-           '<span class="stat__label">' + esc(label) + '</span></div>';
-  }
-
-  $('links').innerHTML = S.pieces.map(function (p) {
-    return '<a class="btn btn--ghost btn--sm" href="../' + esc(p.file) + '">' + esc(p.title) + '</a>';
-  }).join('') +
-    '<a class="btn btn--ghost btn--sm" href="https://www.apple.com/pl/">Bar · apple.com/pl</a>' +
-    '<a class="btn btn--ghost btn--sm" href="https://www.apple.com/">Bar · apple.com</a>' +
-    '<a class="btn btn--ghost btn--sm" href="PROSE.md">Prose contract</a>' +
-    '<a class="btn btn--ghost btn--sm" href="BRIEF.md">Ground-truth brief</a>';
-
-  $('foundation').innerHTML = S.foundation.map(function (f) {
-    return '<li class="found"><span class="found__tick">' + (f.done ? '[x]' : '[ ]') + '</span>' +
-      '<span><span class="found__label">' + esc(f.label) + '</span><br>' +
-      '<span class="found__detail">' + esc(f.detail) + '</span></span></li>';
-  }).join('');
-
-  $('rules').innerHTML = S.rules.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('');
-
-  $('log').innerHTML = S.log.map(function (l) {
-    return '<li><time>' + esc(l.t) + '</time><span>' + esc(l.m) + '</span></li>';
-  }).join('');
-
-  var M = window.ITP_METRICS;
-  if (M) {
-    var titleOf = {};
-    S.pieces.forEach(function (p) { titleOf[p.file] = p.title; });
-
-    var mrow = function (label, m, cls) {
-      var gate = m.pass === undefined ? '·'
-        : (m.pass ? '<span class="ok">PASS</span>' : '<span class="bad">FAIL</span>');
-      var f = function (v, limit, over) {
-        if (limit === undefined) return esc(v);
-        return '<span class="' + (over ? 'bad' : 'ok') + '">' + esc(v) + '</span>';
-      };
-      return '<tr class="' + cls + '"><td>' + esc(label) + '</td>' +
-        '<td>' + esc(m.words) + '</td>' +
-        '<td>' + f(m.em_per_1k, 3, m.em_per_1k >= 3) + '</td>' +
-        '<td>' + esc(m.dash_per_1k) + '</td>' +
-        '<td>' + f(m.banned, 0, m.banned > 0) + '</td>' +
-        '<td>' + esc(m.soft_per_1k) + '</td>' +
-        '<td>' + esc(m.sent_mean) + '</td>' +
-        '<td>' + esc(m.sent_sd) + '</td>' +
-        '<td>' + esc(m.colon_head_pct) + '</td>' +
-        '<td>' + esc(m.top_opener_pct) + '</td>' +
-        '<td>' + esc(m.emd === undefined ? '·' : m.emd) + '</td>' +
-        '<td>' + gate + '</td></tr>';
-    };
-
-    var rows = '';
-    Object.keys(M.files).forEach(function (f) {
-      rows += mrow(titleOf[f] || f, M.files[f], '');
-    });
-    rows += mrow('All Polish copy', M.totals.pl, 'total');
-    rows += mrow('All English copy', M.totals.en, 'total');
-    rows += mrow('apple.com/pl', M.bar.pl, 'bar');
-    rows += mrow('apple.com', M.bar.en, 'bar');
-    $('metrics').innerHTML = rows;
-
-    $('metric-note').textContent =
-      'Em-dashes per thousand words must land under 3. Any clause dash must stay within one '
-      + 'of the bar. Banned constructions must be zero. Soft buzzwords must stay under the rate '
-      + 'Apple itself writes at. EMD is the distance between our sentence-length histogram and '
-      + 'the bar\u2019s, in percentage points, and must sit at 25 or below. Colon% counts headlines '
-      + 'shaped Term: explanation. Opener% is the share taken by the single most repeated two-word '
-      + 'sentence opening. Run python3 scripts/prose.py js to refresh this table.';
-  }
-})();
-</script>
+</div>
 </body>
 </html>

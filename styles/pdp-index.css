@@ -1,0 +1,623 @@
+/* ==========================================================================
+   ITP — PDP STORE INDEX  ·  mockups/product.html
+   Organimo has no index page, so this one is assembled out of its grammar.
+   Every measurement below is the organimo value from ref/organimo/spec.json
+   and geometry.json, or the pdp-core token that already carries it:
+
+     hero          display H1 72.8 / lh .82 / ls -.05em          (.t-h1)
+     hero copy     starts at the gutter, 15/32 measure, three lines
+     hero object   536×536 hairline square at offset-19/32 w-12/32, the
+                   mirror of organimo's gallery square at offset-3/32
+     trust strip   13.06 / 11.2px mono directly above the H1, organimo
+                   device 4 (theirs is a star rating; we have none)
+     one CTA       46/56px pill, exactly one dominant route per screen
+     stat row      full bleed, 1px ink hairline top, four equal cells split
+                   by 1px vertical ink hairlines running to the viewport edge
+     card row      desktop-1440-06.png: full-bleed cards, no gaps, split
+                   by 1px full-strength ink; 3 across at 1440 on theirs,
+                   2×2 here because there are four formulas and each one
+                   carries a 56px name plus two prices
+     card image    full bleed inside the card, hairline top and bottom,
+                   the READ MORE pill floated bottom-left over it at 1440
+                   and set under the bottle at 390
+     statement     desktop-1440-h03.png: boxed micro-label, 37.3/600 lead
+     badge strip   desktop-1440-01.png: hairline circles, mono labels
+     closing rows  the accordion-head grammar: full-bleed row, giant
+                   centred title, padding 23.3 / 28.0, hairline top
+     section       padding-block 74.64, hairline bottom              (.pdp-sec)
+
+   One column system. Every vertical hairline on the page is a division of
+   the viewport width, so the page midline (x 720 at 1440) runs through the
+   stat row (quarters), the card row (halves), the badge strip (quarters)
+   and the directory (sixths). Organimo's single full-height vertical is
+   the model.
+
+   Divergences are noted at the rule that makes them. Mobile-first; every
+   rule is scoped under .pdp-index. Owner: index.
+   ========================================================================== */
+
+.pdp-index {
+  /* One knob for the card's inner padding: the field, the N° pill and the
+     ZOBACZ FORMUŁĘ pill all measure themselves against it, so the field can
+     run to the card edge without any of them drifting. */
+  --index-pad: var(--pdp-gutter);
+}
+
+/* ==========================================================================
+   1 · DISPLAY HERO
+   ========================================================================== */
+
+/* The floating pill nav is absolutely positioned over the first section on
+   the page, so the first section is the one that pays for its clearance.
+   pdp-chrome.css publishes its height as --pdp-nav-h (76px at >=900,
+   60px below). Organimo's hero copy starts at y 179 under a 96px header;
+   this lands at 151. */
+.pdp-index__hero { padding-top: calc(var(--pdp-sec) + var(--pdp-nav-h)); }
+
+/* The godray is absolutely positioned, so the copy has to be lifted out of
+   its stacking order. */
+.pdp-index__hero-in,
+.pdp-index__stats { position: relative; }
+
+.pdp-index__hero-in { row-gap: var(--sp-7); }
+
+.pdp-index__hero-copy {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: var(--sp-4);
+}
+
+@media (min-width: 900px) {
+  /* 15/32 = 631px at 1440: the 72.8px line wraps to three —
+     Cztery formuły. / Wszystko zależy / od wchłaniania. — and the right
+     half of the viewport goes to the hero object. */
+  .pdp-index__hero-copy { --c: 15; }
+}
+
+/* Label, then the documented trust line. Organimo stacks its promo glyph
+   line and its rating line the same way, tight, right above the title. */
+.pdp-index__eyebrow { margin: 0; }
+.pdp-index__trust {
+  margin: calc(var(--sp-4) * -1 + 2px) 0 var(--sp-2);
+  color: var(--ink-muted);
+  text-transform: none;   /* the trust line is a sentence, not a label */
+  letter-spacing: 0;
+}
+
+.pdp-index__hero-copy .t-h1 { margin: 0; }
+
+/* Organimo's sub-headline runs a step above body size; ours does too, and
+   it keeps a prose measure so the H1 stays the widest thing on the page. */
+.pdp-index__lead {
+  margin: var(--sp-2) 0 0;
+  max-width: 56ch;
+  font-size: clamp(1rem, 1.32vw, 1.1875rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.pdp-index__cta { margin: var(--sp-4) 0 0; }
+.pdp-index__cta .pdp-btn:focus-visible { border-radius: var(--r-pill); }
+
+.pdp-index__cta-note {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+/* --------------------------------------------------------------------------
+   The hero object. Organimo's gallery is a 536×536 square at offset-3/32;
+   ours is the mirror, offset-19/32 w-12/32, hairline-bounded, and holds the
+   four packshots as one family, bottoms aligned, overlapping the way a
+   product line is shot. The N° pill in the corner is the card row's date
+   pill, so the square announces the four cards below it.
+   -------------------------------------------------------------------------- */
+
+.pdp-index__hero-pack {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--pdp-line);
+  background-color: var(--ivory-bright);
+  background-image:
+    radial-gradient(70% 60% at 50% 100%, var(--cyan-haze) 0%, transparent 70%);
+  overflow: hidden;
+}
+
+.pdp-index__family {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 6% 8%;
+}
+
+.pdp-index__family-pack {
+  flex: none;
+  height: 62%;
+  width: auto;
+  /* Each bottle overlaps its neighbour by a third of its box; the boxes
+     carry the SVG's own side margins, so the bottles themselves clear. The
+     earlier ones sit in front, and the two inner ones stand a step behind. */
+  margin-inline: -9%;
+  filter: drop-shadow(0 18px 22px rgba(11, 31, 58, .14));
+}
+.pdp-index__family-pack:nth-child(2),
+.pdp-index__family-pack:nth-child(3) {
+  height: 66%;
+  margin-bottom: 3%;
+}
+.pdp-index__family-pack:nth-child(1) { z-index: 3; }
+.pdp-index__family-pack:nth-child(2) { z-index: 2; }
+.pdp-index__family-pack:nth-child(3) { z-index: 1; }
+.pdp-index__family-pack:nth-child(4) { z-index: 0; }
+
+.pdp-index__hero-pack-num {
+  position: absolute;
+  top: var(--sp-4);
+  left: var(--sp-4);
+  margin: 0;
+  background: var(--ivory-bright);
+}
+
+@media (min-width: 900px) {
+  .pdp-index__hero-pack {
+    --o: 19;
+    --c: 12;
+    align-self: start;
+  }
+  .pdp-index__hero-pack-num {
+    top: var(--sp-5);
+    left: var(--sp-5);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Hairline stat row. Full bleed on purpose: the hairline has to reach the
+   viewport edge, which it cannot do inside .pdp-c. The end cells carry the
+   gutter as padding instead, so the type still lines up with the H1.
+   -------------------------------------------------------------------------- */
+
+.pdp-index__stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: clamp(40px, 4.8vw, 68px) 0 0;
+  border-top: 1px solid var(--pdp-line);
+}
+
+.pdp-index__stat {
+  display: grid;
+  gap: 6px;
+  padding: var(--sp-4) var(--pdp-gutter);
+}
+.pdp-index__stat:not(:last-child) { border-bottom: 1px solid var(--pdp-line); }
+
+.pdp-index__stat dt { margin: 0; color: var(--ink-muted); }
+.pdp-index__stat dd { margin: 0; }
+
+.pdp-index__figure {
+  font-size: clamp(1.125rem, 1.55vw, 1.399rem);   /* 18 -> 22.4, the card step */
+  font-weight: var(--w-bold);
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+
+/* The pricing cell states the plan price as its figure and the open store
+   as a quiet line under it: two routes at two weights, no arrow between
+   them, so it never reads as a markdown. */
+.pdp-index__stat-note {
+  color: var(--ink-muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.pdp-index__stat-note .pdp-index__price {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+@media (min-width: 900px) {
+  /* Four equal cells: the verticals fall on the quarters of the viewport,
+     and the second one is the page midline the card row splits on. */
+  .pdp-index__stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pdp-index__stat {
+    padding-block: var(--sp-5);
+    padding-inline: var(--sp-7);
+  }
+  .pdp-index__stat:first-child { padding-inline-start: var(--pdp-gutter); }
+  .pdp-index__stat:last-child  { padding-inline-end: var(--pdp-gutter); }
+  .pdp-index__stat:not(:last-child) { border-bottom: 0; }
+  .pdp-index__stat + .pdp-index__stat { border-left: 1px solid var(--pdp-line); }
+}
+
+/* ==========================================================================
+   2 · THE FOUR FORMULAS · full-bleed hairline cards
+   ========================================================================== */
+
+.pdp-index__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.pdp-index__card {
+  display: grid;
+  align-content: start;
+  padding: var(--sp-7) var(--index-pad) var(--sp-8);
+  /* The row hairline. The last card in the flow leaves it to .pdp-sec's own
+     border-bottom, so no line is ever drawn twice. */
+  border-bottom: 1px solid var(--pdp-line);
+}
+.pdp-index__card:last-child { border-bottom: 0; }
+
+.pdp-index__num {
+  margin: 0 0 var(--sp-5);
+  justify-self: start;
+}
+
+/* --------------------------------------------------------------------------
+   The packshot field. Organimo's card image is flush with the card edge and
+   sits between two hairlines; the READ MORE pill floats on it, bottom left.
+   The tint is the formula's own colour, passed in as --card-fc.
+
+   Mobile-first the field is a two-row grid, bottle over pill, so the pill
+   never covers the label: the 390 field is too narrow to float it beside
+   the bottle with clear ground behind it. At 900 and up the field is the
+   fixed-height organimo square and the pill floats.
+   -------------------------------------------------------------------------- */
+
+.pdp-index__field {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--sp-9);   /* 48px of clear field between the bottle and the pill */
+  padding-block: var(--sp-4) var(--sp-5);
+  margin-inline: calc(var(--index-pad) * -1);
+  border-block: 1px solid var(--pdp-line);
+  background-color: var(--ivory-bright);
+  background-image:
+    radial-gradient(76% 84% at 50% 4%,
+      color-mix(in srgb, var(--card-fc) 22%, transparent) 0%,
+      transparent 70%);
+}
+
+.pdp-index__pack {
+  height: clamp(200px, 54vw, 240px);
+  width: auto;
+  max-width: 100%;
+}
+
+.pdp-index__see {
+  justify-self: start;
+  margin-inline-start: var(--index-pad);
+  min-height: 40px;
+  padding: 11px 20px;
+  border-color: var(--pdp-line);
+}
+.pdp-index__see:focus-visible { border-radius: var(--r-pill); }
+
+.pdp-index__name {
+  margin: var(--sp-6) 0 0;
+}
+.pdp-index__name a {
+  color: inherit;
+  text-decoration: none;
+}
+.pdp-index__name a:hover { text-decoration: underline; text-underline-offset: .12em; }
+
+.pdp-index__tag {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--pdp-h3);
+  font-weight: var(--w-medium);
+  letter-spacing: var(--pdp-ls-head);
+  line-height: 1.25;
+  color: var(--ink-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Two journeys under a hairline. Not two buttons: a two-row ledger, each
+   row a label, its documented sub-label and its documented price. The plan
+   row is dominant — full ink, the larger figure, the arrow — and the open
+   store is the quiet row beneath it, so a shopper reads "with a plan"
+   against "without analysis", not a price against a cheaper price. The
+   card's single pill is ZOBACZ FORMUŁĘ, on the field.
+
+   The hairlines run to both card edges — organimo never draws an inset
+   rule — while the content stays on the card's own left margin, so the
+   negative margin is paid back as padding.
+   -------------------------------------------------------------------------- */
+
+.pdp-index__routes {
+  display: grid;
+  margin-top: var(--sp-7);
+  margin-inline: calc(var(--index-pad) * -1);
+  border-top: 1px solid var(--pdp-line);
+}
+
+.pdp-index__journey {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--sp-4);
+  padding: var(--sp-4) var(--index-pad);
+  color: var(--ink);
+  text-decoration: none;
+}
+.pdp-index__journey + .pdp-index__journey { border-top: 1px solid var(--pdp-line); }
+.pdp-index__journey:hover { background: var(--ivory-bright); }
+.pdp-index__journey:focus-visible { outline: none; box-shadow: inset var(--ring); }
+
+.pdp-index__journey-head {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.pdp-index__journey-label { line-height: 1.2; }
+.pdp-index__journey-sub {
+  color: var(--ink-muted);
+  text-transform: none;   /* the sub-labels are documented phrases, not labels */
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+/* Prices are documented strings: never uppercased, never abbreviated. */
+.pdp-index__price,
+.pdp-index__journey-price {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.pdp-index__journey-price {
+  font-weight: var(--w-bold);
+  letter-spacing: -.02em;
+  white-space: nowrap;
+  text-align: end;
+}
+
+/* The dominant row: figure at the card step, arrow beside it. */
+.pdp-index__journey--plan {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  padding-block: var(--sp-5);
+}
+.pdp-index__journey--plan .pdp-index__journey-label { font-weight: 700; }
+.pdp-index__journey--plan .pdp-index__journey-price { font-size: var(--pdp-h3); }
+.pdp-index__journey--plan svg { flex: none; color: var(--ink); }
+
+/* The quiet row: muted throughout, figure a step down. Its third track is
+   the width of the plan row's arrow, so the two prices share a right edge. */
+.pdp-index__journey--open {
+  grid-template-columns: minmax(0, 1fr) auto 15px;
+  color: var(--ink-muted);
+}
+.pdp-index__journey--open .pdp-index__journey-price {
+  font-size: var(--pdp-micro);
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+.pdp-index__journey--open:hover { color: var(--ink); }
+.pdp-index__journey--open:hover .pdp-index__journey-price { color: var(--ink); }
+
+@media (min-width: 900px) {
+  .pdp-index__grid { grid-template-columns: 1fr 1fr; }
+  /* 2×2: one vertical hairline down the middle, one horizontal between the
+     rows, and the section's own border closes the block. */
+  .pdp-index__card { padding-block: var(--sp-8) var(--sp-9); }
+  .pdp-index__card:nth-child(2n) { border-left: 1px solid var(--pdp-line); }
+  .pdp-index__card:nth-child(n+3) { border-bottom: 0; }
+
+  /* The organimo card image: fixed height, bottle centred, pill floated. */
+  .pdp-index__field {
+    display: grid;
+    place-items: center;
+    height: clamp(230px, 20.8vw, 300px);
+    padding-block: 0;
+    gap: 0;
+  }
+  .pdp-index__pack {
+    height: 86%;
+  }
+  .pdp-index__see {
+    position: absolute;
+    left: var(--index-pad);
+    bottom: var(--sp-4);
+    margin: 0;
+  }
+
+  .pdp-index__journey { padding-inline: var(--index-pad); }
+}
+
+/* ==========================================================================
+   3 · OVERSIZED STATEMENT
+   ========================================================================== */
+
+.pdp-index__statement-in {
+  display: grid;
+  gap: var(--sp-6);
+  justify-items: start;
+}
+
+.pdp-index__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px var(--sp-2);
+  margin: 0;
+}
+
+.pdp-index__statement-lead { margin: 0; }
+
+@media (min-width: 1200px) {
+  /* Organimo's statement sits on a 1254px measure and runs four lines. The
+     BioSNEDS™ lede is a third longer, so it takes 30/32 — measured 1263px
+     at 1440 — and lands on six lines with no widow. */
+  .pdp-index__statement-in { --c: 30; }
+}
+
+/* ==========================================================================
+   4 · BADGE STRIP · the heading and the three shared proofs
+   ========================================================================== */
+
+/* No border-top: the statement section above already draws the hairline
+   this strip sits on, and two rules would read as a 2px line. */
+.pdp-index__badges {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.pdp-index__badges-h {
+  margin: 0;
+  padding: var(--sp-5) var(--pdp-gutter);
+  border-bottom: 1px solid var(--pdp-line);
+}
+
+.pdp-index__badges-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pdp-index__badge {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--pdp-gutter);
+}
+.pdp-index__badge:not(:last-child) { border-bottom: 1px solid var(--pdp-line); }
+
+/* Technology, not a formula: the mark is cyan, never the formula colour. */
+.pdp-index__badge .medallion {
+  color: var(--cyan-deep);
+  background: var(--ivory-bright);
+}
+
+.pdp-index__badge-label {
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+/* One glyph per mark id. The SVG carries all of them and the mark decides
+   which one is shown, because the template language cannot branch on a
+   value. Anything we have no glyph for falls back to the generic mark. */
+.pdp-index__gl { display: none; }
+[data-index-mark="biosneds"] .pdp-index__gl--biosneds,
+[data-index-mark="licencja"] .pdp-index__gl--licencja,
+[data-index-mark="badania"]  .pdp-index__gl--badania { display: block; }
+.pdp-index__badge:not([data-index-mark="biosneds"]):not([data-index-mark="licencja"]):not([data-index-mark="badania"])
+  .pdp-index__gl--generic { display: block; }
+
+@media (min-width: 900px) {
+  /* Quarters: heading cell, then the three proofs. The first vertical is
+     at 1/4, the second is the page midline. */
+  .pdp-index__badges { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); }
+  .pdp-index__badges-h {
+    display: flex;
+    align-items: center;
+    padding-block: var(--sp-7);
+    padding-inline: var(--pdp-gutter) var(--sp-7);
+    border-bottom: 0;
+  }
+  .pdp-index__badges-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pdp-index__badge {
+    padding-block: var(--sp-7);
+    padding-inline: var(--sp-7);
+    border-left: 1px solid var(--pdp-line);
+  }
+  .pdp-index__badge:last-child  { padding-inline-end: var(--pdp-gutter); }
+  .pdp-index__badge:not(:last-child) { border-bottom: 0; }
+}
+
+/* The strip is the section's whole content, so the section keeps its
+   hairline bottom but drops the padding that would double the rhythm. */
+.pdp-index__proofs { padding-block: 0; }
+
+/* ==========================================================================
+   5 · LINK BLOCK · the accordion-head grammar
+   ========================================================================== */
+
+.pdp-index__big-row {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-2);
+  padding: 23.3px var(--pdp-gutter) 28px;
+  border-bottom: 1px solid var(--pdp-line);
+  color: inherit;
+  text-decoration: none;
+  text-align: center;
+}
+.pdp-index__big-row:hover { background: var(--ivory-bright); }
+
+.pdp-index__big-title {
+  display: inline-flex;
+  align-items: center;
+  gap: .4em;
+  text-wrap: balance;
+}
+.pdp-index__big-title svg { flex: none; }
+.pdp-index__big-note { color: var(--ink-muted); }
+
+.pdp-index__dir {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.pdp-index__dir-h {
+  margin: 0;
+  padding: var(--sp-5) var(--pdp-gutter);
+  border-bottom: 1px solid var(--pdp-line);
+  color: var(--ink-muted);
+}
+
+.pdp-index__dir-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--pdp-gutter);
+  color: inherit;
+  text-decoration: none;
+}
+.pdp-index__dir-cell:not(:last-child) { border-bottom: 1px solid var(--pdp-line); }
+.pdp-index__dir-cell svg { flex: none; color: var(--ink-muted); }
+.pdp-index__dir-cell:hover { background: var(--ivory-bright); }
+.pdp-index__dir-cell:hover svg { color: var(--ink); }
+
+/* The cell for the page we are already on stays reachable but reads as
+   arrived: dimmed type, no arrow. */
+.pdp-index__dir-cell[aria-current="page"] { color: var(--ink-faint); }
+.pdp-index__dir-cell[aria-current="page"] svg { visibility: hidden; }
+
+@media (min-width: 900px) {
+  /* Sixths: the heading cell and five routes. The third vertical is the
+     page midline. */
+  .pdp-index__dir { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .pdp-index__dir-h,
+  .pdp-index__dir-cell {
+    min-height: 168px;
+    padding: var(--sp-7);
+  }
+  .pdp-index__dir-h {
+    padding-inline-start: var(--pdp-gutter);
+    border-bottom: 0;
+  }
+  .pdp-index__dir-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sp-8);
+    border-left: 1px solid var(--pdp-line);
+  }
+  .pdp-index__dir-cell:last-child  { padding-inline-end: var(--pdp-gutter); }
+  .pdp-index__dir-cell:not(:last-child) { border-bottom: 0; }
+}
+
+/* ==========================================================================
+   MOBILE · 390
+   ========================================================================== */
+
+@media (max-width: 899px) {
+  /* At 13px the trust line takes three lines on a 390 screen and starts to
+     compete with the H1, so it drops to the small mono step. */
+  .pdp-index__eyebrow { font-size: var(--pdp-micro-sm); }
+  .pdp-index__trust { margin-top: calc(var(--sp-4) * -1 + 4px); }
+  .pdp-index__cta .pdp-btn { width: 100%; }
+}

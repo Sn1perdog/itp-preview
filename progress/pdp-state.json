@@ -1,0 +1,139 @@
+{
+  "title": "PERSONA product pages, restyled onto organimo.com/seamoss",
+  "round": 7,
+  "phase": "Complete · every blind critic picked ours",
+  "updated": "2026-09-02 11:32 UTC",
+  "bar": "https://organimo.com/seamoss/",
+  "lede": "The bar is organimo.com/seamoss, captured on disk at 1440 and 390. Every piece below is built by one agent and judged by a separate agent with fresh context, which puts our render next to theirs blind, with the labels stripped, and says which one reads as the better-built commerce page. If ours does not win, the piece goes back to the builder. The loop ends when every critic picks ours.",
+  "foundation": [
+    [
+      "Reference captured",
+      "8 desktop slices at 1440x900, 8 more on a 450px half-offset, 17 with every accordion forced open, 9 mobile slices at 390x844 dsf2. The page runs a Lenis scroll container, so it only captures by driving main.scroll-container.scrollTop.",
+      "done"
+    ],
+    [
+      "Reference measured",
+      "ref/organimo/spec.json and geometry.json hold the computed type ramp, colour census, radius census, hairline census, section padding and 32-column grid offsets read off the live DOM. Nothing in this refactor is calibrated against a memory of the page.",
+      "done"
+    ],
+    [
+      "Shared ground truth",
+      "progress/PDP-BRIEF.md: what organimo does, measured; the devices to steal; where we deliberately diverge; the frozen content rules; file ownership per section; the class contract.",
+      "done"
+    ],
+    [
+      "Core stylesheet",
+      "styles/pdp-core.css. 72.8 / 56 / 37.3 / 22.4px display ramp at -0.05em, 1px full-strength ink hairlines, 32-column full-bleed grid, 112px medallions, 999px pills, 62px sticky buy bar.",
+      "done"
+    ],
+    [
+      "Generated pages",
+      "scripts/assemble_pdp.py builds the four product pages and one standalone preview harness per section from mockups/parts/*.html, so the layout can never drift between the four formulas and every piece can be judged on its own.",
+      "done"
+    ],
+    [
+      "Frozen content",
+      "scripts/pdp_data.py. Prices, doses, absorption figures and the legal line are lifted verbatim and never bend to a layout.",
+      "done"
+    ]
+  ],
+  "pieces": [
+    {
+      "name": "Chrome",
+      "files": "parts/chrome-head.html · parts/chrome-foot.html · pdp-chrome.css",
+      "scope": "Promo bar, floating pill navigation, the 62px sticky bottom buy bar carrying both documented prices, and the dark footer with the closing marquee and the legal line.",
+      "status": "won",
+      "round": 4,
+      "verdict": "Critic picked ours at desktop and mobile.",
+      "gap": "Residual: simplify the two-message promo and unify footer alignment."
+    },
+    {
+      "name": "Buy box",
+      "files": "parts/buybox.html · pdp-buybox.css",
+      "scope": "The 536x536 gallery with thumbnail strip and dot pager, the trust line where organimo puts a star rating we do not have, the 72.8px display title, three icon bullets, the price block and one dominant CTA.",
+      "status": "won",
+      "round": 2,
+      "verdict": "Critic picked ours at desktop and mobile.",
+      "gap": "Residual: photographic atmosphere remains deliberately synthetic rather than invented product photography."
+    },
+    {
+      "name": "Story split",
+      "files": "parts/story.html · pdp-story.css",
+      "scope": "The two-column chapter divided edge to edge by a vertical ink hairline: 56px headline, body at a 46ch measure, a 2x3 grid of hairline medallion badges, and a product visual that bleeds off an edge.",
+      "status": "won",
+      "round": 2,
+      "verdict": "Critic picked ours at desktop and mobile.",
+      "gap": "Residual: fixed buy bar can intersect long section-only captures; live-page spacing is clear."
+    },
+    {
+      "name": "Statement",
+      "files": "parts/statement.html · pdp-statement.css",
+      "scope": "The oversized 37.3px weight-600 statement paragraph under a micro-label whose last word is boxed in an outline pill. The smallest piece and the one most likely to be underbuilt.",
+      "status": "won",
+      "round": 7,
+      "verdict": "Critic picked ours at desktop and mobile.",
+      "gap": "Residual: the final mobile line remains shorter after the mono absorption phrase."
+    },
+    {
+      "name": "Accordion",
+      "files": "parts/accordion.html · pdp-accordion.css",
+      "scope": "Three full-bleed rows with 37.3px centred titles: Korzysci as a two-column 112px medallion grid, Sklad i dawki as hairline dose tables, and FAQ. All closed by default, all keyboard operable.",
+      "status": "won",
+      "round": 2,
+      "verdict": "Critic picked ours at desktop and mobile.",
+      "gap": "Residual: desktop open benefits remain copy-dense, but hierarchy and table grammar won."
+    },
+    {
+      "name": "Technology",
+      "files": "parts/tech.html · pdp-tech.css",
+      "scope": "The full-bleed navy BioSNEDS chapter, the edge-to-edge display marquee, the four documented absorption figures drawn truthfully rather than smoothed, and the two-price split with its four pillars.",
+      "status": "won",
+      "round": 2,
+      "verdict": "Critic picked ours at desktop and mobile.",
+      "gap": "Residual: abstract capsule remains illustrative, with no invented microscopy or study imagery."
+    },
+    {
+      "name": "Social proof",
+      "files": "parts/social.html · pdp-social.css",
+      "scope": "Expert voices with the quote set at the 37.3px statement scale and role-only attribution behind a makieta chip, the other three formulas as hairline-split cards, and the closing route band.",
+      "status": "won",
+      "round": 2,
+      "verdict": "Critic picked ours at desktop and mobile.",
+      "gap": "Residual: expert quotes remain explicitly marked as mockup content."
+    },
+    {
+      "name": "Store index",
+      "files": "parts/index.html · pdp-index.css",
+      "scope": "mockups/product.html rebuilt in the same language: display hero, a hairline stat row, the four formulas as full-bleed hairline cards, a statement band and a proof badge row.",
+      "status": "won",
+      "round": 2,
+      "verdict": "Critic picked ours at desktop and mobile.",
+      "gap": "Residual: catalogue packshots are intentionally diagrammatic rather than photographic."
+    }
+  ],
+  "rules": [
+    "Never bend a documented price, dose or legal line to fit a layout. 249 zl open store, 179 zl/szt. in a personalized set. Doses exactly as documented; etykieta* where the document gives no milligrams.",
+    "Absorption is od 40x do 100x, w zaleznosci od skladnika, plus the four per-ingredient figures. Never 43x.",
+    "Organimo's hero carries a 4.8/5 star rating. We have no ratings, so that slot takes the documented specialist and shipping line instead. No invented rating, review, customer name, study or journal anywhere.",
+    "Expert voices only, attributed by role, behind a visible makieta chip. Stage I sells nothing and every cart says so.",
+    "Palette and typefaces stay ITP: navy, ivory, electric cyan, Inter, Space Mono. We take organimo's structure, rhythm, scale and devices, not its lavender."
+  ],
+  "log": [
+    {
+      "when": "2026-09-02 09:13 UTC",
+      "what": "Foundation closed. organimo.com/seamoss captured at both widths and measured off its live DOM. Eight builders dispatched in parallel, one per judgeable piece."
+    },
+    {
+      "when": "2026-09-02 09:59 UTC",
+      "what": "All eight pieces built. Frozen-fact guard clean on all five pages: both prices, every documented dose, the four absorption figures and the legal line survive the restyle, and 43x appears nowhere. No horizontal overflow at 390 on any surface. Blind A/B composites cut against the matching organimo region; eight critics dispatched."
+    },
+    {
+      "when": "2026-09-02 10:12 UTC",
+      "what": "Round 1 judged blind. Every critic picked organimo, so all eight pieces go back to their builders. Three defects in the judging rig fixed first: sections are now cropped from the real assembled page instead of a preview harness whose floating nav has nothing to float over, blind composites are cut into 1500px bands at native width after one critic judged a 390px page from a 200px thumbnail, and organimo's mobile accordions were recaptured open, because round 1 compared our open panel against their closed rows."
+    },
+    {
+      "when": "2026-09-02 11:32 UTC",
+      "what": "Gauntlet closed. Buy box, story, accordion, technology, social proof and store index passed in round 2; corrected chrome capture passed in round 4; the statement passed in round 7 after restoring the 37.28px five-line desktop declaration while preserving the mobile winner. Frozen-fact verification is clean on all five generated pages. Browser smoke at 390px confirmed correct titles, both prices, legal copy, buy boxes, and zero horizontal overflow; the mobile menu opens and updates aria-expanded."
+    }
+  ]
+}

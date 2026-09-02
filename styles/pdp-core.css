@@ -1,0 +1,409 @@
+/* ==========================================================================
+   ITP — PDP CORE
+   The spine of the PERSONA product pages, restyled onto the layout of
+   https://organimo.com/seamoss/.
+
+   Every number below was measured off that page's live DOM at 1440 and is
+   recorded in ref/organimo/spec.json and ref/organimo/geometry.json. Where a
+   value is expressed as a vw it is the 1440 pixel value divided by 14.4, so it
+   lands exactly on the reference at 1440 and degrades sensibly below it.
+
+   What we take from organimo   structure, rhythm, scale, hairlines, devices.
+   What stays ITP               navy / ivory / electric cyan, Inter, Space Mono.
+
+   Owner: main agent. Section stylesheets (pdp-chrome, pdp-buybox, pdp-story,
+   pdp-statement, pdp-accordion, pdp-tech, pdp-social, pdp-index) must scope
+   every rule under their own section class and must not redeclare anything
+   here.
+   ========================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------
+     Structural hairline. Organimo draws 1px solid #2D2F36 at FULL strength
+     (33 structural uses) — not a faint grey. It is the loudest signature of
+     the page and the reason it reads as built rather than styled.
+     ----------------------------------------------------------------- */
+  --pdp-line: var(--navy-900);
+  --pdp-line-navy: rgba(247, 246, 241, .30);
+  --pdp-line-inner: var(--ivory-white);
+
+  /* Display ramp, measured. 72.78 / 55.98 / 37.32 / 22.39 px at 1440. */
+  --pdp-h1:      clamp(2.75rem, 5.055vw, 4.549rem);   /*  44 -> 72.8 */
+  --pdp-h2:      clamp(2.125rem, 3.888vw, 3.499rem);  /*  34 -> 56.0 */
+  --pdp-h3:      clamp(1.1875rem, 1.555vw, 1.399rem); /*  19 -> 22.4 */
+  --pdp-xl:      clamp(1.5rem, 2.591vw, 2.332rem);    /*  24 -> 37.3 */
+  --pdp-body:    0.9375rem;                            /*  15         */
+  --pdp-body-lh: 1.5;                                  /*  22.5       */
+  --pdp-micro:   0.8125rem;                            /*  13         */
+  --pdp-micro-sm: 0.6875rem;                           /*  11         */
+
+  /* Tracking, measured: -0.05em on the two display steps, -0.03em below. */
+  --pdp-ls-display: -.05em;
+  --pdp-ls-head:    -.03em;
+
+  /* Leading, measured: 0.80 on the H1, 1.10 on the H2, 1.125 on the XL. */
+  --pdp-lh-h1: .82;
+  --pdp-lh-h2: 1.10;
+  --pdp-lh-xl: 1.125;
+
+  /* Rhythm. Section padding-block 74.64px; feature band 149.29 / 93.30. */
+  --pdp-sec:      clamp(38px, 5.183vw, 74.64px);
+  --pdp-sec-lg:   clamp(64px, 10.367vw, 149.29px);
+  --pdp-sec-lg-b: clamp(48px, 6.479vw, 93.3px);
+
+  /* Container: padding-inline 46.65px at 1440, no max-width. Full bleed. */
+  --pdp-gutter: clamp(20px, 3.24vw, 46.65px);
+
+  /* Radii, by census: pill 999 (80 uses), circle 50% (26), panel 77.44 (23),
+     medium 14.93 (7), small 7.46 (10). */
+  --pdp-r-panel: 77.44px;
+  --pdp-r-md:    14.93px;
+  --pdp-r-sm:    7.46px;
+
+  /* The 112px hairline medallion the benefits grid is built on. */
+  --pdp-medallion: 112px;
+
+  /* Sticky bottom buy bar height, measured 62px. */
+  --pdp-bar-h: 62px;
+}
+
+/* ==========================================================================
+   PAGE ROOT
+   ========================================================================== */
+
+.pdp {
+  background: var(--ivory);
+  color: var(--ink);
+  /* The buy bar is fixed to the bottom edge; keep the footer clear of it. */
+  padding-bottom: var(--pdp-bar-h);
+}
+
+/* Organimo tints the whole hero with two soft "godray" overlays. Ours is one
+   flat ivory field with a single cool wash at the top, no image. */
+.pdp-godray {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 70% at 50% -10%, var(--cyan-haze) 0%, transparent 62%),
+    linear-gradient(180deg, var(--ivory-bright) 0%, var(--ivory) 58%);
+}
+
+/* ==========================================================================
+   CONTAINER AND 32-COLUMN GRID
+
+   Organimo's grid is a 32-column flex track inside a container with
+   46.65px side padding and no max-width. Column widths and offsets are
+   written as n/32 (`w-13/32`, `offset-3/32`). We reproduce it as a real grid
+   so a child only declares --c (span) and --o (offset).
+   ========================================================================== */
+
+.pdp-c {
+  padding-inline: var(--pdp-gutter);
+}
+
+.pdp-g {
+  display: grid;
+  grid-template-columns: repeat(32, minmax(0, 1fr));
+  column-gap: 0;
+}
+
+.pdp-g > * {
+  grid-column: calc(var(--o, 0) + 1) / span var(--c, 32);
+  min-width: 0;
+}
+
+@media (max-width: 899px) {
+  /* Mobile-first fallback: every grid child goes full width unless it opts
+     out with --cm / --om. */
+  .pdp-g > * {
+    grid-column: calc(var(--om, 0) + 1) / span var(--cm, 32);
+  }
+}
+
+/* ==========================================================================
+   SECTIONS AND HAIRLINES
+   ========================================================================== */
+
+.pdp-sec {
+  position: relative;
+  padding-block: var(--pdp-sec);
+  border-bottom: 1px solid var(--pdp-line);
+}
+
+.pdp-sec--flush { padding-block: 0; }
+
+.pdp-sec--lg {
+  padding-block: var(--pdp-sec-lg) var(--pdp-sec-lg-b);
+}
+
+.pdp-sec--bright { background: var(--ivory-bright); }
+.pdp-sec--sunk   { background: var(--ivory-sunk); }
+
+.pdp-sec--navy {
+  background: var(--navy-900);
+  color: var(--on-navy);
+  border-bottom-color: var(--navy-900);
+}
+.pdp-sec--navy .pdp-rule,
+.pdp-sec--navy .pdp-split > * + * { border-color: var(--pdp-line-navy); }
+
+/* A standalone full-bleed hairline, for use between blocks inside a section. */
+.pdp-rule {
+  border: 0;
+  border-top: 1px solid var(--pdp-line);
+  margin: 0;
+}
+
+/* Two columns divided edge to edge by a vertical hairline. Organimo runs this
+   rule the full height of the section, gutter to gutter. */
+.pdp-split {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.pdp-split > * + * { border-top: 1px solid var(--pdp-line); }
+
+@media (min-width: 900px) {
+  .pdp-split { grid-template-columns: 1fr 1fr; }
+  .pdp-split > * + * {
+    border-top: 0;
+    border-left: 1px solid var(--pdp-line);
+  }
+}
+
+/* ==========================================================================
+   TYPE
+   ========================================================================== */
+
+.t-h1 {
+  font-size: var(--pdp-h1);
+  font-weight: var(--w-black);
+  letter-spacing: var(--pdp-ls-display);
+  line-height: var(--pdp-lh-h1);
+  text-wrap: balance;
+}
+
+.t-h2 {
+  font-size: var(--pdp-h2);
+  font-weight: var(--w-black);
+  letter-spacing: var(--pdp-ls-display);
+  line-height: var(--pdp-lh-h2);
+  text-wrap: balance;
+}
+
+.t-h3 {
+  font-size: var(--pdp-h3);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--pdp-ls-head);
+  line-height: 1.2;
+}
+
+/* The oversized statement paragraph: 37.3px, weight 600, -0.03em. Organimo
+   uses it twice and it does more for the page than any image on it. */
+.t-lead-xl {
+  font-size: var(--pdp-xl);
+  font-weight: var(--w-semi);
+  letter-spacing: var(--pdp-ls-head);
+  line-height: var(--pdp-lh-xl);
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.t-body {
+  font-size: var(--pdp-body);
+  line-height: var(--pdp-body-lh);
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+.pdp-sec--navy .t-body { color: var(--on-navy-muted); }
+
+.t-micro,
+.t-micro--sm {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+.t-micro { font-size: var(--pdp-micro); }
+.t-micro--sm { font-size: var(--pdp-micro-sm); letter-spacing: .02em; }
+.pdp-sec--navy .t-micro,
+.pdp-sec--navy .t-micro--sm { color: var(--on-navy); }
+
+/* Organimo switches one fragment of every display line into a serif italic.
+   We have no serif and may not load one, so the ITP-native equivalent is a
+   colour switch: the formula colour for the product, cyan for technology. */
+.t-accent { color: var(--fc, var(--cyan-deep)); }
+.t-accent--cyan { color: var(--cyan-deep); }
+.pdp-sec--navy .t-accent--cyan { color: var(--cyan); }
+
+/* ==========================================================================
+   PILL — the ⟨NUTRITION⟩ device: a micro-label whose last word is boxed.
+   ========================================================================== */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--r-pill);
+  padding: 4px 12px 3px;
+  font-family: var(--font-mono);
+  font-size: var(--pdp-micro);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.pdp-sec--navy .pill { border-color: var(--pdp-line-navy); }
+.pill--cyan { border-color: var(--cyan-deep); color: var(--cyan-deep); }
+
+/* ==========================================================================
+   CTA — 999px pills. Organimo runs exactly one dominant CTA per screen.
+   ========================================================================== */
+
+.pdp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 13px 30px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  background: var(--ivory-white);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--pdp-micro);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease);
+}
+.pdp-btn:hover { background: var(--ivory-sunk); }
+
+.pdp-btn--solid {
+  background: var(--navy-900);
+  color: var(--on-navy);
+}
+.pdp-btn--solid:hover { background: var(--navy-800); }
+
+.pdp-btn--outline {
+  background: transparent;
+  border-color: var(--pdp-line);
+}
+.pdp-btn--outline:hover { background: rgba(11, 31, 58, .05); }
+
+.pdp-btn--cyan {
+  background: var(--cyan);
+  color: var(--navy-900);
+}
+.pdp-btn--cyan:hover { background: var(--cyan-soft); }
+
+.pdp-btn--lg { min-height: 56px; padding: 18px 40px; }
+.pdp-btn--block { width: 100%; }
+
+.pdp-sec--navy .pdp-btn--outline { border-color: var(--pdp-line-navy); color: var(--on-navy); }
+.pdp-sec--navy .pdp-btn--outline:hover { background: rgba(247, 246, 241, .08); }
+
+/* A circular icon button: gallery arrows, testimonial prev/next, ± toggles. */
+.pdp-round {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--pdp-line);
+  border-radius: 50%;
+  background: var(--ivory-white);
+  color: var(--ink);
+  cursor: pointer;
+}
+.pdp-round--lg { width: 46px; height: 46px; }
+
+/* ==========================================================================
+   MEDALLION — 112px hairline circle. Organimo fills it #E6E7F1 with a gold
+   hairline mark; ours carries the formula colour.
+   ========================================================================== */
+
+.medallion {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--pdp-medallion);
+  height: var(--pdp-medallion);
+  border: 1px solid var(--pdp-line);
+  border-radius: 50%;
+  background: var(--ivory-sunk);
+  color: var(--fc, var(--cyan-deep));
+}
+.medallion > svg { width: 46%; height: 46%; }
+.medallion--sm { --pdp-medallion: 56px; }
+.medallion--xs { --pdp-medallion: 40px; }
+.pdp-sec--navy .medallion {
+  border-color: var(--pdp-line-navy);
+  background: var(--navy-800);
+}
+
+/* ==========================================================================
+   MARQUEE — one edge-to-edge line of display type on a contrasting band.
+   Static by default; animation is not part of this brief.
+   ========================================================================== */
+
+.pdp-marquee {
+  overflow: hidden;
+  background: var(--charcoal);
+  color: var(--ivory-bright);
+  border-block: 1px solid var(--pdp-line);
+}
+.pdp-marquee__track {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
+  padding-block: 18px;
+  font-size: var(--pdp-h2);
+  font-weight: var(--w-black);
+  letter-spacing: var(--pdp-ls-display);
+  line-height: 1.1;
+}
+.pdp-marquee__track > span { padding-inline: .28em; }
+
+/* ==========================================================================
+   GALLERY DOT PAGER
+   ========================================================================== */
+
+.pdp-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(247, 246, 241, .5);
+  cursor: pointer;
+}
+.pdp-dot[aria-current="true"] { background: var(--ivory-white); }
+
+/* ==========================================================================
+   SHARED HELPERS
+   ========================================================================== */
+
+.pdp-stack   { display: grid; gap: var(--sp-5); }
+.pdp-stack-2 { display: grid; gap: var(--sp-2); }
+.pdp-stack-3 { display: grid; gap: var(--sp-3); }
+.pdp-stack-7 { display: grid; gap: var(--sp-7); }
+.pdp-row     { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
+.pdp-center  { text-align: center; justify-items: center; }
+.pdp-measure { max-width: 46ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp *, .pdp *::before, .pdp *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

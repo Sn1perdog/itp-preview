@@ -1,0 +1,331 @@
+/* ==========================================================================
+   ITP — PDP SPLIT STORY
+   Organimo counterpart: "The Ultimate Superfood." (ref/organimo/
+   desktop-1440-01.png, mobile-390-01.png), measured at 1440:
+
+     band          hairline top and bottom, ~718px tall, no padding-block
+                   (.pdp-sec--flush); one vertical ink hairline splits it
+                   at exactly 50 % and runs the full height   (.pdp-split)
+     copy          x 46.65 = the gutter; vertically centred in the band;
+                   H2 56 / 61.6 / -0.05em                     (.t-h2)
+                   body 14.9 / 22.4 on a ~600px measure, 24px below the H2
+     badges        2×3 grid, columns at x 46 and x 368 (322px pitch),
+                   row pitch 56px, 40px below the body; each a 48px ringed
+                   hairline circle with a line-drawn gold mark, then a
+                   13px / 600 / uppercase label 16px to its right
+     render        the right half is filled by a 3D capsule render that
+                   bleeds off the top and right edges, a "+" hotspot sits
+                   on the bubble
+
+   Ours keeps the hairline cross to the pixel, swaps gold for the formula
+   colour, and composes the right half as one render: the packshot tilted
+   on a hard-edged formula disc, the documented artefact layered over its
+   shoulder as a hairline data card, the hotspot on the product.
+   The top hairline is the buy box's bottom rule; the
+   bottom one is .pdp-sec's own. Every rule is scoped under .pdp-story.
+   Owner: story.
+   ========================================================================== */
+
+/* The band's own top hairline, pulled up 1px onto the previous section's
+   bottom rule so exactly one line separates them wherever it sits. */
+.pdp-story {
+  margin-top: -1px;
+  border-top: 1px solid var(--pdp-line);
+}
+
+.pdp-story__split {
+  min-height: clamp(520px, 49.86vw, 718px);
+}
+
+/* Inline symbol sheet for the badge marks: takes no space. */
+.pdp-story__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------------
+   LEFT · copy
+   ------------------------------------------------------------------------ */
+.pdp-story__copy {
+  display: grid;
+  align-content: center;
+  gap: var(--sp-6);
+  padding: var(--pdp-sec) var(--pdp-gutter);
+}
+
+.pdp-story__h {
+  margin: 0;
+  max-width: 14ch;
+}
+
+.pdp-story__p {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+/* 2×3 badge grid on organimo's 56px row pitch, no row gap. The label slot is
+   ~241px at 1440 (301px column − 48px ring − 12px gap). Two of the six
+   labels (the shared 38-character licence and studies lines) cannot be held
+   on one line by any width or size this column allows, so the beat is set
+   deliberately: rows 1–2 one line each, row 3 — the same row on all four
+   formulas — two lines each. That needs the 11px mono step (13px would also
+   wrap the 30–34 character mechanism labels and break the row pairing). */
+.pdp-story__badges {
+  list-style: none;
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--sp-6);
+  max-width: 644px;
+}
+
+.pdp-story__badge {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 56px;
+}
+
+/* Theirs: 48px ringed circle, 40px glyph on a 1px stroke. The core medallion
+   fills with --ivory-sunk; on this band it sits directly on the ivory, so the
+   ring is the only shape and the mark is the only colour. */
+.pdp-story__medal {
+  --pdp-medallion: 48px;
+  background: transparent;
+}
+.pdp-story__medal > svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pdp-story__label {
+  font-size: var(--pdp-micro-sm);
+  font-weight: var(--w-bold);
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------------
+   RIGHT · the render
+
+   One 720×718 scene (the cell at 1440) drawn in SVG so it scales with the
+   cell: the disc, the tilted packshot and its clip move together and the
+   crop is always the cell edge. The hotspot and its leader are HTML, placed
+   in cell percentages read off the same scene geometry:
+
+     packshot   s = 1.16 px/unit → 882px tall = 123 % of the band, centred at
+                (460, 270), rotated −14°: cap leaves through the top edge,
+                the label block (units 296–700) lands at y ≈ 175–655, the base
+                sits on the disc at y ≈ 690 with its cast shadow leaving
+                through the bottom-right
+     disc       r 280 = 78 % of the band height, centre (520, 410), clipped
+                by the cell on the right
+     hotspot    on the bar graphic, unit (184, 626) → (443, 568) = 61.7 % /
+                79 %; the leader runs left to x 340 (47.2 %) on plain ivory
+                and up behind the card
+   ------------------------------------------------------------------------ */
+.pdp-story__visual {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  --pdp-story-plus-x: 61.7%;
+  --pdp-story-plus-y: 79%;
+  --pdp-story-lead-x: 47.2%;
+  --pdp-story-card-top: clamp(48px, 5.56vw, 80px);
+  --pdp-story-card-left: var(--pdp-gutter);
+}
+
+.pdp-story__scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* A drawn surface, not a glow: one hard-edged disc in a flat formula tint. */
+.pdp-story__disc {
+  fill: color-mix(in srgb, var(--fc, var(--cyan)) 16%, var(--ivory-bright));
+}
+
+.pdp-story__pack {
+  filter: drop-shadow(18px 26px 22px rgba(11, 31, 58, .22));
+}
+
+/* 1px ink leader from the hotspot to the card: an L whose vertical leg runs
+   up behind the card, so it is seen from the card's bottom edge whatever the
+   card's height. Sits between the scene and the card. */
+.pdp-story__lead {
+  position: absolute;
+  z-index: 1;
+  left: var(--pdp-story-lead-x);
+  top: var(--pdp-story-card-top);
+  right: calc(100% - var(--pdp-story-plus-x));
+  bottom: calc(100% - var(--pdp-story-plus-y));
+  border-left: 1px solid var(--pdp-line);
+  border-bottom: 1px solid var(--pdp-line);
+  pointer-events: none;
+}
+
+/* The documented artefact as a hairline card layered over the bottle's
+   shoulder: at 1440 it spans x 47–419 against a body edge at x ≈ 264–300,
+   so it overlaps the bottle by ≥ 120px (a third of its width). */
+.pdp-story__card {
+  position: absolute;
+  z-index: 2;
+  left: var(--pdp-story-card-left);
+  top: var(--pdp-story-card-top);
+  width: min(372px, calc(100% - 2 * var(--pdp-gutter)));
+  margin: 0;
+  padding: var(--sp-4) var(--sp-5) var(--sp-5);
+  display: grid;
+  gap: var(--sp-4);
+  background: var(--ivory-white);
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--pdp-r-md);
+}
+
+/* Two mono captions; when both cannot share the line the second drops to
+   its own row whole, never mid-label. */
+.pdp-story__cap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px var(--sp-3);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--pdp-line);
+  color: var(--ink-muted);
+}
+.pdp-story__cap > span { flex: none; max-width: 100%; }
+.pdp-story__cap-r { text-align: right; color: var(--fc, var(--cyan-deep)); }
+
+/* Organimo's "+" hotspot sits on the product. Ours sits on the first dose
+   bar of the label, the thing the card explains. */
+.pdp-story__plus {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  left: var(--pdp-story-plus-x);
+  top: var(--pdp-story-plus-y);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--ivory-white);
+  border: 1px solid var(--pdp-line);
+  font: var(--w-medium) 16px/1 var(--font-sans);
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------------
+   The artefact figure arrives in one of four shapes (a bare svg, .sleepmap,
+   .gainbar rows, .mito). Nothing outside a section styles them, so each
+   layout is handled here, scoped to the card.
+   ------------------------------------------------------------------------ */
+.pdp-story__artefact > svg { display: block; width: 100%; height: auto; }
+
+.pdp-story__artefact .sleepmap {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: stretch;
+}
+.pdp-story__artefact .sleepmap__ax {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--pdp-micro-sm);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: var(--ink-muted);
+  padding-block: 2px;
+}
+.pdp-story__artefact .sleepmap__svg { display: block; width: 100%; height: 92px; }
+
+.pdp-story__artefact .gainbar {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(60px, 1fr) minmax(0, auto);
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--pdp-body);
+  padding-block: 10px;
+}
+.pdp-story__artefact .gainbar + .gainbar { border-top: 1px solid var(--pdp-line); }
+.pdp-story__artefact .gainbar__track {
+  height: 8px;
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+.pdp-story__artefact .gainbar__track > i {
+  display: block;
+  height: 100%;
+  background: var(--fc, var(--cyan-deep));
+}
+.pdp-story__artefact .gainbar__val {
+  font-family: var(--font-mono);
+  font-weight: var(--w-bold);
+  font-size: var(--pdp-micro);
+}
+
+.pdp-story__artefact .mito {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-4);
+}
+.pdp-story__artefact .mito__ring { width: 96px; height: 96px; }
+.pdp-story__artefact .mito__txt { display: grid; gap: 4px; margin: 0; }
+.pdp-story__artefact .mito__num {
+  font-family: var(--font-mono);
+  font-weight: var(--w-bold);
+  font-size: var(--pdp-h3);
+  letter-spacing: -.03em;
+}
+.pdp-story__artefact .mito__sub {
+  font-size: var(--pdp-micro);
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   Below 900 the split stacks, copy first; core turns the vertical hairline
+   horizontal. The badges keep organimo's 2×3 grid on a 40px ring: at 390
+   the label slot is ~119px, which holds the 17-character words of the two
+   long labels. The scene is the same composition scaled to the 400px band
+   (slice crops ~5px off each side), so the hotspot percentages hold; only
+   the card shrinks so it still clears the label text.
+   ------------------------------------------------------------------------ */
+@media (max-width: 899px) {
+  .pdp-story__split { min-height: 0; }
+  .pdp-story__copy { padding-block: var(--sp-8); }
+  .pdp-story__badges { gap: 0 var(--sp-2); max-width: none; }
+  .pdp-story__badge { gap: var(--sp-3); min-height: 52px; }
+  .pdp-story__medal { --pdp-medallion: 40px; }
+  .pdp-story__medal > svg { width: 20px; height: 20px; }
+  .pdp-story__visual {
+    min-height: 0;
+    height: 400px;
+    --pdp-story-card-top: var(--sp-3);
+    --pdp-story-card-left: var(--sp-5);
+  }
+  /* Tight enough to clear the label's N° line below it. */
+  .pdp-story__card {
+    width: min(224px, calc(100% - 2 * var(--sp-5)));
+    padding: var(--sp-3);
+    gap: var(--sp-2);
+  }
+  .pdp-story__cap { padding-bottom: var(--sp-2); line-height: 1.2; }
+  .pdp-story__pack { filter: drop-shadow(10px 14px 12px rgba(11, 31, 58, .22)); }
+}

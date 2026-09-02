@@ -1,0 +1,707 @@
+/* ==========================================================================
+   ITP — PDP CHROME
+   Head (promo band + floating pill nav + mobile sheet) and foot (edge-to-edge
+   marquee, sticky bottom buy bar, dark footer).
+
+   Organimo counterparts, measured off the captures in ref/organimo/:
+
+     promo band     top 62px of desktop-1440-00.png. Full bleed, one centred
+                    micro-label with a 22px hairline glyph, a left-to-right
+                    tonal wash, hairline at the bottom. 44px at 390
+                    (mobile-390-00.png).
+     pill nav       row centred on y=100, i.e. 62 + 38. The 46px-tall current
+                    pill measured x 48 -> 135, so it starts exactly on the
+                    46.65px container gutter. The row has NO ground of its own:
+                    it floats over the section below, which is why the nav is
+                    absolute here and contributes no flow height.
+     wordmark       dead centre of the viewport, uppercase, wide tracking.
+     right cluster  text link, outline pill, 46px circular cart with a small
+                    filled count badge pinned to its top-right corner.
+     buy bar        62px, white, pinned to the bottom edge of every slice,
+                    full bleed, 1px full-strength ink hairline on top:
+                    wordmark left, name + price centre, one pill CTA right.
+                    Stacks name over price at 390 (mobile-390-01.png).
+     footer         desktop-1440-07.png: a black display marquee band, then a
+                    near-black footer with a centred wordmark, an uppercase
+                    micro-link row and the legal notice.
+
+   Two custom properties are published on :root because the section BELOW the
+   nav has to reserve the height the floating nav does not occupy, and a
+   measurement can only be shared through the cascade. Nothing else in this
+   file leaves the .pdp-chrome / .pdp-chrome-foot scopes.
+
+   Owner: chrome.
+   ========================================================================== */
+
+:root {
+  --pdp-promo-h: 44px;   /* compact one-line utility band */
+  --pdp-nav-h:   64px;   /* quiet utility row below the band */
+}
+
+@media (max-width: 899px) {
+  :root {
+    --pdp-promo-h: 44px;
+    --pdp-nav-h:   56px;
+  }
+}
+
+/* ==========================================================================
+   HEAD
+   ========================================================================== */
+
+/* Only the promo band takes height. The nav is absolute against this box, so
+   it floats over the hero exactly as organimo's does. */
+.pdp-chrome {
+  position: relative;
+  z-index: 20;
+}
+
+/* The chrome preview harness assembles head + foot with nothing between
+   them, so there is no hero for the nav to float over and it would land on
+   the marquee band. When <main> holds no section, the chrome reserves the
+   nav height itself. On every real page main has children and this does not
+   apply. */
+.pdp-chrome:not(:has(+ main > *)) {
+  padding-bottom: var(--pdp-nav-h);
+}
+
+/* ------------------------------------------------------- 1 · PROMO BAND */
+
+.pdp-chrome__promo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--pdp-promo-h);
+  margin: 0;
+  padding-inline: var(--pdp-gutter);
+  background: linear-gradient(90deg, var(--ivory-bright) 0%, var(--ivory-sunk) 100%);
+  border-bottom: 1px solid var(--pdp-line);
+  color: var(--ink);
+  font-weight: var(--w-bold);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.pdp-chrome__promo > span {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.pdp-chrome__promo-glyph {
+  flex: none;
+  color: var(--ink);
+}
+
+/* -------------------------------------------------- 2 · FLOATING PILL NAV */
+
+.pdp-chrome__head {
+  position: absolute;
+  inset-inline: 0;
+  top: var(--pdp-promo-h);
+  z-index: 30;
+}
+
+/* Three tracks so the wordmark lands on the viewport centre whatever the
+   nav and the cluster weigh. The burger and the nav share track 1; exactly
+   one of them is displayed at any width. */
+.pdp-chrome__row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-4);
+  min-height: var(--pdp-nav-h);
+}
+
+.pdp-chrome__nav {
+  grid-column: 1;
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* The source is emitted twice so the mobile sheet retains every route. On
+   desktop only the first two links stay beside the mark; the cluster keeps
+   its useful analysis, institute and cart actions without a second directory. */
+.pdp-chrome__nav a[data-nav-i]:not([data-nav-i="0"], [data-nav-i="1"]),
+.pdp-chrome__cluster a[data-nav-i] { display: none; }
+
+
+.pdp-chrome__pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--pdp-micro);
+  font-weight: var(--w-semi);
+  letter-spacing: -.01em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+}
+
+.pdp-chrome__pill:hover { background: rgba(255, 255, 255, .55); }
+
+/* The current page is the one filled pill; every sibling stays bare. The
+   hero behind it is a near-white wash, so the fill alone is a ~2% step and
+   the pill takes the hairline as well — the same line the outline pill and
+   the cart circle wear, so it stays one system.
+   No shadow: organimo's white pill has none, and an attribute-selector
+   box-shadow here would out-specify the :focus-visible ring and leave the
+   current pill with no visible focus state. */
+.pdp-chrome__nav a[aria-current="page"] {
+  background: var(--ivory-white);
+  border-color: var(--pdp-line);
+}
+
+/* The outline pill in the right cluster keeps the full-strength hairline
+   and the tighter padding so the cluster stays short. */
+.pdp-chrome__pill--outline {
+  padding-inline: 18px;
+  border-color: var(--pdp-line);
+}
+.pdp-chrome__pill--outline:hover { background: var(--ivory-white); }
+
+/* ------------------------------------------------------------ 3 · WORDMARK */
+
+.pdp-chrome__mark {
+  grid-column: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: var(--w-extra);
+  letter-spacing: .14em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pdp-chrome__mark > svg { flex: none; }
+
+/* The one place the formula colour enters the chrome: the dot inside the
+   hexagon, so the header carries the page's identity without a second hue. */
+.pdp-chrome__mark-dot { fill: var(--fc, var(--cyan-deep)); }
+
+.pdp-chrome__mark-sep {
+  color: var(--ink-faint);
+  letter-spacing: 0;
+}
+
+.pdp-chrome__mark-itp,
+.pdp-chrome__mark-line { color: var(--ink); }
+
+/* -------------------------------------------------------- 4 · RIGHT CLUSTER */
+
+/* The compact cluster keeps analysis, institute and cart controls together,
+   with enough air to balance the two utility links on the left. */
+.pdp-chrome__cluster {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pdp-chrome__text {
+  padding-inline: 6px;
+  color: var(--ink);
+  font-size: var(--pdp-micro);
+  font-weight: var(--w-semi);
+  letter-spacing: -.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.pdp-chrome__text:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+.pdp-chrome__cart {
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--pdp-line);
+  border-radius: 50%;
+  background: var(--ivory-white);
+  color: var(--ink);
+  text-decoration: none;
+}
+.pdp-chrome__cart:hover { background: var(--ivory-sunk); }
+
+.pdp-chrome__badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding-inline: 5px;
+  border: 1px solid var(--ivory-white);
+  border-radius: var(--r-pill);
+  background: var(--navy-900);
+  color: var(--on-navy);
+  font-size: 0.625rem;
+  font-weight: var(--w-bold);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------- 5 · BURGER */
+
+.pdp-chrome__burger {
+  grid-column: 1;
+  justify-self: start;
+  display: none;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--pdp-line);
+  border-radius: 50%;
+  background: var(--ivory-white);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------- 6 · MOBILE SHEET */
+
+/* scripts/chrome.js toggles .is-open on #itp-menu-panel and nothing else, so
+   the whole open state is one class swap. The sheet sits inside the absolute
+   header, which makes it a full-width overlay without a second stacking
+   context. */
+.pdp-chrome__panel { display: none; }
+.pdp-chrome__panel.is-open { display: block; }
+
+.pdp-chrome__panel-in {
+  display: grid;
+  gap: var(--sp-1);
+  padding-block: var(--sp-4) var(--sp-6);
+  background: var(--ivory-white);
+  border-block: 1px solid var(--pdp-line);
+}
+
+.pdp-chrome__panel-in a:not(.pdp-btn) {
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 1.0625rem;
+  font-weight: var(--w-semi);
+  letter-spacing: var(--ls-head);
+  text-decoration: none;
+}
+
+.pdp-chrome__panel-in .pdp-btn { margin-top: var(--sp-4); }
+
+.pdp-chrome :focus-visible { border-radius: var(--r-pill); }
+.pdp-chrome__panel-in a:not(.pdp-btn):focus-visible { border-radius: var(--r-sm); }
+
+/* ------------------------------------------------------- 7 · NARROW WIDTHS */
+
+/* The mark and the compact controls remain centred below 1280; the full
+   directory is still present in the menu and footer instead of crowding the
+   header. */
+@media (max-width: 1279px) {
+  .pdp-chrome__cluster a[data-nav-i] { display: none; }
+  .pdp-chrome__pill { padding-inline: 14px; }
+}
+
+@media (max-width: 899px) {
+  .pdp-chrome__burger { display: inline-grid; }
+  .pdp-chrome__nav,
+  .pdp-chrome__hide-m { display: none; }
+
+  /* The utility stays compact but may wrap to two complete lines on a narrow
+     screen; unlike the old marquee it never clips a message mid-word. */
+  .pdp-chrome__promo {
+    gap: 8px;
+    padding-inline: 12px;
+    font-size: 0.625rem;
+    letter-spacing: -.02em;
+    line-height: 1.25;
+    text-align: center;
+    white-space: normal;
+  }
+  .pdp-chrome__promo > span {
+    max-width: none;
+    white-space: normal;
+  }
+  .pdp-chrome__promo-glyph { width: 16px; height: 16px; }
+
+  .pdp-chrome__row { gap: var(--sp-2); }
+  .pdp-chrome__mark { font-size: 0.8125rem; letter-spacing: .12em; }
+  .pdp-chrome__burger,
+  .pdp-chrome__cart { width: 40px; height: 40px; }
+}
+
+/* ----------------------------------------------------------- 8 · SLOGAN */
+
+/* The formula names remain in the footer directory below. This single display
+   line keeps the closing band memorable without a competing clipped marquee. */
+.pdp-chrome-foot__slogan {
+  margin: 0;
+  padding-block: clamp(20px, 3vw, 36px) clamp(24px, 3.5vw, 44px);
+  color: var(--on-navy);
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
+  font-weight: var(--w-extra);
+  letter-spacing: -.055em;
+  line-height: .92;
+  text-align: center;
+}
+
+.pdp-chrome-foot__slogan-accent { color: var(--fc, var(--cyan)); }
+
+
+/* Above the burger breakpoint the sheet can never be visible, even if the
+   viewport grew while it was open (chrome.js only auto-closes above 1080). */
+@media (min-width: 900px) {
+  .pdp-chrome__panel,
+  .pdp-chrome__panel.is-open { display: none; }
+}
+
+/* ==========================================================================
+   FOOT
+   ========================================================================== */
+
+.pdp-chrome-foot { position: relative; }
+
+/* On the store index the buy bar is not emitted, so the 62px .pdp reserves
+   at the bottom of the page would show as a bare ivory strip under the dark
+   footer. The footer takes that strip back. */
+.pdp-chrome-foot--nobar { margin-bottom: calc(-1 * var(--pdp-bar-h)); }
+
+
+/* -------------------------------------------------------- 9 · STICKY BAR */
+
+.pdp-chrome-foot__bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  height: var(--pdp-bar-h);
+  background: var(--ivory-white);
+  border-top: 1px solid var(--pdp-line);
+}
+
+.pdp-chrome-foot__bar-in {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-5);
+  height: 100%;
+}
+
+.pdp-chrome-foot__bar-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: var(--w-extra);
+  letter-spacing: .14em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pdp-chrome-foot__bar-dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--fc, var(--cyan-deep));
+}
+
+.pdp-chrome-foot__bar-mid {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+
+.pdp-chrome-foot__bar-name {
+  font-size: 0.9375rem;
+  font-weight: var(--w-semi);
+  letter-spacing: var(--ls-head);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.pdp-chrome-foot__bar-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Both documented prices, both in mono, neither abbreviated. */
+.pdp-chrome-foot__bar-prices .mono {
+  color: var(--ink);
+  font-weight: var(--w-bold);
+  letter-spacing: -.02em;
+}
+
+.pdp-chrome-foot__bar-tag {
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--pdp-micro-sm);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.pdp-chrome-foot__bar-sep { color: var(--ink-faint); letter-spacing: 0; }
+
+.pdp-chrome-foot__bar-cta {
+  justify-self: end;
+  min-height: 40px;
+  padding: 12px 24px;
+  white-space: nowrap;
+}
+
+@media (max-width: 899px) {
+  /* 62px is a hard number: .pdp reserves exactly that much, so the bar keeps
+     its height and the two lines tighten instead. Name over price on the
+     left, the single CTA on the right, as mobile-390-01.png does. */
+  .pdp-chrome-foot__bar-in {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--sp-3);
+  }
+  .pdp-chrome-foot__bar-mark { display: none; }
+
+  .pdp-chrome-foot__bar-mid {
+    display: grid;
+    justify-items: start;
+    justify-content: start;
+    gap: 3px;
+  }
+  .pdp-chrome-foot__bar-name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pdp-chrome-foot__bar-prices { font-size: 0.6875rem; gap: 5px; }
+  /* The two word labels do not fit at 390. The prices themselves never move. */
+  .pdp-chrome-foot__bar-tag { display: none; }
+
+  .pdp-chrome-foot__bar-cta {
+    min-height: 38px;
+    padding: 11px 16px;
+    font-size: var(--pdp-micro-sm);
+  }
+}
+
+/* ---------------------------------------------------------- 10 · FOOTER */
+
+.pdp-chrome-foot__foot {
+  padding-block: clamp(44px, 6vw, 88px) clamp(28px, 4vw, 48px);
+  background: var(--navy-950);
+  color: var(--on-navy-soft);
+  border-top: 1px solid var(--pdp-line);
+}
+
+.pdp-chrome-foot__inner {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+}
+
+.pdp-chrome-foot__identity {
+  display: grid;
+  gap: clamp(20px, 2.5vw, 32px);
+  justify-items: center;
+}
+
+.pdp-chrome-foot__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--on-navy);
+  font-size: 1.0625rem;
+  font-weight: var(--w-extra);
+  letter-spacing: .18em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.pdp-chrome-foot__mark > svg { flex: none; }
+.pdp-chrome-foot__mark-dot { fill: var(--fc, var(--cyan)); }
+.pdp-chrome-foot__mark-sep { color: var(--on-navy-faint); letter-spacing: 0; }
+
+/* The complete directory remains intact, but the links read as one quiet
+   band with a single pair of rules instead of three boxed information panels. */
+.pdp-chrome-foot__cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  column-gap: clamp(18px, 3vw, 44px);
+  padding-block: clamp(20px, 2.4vw, 32px);
+  border-block: 1px solid var(--pdp-line-navy);
+}
+
+.pdp-chrome-foot__col {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+
+.pdp-chrome-foot__col-h {
+  margin: 0;
+  color: var(--on-navy-muted);
+  font-weight: var(--w-bold);
+}
+
+.pdp-chrome-foot__list {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pdp-chrome-foot__list a {
+  color: var(--on-navy-soft);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-decoration: none;
+}
+.pdp-chrome-foot__list a:hover { color: var(--cyan); }
+
+.pdp-chrome-foot__close {
+  display: grid;
+  justify-items: center;
+  gap: clamp(20px, 2.5vw, 32px);
+  width: 100%;
+}
+
+.pdp-chrome-foot__micro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-2) clamp(16px, 2.5vw, 36px);
+  width: 100%;
+}
+
+.pdp-chrome-foot__micro a {
+  color: var(--on-navy-muted);
+  font-weight: var(--w-bold);
+  text-decoration: none;
+}
+.pdp-chrome-foot__micro a:hover { color: var(--cyan); }
+
+/* The mandatory notice stays prominent without becoming another left-heavy
+   block: one cyan rule and a centred measure make the close easy to scan. */
+.pdp-chrome-foot__legal {
+  max-width: 58ch;
+  margin: 0;
+  padding: 16px 20px 0;
+  border: 0;
+  border-top: 1px solid var(--cyan);
+  color: var(--on-navy);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.pdp-chrome-foot__meta {
+  display: grid;
+  gap: var(--sp-2);
+  justify-items: center;
+  width: 100%;
+  max-width: 76ch;
+  text-align: center;
+}
+
+.pdp-chrome-foot__operator {
+  margin: 0;
+  color: var(--on-navy-muted);
+  font-size: var(--pdp-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: .02em;
+}
+
+.pdp-chrome-foot__stage {
+  margin: 0;
+  color: var(--on-navy-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.pdp-chrome-foot__stage b { color: var(--on-navy); font-weight: var(--w-bold); }
+
+.pdp-chrome-foot__social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pdp-chrome-foot__social a {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--pdp-line-navy);
+  border-radius: 50%;
+  color: var(--on-navy);
+  text-decoration: none;
+  transition: border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+.pdp-chrome-foot__social a:hover { border-color: var(--cyan); color: var(--cyan); }
+.pdp-chrome-foot__social svg { display: block; }
+
+.pdp-chrome-foot__foot :focus-visible { border-radius: var(--r-sm); }
+
+@media (max-width: 899px) {
+  .pdp-chrome-foot__foot { padding-block: 44px 32px; }
+  .pdp-chrome-foot__inner { gap: 32px; }
+  .pdp-chrome-foot__slogan {
+    padding-block: 16px 28px;
+    font-size: clamp(2.4rem, 11vw, 3.5rem);
+  }
+  .pdp-chrome-foot__identity { gap: 20px; }
+  .pdp-chrome-foot__mark { font-size: 0.9375rem; letter-spacing: .14em; }
+
+  .pdp-chrome-foot__cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+    padding-block: 12px;
+  }
+  .pdp-chrome-foot__col {
+    gap: 10px;
+    padding-block: 16px;
+  }
+  .pdp-chrome-foot__col:nth-child(3) {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--pdp-line-navy);
+  }
+  .pdp-chrome-foot__list { gap: 6px; }
+  .pdp-chrome-foot__list a { font-size: 0.8125rem; line-height: 1.35; }
+
+  .pdp-chrome-foot__close { gap: 20px; }
+  .pdp-chrome-foot__micro { gap: 8px 14px; }
+  .pdp-chrome-foot__legal {
+    max-width: 34ch;
+    padding: 14px 12px 0;
+    font-size: 0.8125rem;
+  }
+  .pdp-chrome-foot__meta { gap: 8px; }
+  .pdp-chrome-foot__stage { max-width: 38ch; font-size: 0.6875rem; }
+  .pdp-chrome-foot__social a { width: 30px; height: 30px; }
+}

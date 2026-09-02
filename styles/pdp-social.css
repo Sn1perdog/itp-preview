@@ -1,0 +1,380 @@
+/* ==========================================================================
+   ITP — PDP SOCIAL
+   Three blocks, all owned by `social`: the expert voices carousel, the row of
+   the three other formulas, and the closing band.
+
+   Organimo counterparts and what was measured off them:
+
+     VOICES · ref/organimo/desktop-1440-04.png + -05.png
+       headline         56 / 61.6 / -0.05em, centred, in its own band above;
+                        ours is demoted to the mono eyebrow row so the quote
+                        is the band's only display type
+       avatar cluster   three overlapping circles, centres on one line; ours
+                        carry the voices' numerals and double as tabs
+       quote            37.3 / 42 / 600 on a 692px measure, 6–12 lines; ours
+                        are 58–110 characters, so they take the 56px step on
+                        a 16/32 measure to reach the same mass
+       attribution      13.06 uppercase .02em, ~30px under the quote
+       prev / next      two 40px circles, 14px apart, ~68px lower  (.pdp-round--lg)
+
+     OTHERS · ref/organimo/desktop-1440-06.png
+       row              full bleed, three equal columns, split by 1px ink
+                        vertical hairlines running the full card height
+       card head        pill at the top, then a 22.4 / 600 title
+       card field       dimmed image filling the card, a pill sitting on it at
+                        the bottom left with a circular chevron inside it
+
+     CLOSE · ref/organimo/desktop-1440-07.png
+       band             full bleed, tall, one centred display line, one pill
+
+   Our divergences are documented in mockups/parts/social.html: no
+   photographs, role-only attribution, the makieta chip, the packshot on a
+   formula-tinted field, and a cyan hairline constellation instead of their
+   cloud render. Mobile-first; every rule scoped under .pdp-social.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1 · EXPERT VOICES
+   -------------------------------------------------------------------------- */
+
+.pdp-social__voices {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+/* The band's title lives in the mono eyebrow row with the makieta chip,
+   organimo's `HELP US TO ⟨REDUCE WASTE⟩` device, so nothing but the quote
+   is set at display size between the hairlines. */
+.pdp-social__eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px var(--sp-2);
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+/* The avatar slot. Three hairline circles on one centre line, overlapping
+   like organimo's photographs, but carrying something real instead of an
+   empty glyph: the numeral of each voice, in mono. The circle is the tab
+   for its quote; the one on screen takes the formula tint. Every circle is
+   the same size so cycling never moves the layout. */
+.pdp-social__avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(28px, 2.5vw, 36px);
+}
+
+.pdp-social__avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: clamp(64px, 5.83vw, 84px);
+  height: clamp(64px, 5.83vw, 84px);
+  padding: 0;
+  border: 1px solid var(--pdp-line);
+  border-radius: 50%;
+  background: var(--ivory-white);
+  color: var(--ink-muted);
+  font-size: var(--pdp-micro);
+  font-weight: 700;
+  letter-spacing: .02em;
+  cursor: pointer;
+}
+
+.pdp-social__avatar + .pdp-social__avatar { margin-left: clamp(-12px, -.83vw, -8px); }
+
+.pdp-social__avatar--on {
+  position: relative;
+  z-index: 1;
+  background: color-mix(in srgb, var(--fc, var(--cyan)) 18%, var(--ivory-white));
+  color: var(--ink);
+}
+
+.pdp-social__avatar:hover { color: var(--ink); }
+
+.pdp-social__quotes {
+  width: 100%;
+  margin-top: clamp(28px, 2.78vw, 40px);
+}
+
+/* Live mode, set by the section's own script. Only the quote on screen is in
+   flow, so it sits 40px under the circles and the nav 52px under it whatever
+   its length — organimo's own band grows and shrinks the same way as its
+   quotes cycle. Before the script runs the [hidden] attribute does the same
+   job. */
+.pdp-social__quotes[data-social-live] > .pdp-social__quote { display: none; }
+.pdp-social__quotes[data-social-live] > .pdp-social__quote--on { display: block; }
+
+.pdp-social__quote { margin: 0; }
+
+/* The oversized quote is the device and the only display type in the band.
+   Organimo's testimonials run 100–300 words at 37.3px, six to twelve lines
+   on a 692px measure. Ours are frozen at 58–110 characters and may not be
+   lengthened, so the same mass comes from the section step instead: 56px,
+   weight 600, the H2 leading, on the same 16/32 measure. */
+.pdp-social__q {
+  margin: 0;
+  font-size: var(--pdp-h2);
+  font-weight: var(--w-semi);
+  letter-spacing: var(--pdp-ls-head);
+  line-height: var(--pdp-lh-h2);
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.pdp-social__q > p { margin: 0; }
+
+/* Polish quotation marks, drawn by the stylesheet so no sentence in the data
+   is altered. */
+.pdp-social__q > p::before { content: "\201E"; }
+.pdp-social__q > p::after  { content: "\201D"; }
+
+/* Role only. No name, no institution, no rating. 30px under the quote, as
+   organimo sets it, so it reads as the quote's signature. */
+.pdp-social__role {
+  margin-top: clamp(22px, 2.08vw, 30px);
+  color: var(--ink);
+}
+
+.pdp-social__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  margin-top: clamp(32px, 3.61vw, 52px);
+}
+
+.pdp-social__count {
+  margin: 0;
+  min-width: 5em;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   2 · THE OTHER THREE FORMULAS
+   Organimo's news row. Stacked at 390 with horizontal hairlines, three equal
+   columns split by vertical hairlines from 900 up. The first card never draws
+   a top rule: the section above already ends in one.
+   -------------------------------------------------------------------------- */
+
+.pdp-social__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.pdp-social__card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pdp-social__card + .pdp-social__card { border-top: 1px solid var(--pdp-line); }
+
+.pdp-social__card-head {
+  display: grid;
+  justify-items: start;
+  gap: var(--sp-4);
+  padding: clamp(24px, 2.36vw, 34px) clamp(20px, 2.36vw, 34px) clamp(20px, 1.94vw, 28px);
+}
+
+.pdp-social__card-n { margin: 0; }
+
+/* Their date pill sits in the same slot; ours carries the formula index and
+   takes the formula colour so the three cards are told apart at a glance. */
+.pdp-social__card-n > .pill {
+  border-color: var(--fc);
+  color: var(--fc);
+}
+
+.pdp-social__card-t {
+  margin: 0;
+  max-width: 18ch;
+}
+
+.pdp-social__card-tag {
+  margin: 0;
+  color: var(--ink-muted);
+  max-width: 30ch;
+}
+
+/* The field their photograph fills: hairline top, a wash of the formula
+   colour, the packshot centred on it, the pill sitting at the bottom left. */
+.pdp-social__card-media {
+  position: relative;
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: clamp(240px, 20.8vw, 300px);
+  padding: clamp(20px, 2.36vw, 34px);
+  border-top: 1px solid var(--pdp-line);
+  background: color-mix(in srgb, var(--fc) 12%, var(--ivory-white));
+  overflow: hidden;
+}
+
+/* No shadow: on this page depth is drawn with hairlines and flat fields only,
+   the same discipline organimo keeps. */
+.pdp-social__pack {
+  width: auto;
+  height: clamp(168px, 16.1vw, 232px);
+}
+
+.pdp-social__card-cta {
+  position: absolute;
+  left: clamp(20px, 2.36vw, 34px);
+  bottom: clamp(20px, 2.36vw, 34px);
+  padding-right: 6px;
+}
+
+/* The circular chevron organimo tucks inside the pill. */
+.pdp-social__chev {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--navy-900);
+  color: var(--on-navy);
+}
+
+.pdp-social__card-cta:hover { background: var(--ivory-white); }
+.pdp-social__card-cta:hover .pdp-social__chev { background: var(--fc); color: var(--navy-900); }
+
+/* --------------------------------------------------------------------------
+   3 · CLOSING BAND
+   Their pink cloud render, rebuilt in ink and cyan: a tall ivory field with a
+   hairline constellation behind one centred display line, the two documented
+   routes, both documented prices in mono, and the legal line.
+   -------------------------------------------------------------------------- */
+
+.pdp-social--close {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(64px, 10.37vw, 149.29px) clamp(56px, 6.48vw, 93.3px);
+}
+
+.pdp-social__sky {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--cyan);
+  opacity: .42;
+  pointer-events: none;
+}
+
+.pdp-social__close-in { position: relative; }
+
+.pdp-social__close-copy {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.pdp-social__close-eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px var(--sp-2);
+  margin: 0 0 var(--sp-6);
+  color: var(--ink-muted);
+}
+
+.pdp-social__close-n { color: var(--fc, var(--cyan-deep)); }
+
+/* The accent word `spersonalizowana` cannot break. At 390 the display step
+   sets it wider than the 350px column, so below 900 the size is capped by
+   the viewport instead: 9.1vw is 35.5px at 390, where the word measures
+   under 300px and clears both 20px gutters. */
+.pdp-social--close .t-h1 {
+  margin: 0;
+  max-width: min(15ch, 100%);
+}
+
+@media (max-width: 899px) {
+  .pdp-social--close .t-h1 { font-size: min(var(--pdp-h1), 9.1vw); }
+}
+
+.pdp-social__routes {
+  display: grid;
+  gap: var(--sp-8);
+  justify-items: center;
+  width: 100%;
+  margin-top: clamp(36px, 3.33vw, 48px);
+}
+
+.pdp-social__route {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-4);
+}
+
+.pdp-social__route > .pdp-btn { width: 100%; }
+
+.pdp-social__route-meta {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  margin: 0;
+}
+
+/* Both prices exactly as documented: 249 zł and 179 zł/szt., in mono, never
+   rounded, never with a struck-through original. */
+.pdp-social__price {
+  font-size: 1.0625rem;
+  font-weight: var(--w-bold);
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+
+.pdp-social__route-sub { color: var(--ink-muted); }
+
+/* Legible, not a whisper — it is a legal requirement. The token's cyan rule
+   only reads as deliberate against a left-aligned block, so the notice keeps
+   its own alignment inside the centred column. */
+.pdp-social__legal {
+  margin: clamp(32px, 2.78vw, 40px) 0 0;
+  max-width: 60ch;
+  font-size: .875rem;
+  text-align: left;
+  color: var(--ink-2);
+}
+
+/* --------------------------------------------------------------------------
+   FOCUS
+   The global :focus-visible ring rounds to --r-sm, which would square off a
+   circle and a pill. Restore the real shape.
+   -------------------------------------------------------------------------- */
+
+.pdp-social .pdp-round:focus-visible { border-radius: 50%; }
+.pdp-social .pdp-btn:focus-visible,
+.pdp-social a:focus-visible { border-radius: var(--r-pill); }
+
+/* --------------------------------------------------------------------------
+   FROM 900 UP
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  .pdp-social__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .pdp-social__card + .pdp-social__card {
+    border-top: 0;
+    border-left: 1px solid var(--pdp-line);
+  }
+
+  .pdp-social__routes {
+    grid-auto-flow: column;
+    justify-content: center;
+    gap: var(--sp-7);
+  }
+
+  .pdp-social__route > .pdp-btn { width: auto; }
+}

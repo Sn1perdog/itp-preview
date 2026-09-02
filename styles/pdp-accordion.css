@@ -1,0 +1,397 @@
+/* ==========================================================================
+   ITP — PDP ACCORDION STACK
+   Korzyści / Skład i dawki / FAQ.
+
+   Organimo counterparts: the three closed rows in
+   ref/organimo/desktop-1440-02.png and desktop-1440-h03.png, the benefit
+   grid in desktop-open-02/03, the `Read more` clamp in desktop-open-04/08
+   and the question list in desktop-open-09. Measured off their live DOM
+   (ref/organimo/spec.json `accBtn`, `accIcon`) and reproduced:
+
+     row button   w 1440, full bleed, background transparent, radius 0
+                  37.3214px / 600 / lh 41.9866 (= --pdp-xl, --pdp-lh-xl)
+                  padding 23.3259px top, 27.991px bottom  -> .625em / .75em
+                  title centred, a small arrow after it, rotated when open
+     row hairline 1px solid ink at full strength above and below
+     medallion    112 x 112, radius 50 %, recessed ground  (.medallion)
+     benefit grid two 13/32 columns at offsets 2 and 17, row gap 40-60px
+     body copy    14.93 / 22.39 -> ours 15 / 22.5, paragraphs one line apart
+
+   The statement section above draws the hairline they share (its own
+   `.pdp-sec` border-bottom), so the first row here has NO border-top: only
+   rows two and three carry one. The last row's rule is this section's
+   `.pdp-sec` border-bottom. Exactly one hairline at every seam.
+
+   Every rule is scoped under .pdp-acc. Owner: accordion.
+   ========================================================================== */
+
+.pdp-acc {
+  /* One number governs the interior: the body line-height. Paragraph gaps
+     and table row rhythm are multiples of it, so every column of copy in
+     the three panels sits on the same 22.5px baseline grid. */
+  --acc-line: 22.5px;
+  /* Interior separators. Organimo spends the full-strength ink hairline on
+     structure only (section seams, row bands) and draws nothing at that
+     weight inside an open panel. Every table row and FAQ question here
+     takes this demoted rule instead: the same ink at a fifth of its
+     strength, so the seams stay the loudest line on the page. */
+  --acc-rule: color-mix(in srgb, var(--pdp-line) 18%, transparent);
+}
+
+/* .pdp-acc__panel and .pdp-acc__a set a display value, which would defeat
+   the `hidden` attribute the toggles rely on. */
+.pdp-acc [hidden] { display: none; }
+
+/* The medallion sprite: present, addressable, zero-sized. */
+.pdp-acc__sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   ROW · the full-bleed header
+   ========================================================================== */
+
+.pdp-acc__row + .pdp-acc__row {
+  border-top: 1px solid var(--pdp-line);
+}
+
+.pdp-acc__head { margin: 0; }
+
+.pdp-acc__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .18em;
+  width: 100%;
+  /* Keep the closed rows subordinate to the editorial statement: a measured
+     medium title, with size set here rather than inherited from .t-lead-xl. */
+  padding: .625em var(--pdp-gutter) .75em;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: clamp(1.5rem, 1.94vw, 1.75rem);
+  font-weight: var(--w-medium);
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-align: center;
+  cursor: pointer;
+
+}
+@media (max-width: 899px) {
+  .pdp-acc__btn {
+    font-size: clamp(1.125rem, 5.6vw, 1.375rem);
+  }
+}
+
+.pdp-acc__btn:hover { background: var(--ivory-bright); }
+
+.pdp-acc__arrow {
+  flex: none;
+  width: .5em;
+  height: .5em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--dur-2, .2s) var(--ease, ease);
+}
+
+.pdp-acc [aria-expanded="true"] .pdp-acc__arrow {
+  transform: rotate(180deg);
+}
+
+/* A full-bleed control cannot wear an outside ring without it being clipped
+   by the row above, so the focus ring is drawn inside the row. */
+.pdp-acc__btn:focus-visible,
+.pdp-acc__qbtn:focus-visible {
+  outline: 2px solid var(--cyan-deep);
+  outline-offset: -4px;
+}
+
+.pdp-acc__panel {
+  display: block;
+  padding-block: var(--pdp-sec);
+}
+
+/* The two tables and the question list run in the same 28/32 measure the
+   benefit grid uses, so every interior shares one left edge. Below 900px
+   core's grid drops every child to full width, so this resets itself. */
+.pdp-acc__inset {
+  --c: 28;
+  --o: 2;
+}
+
+/* ==========================================================================
+   1 · KORZYŚCI · the medallion grid
+   Mobile: one column of items, each medallion beside its copy. From 900px: organimo's two
+   13/32 columns at offsets 2 and 17, which is 2fr 13fr 2fr 13fr 2fr across
+   the container's 32 columns.
+   ========================================================================== */
+
+.pdp-acc__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(40px, 4vw, 58px);
+  align-items: start;
+}
+
+/* Medallion left of the copy at every width, both tops on one line.
+   Organimo keeps the side-by-side at 390 too (ref/organimo/mobile-open-02:
+   a 72px circle at the gutter, the title 30px after it); the 112px circle
+   is the desktop size and is restored at 900px. */
+.pdp-acc__ben {
+  --pdp-medallion: 72px;
+  display: grid;
+  grid-template-columns: var(--pdp-medallion) minmax(0, 1fr);
+  column-gap: 28px;
+  align-items: start;
+}
+
+.pdp-acc__med { color: var(--fc); }
+
+/* 22.4px / 600 / -0.03em, measured off organimo's item titles. Core's
+   .t-h3 carries the size and the tracking; only the weight is dialled back
+   here, for the benefit titles and for the FAQ questions alike. */
+.pdp-acc__ben-t,
+.pdp-acc__qbtn { font-weight: var(--w-semi); }
+
+.pdp-acc__ben-t { margin: 0; }
+
+.pdp-acc__sum {
+  margin: 6px 0 0;
+  font-size: var(--pdp-body);
+  line-height: var(--acc-line);
+  color: var(--ink-muted);
+}
+
+.pdp-acc__body {
+  margin-top: var(--acc-line);
+  font-size: var(--pdp-body);
+  line-height: var(--acc-line);
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.pdp-acc__body > p { margin: 0; }
+.pdp-acc__body > p + p { margin-top: var(--acc-line); }
+.pdp-acc__body .mono { font-size: .94em; color: var(--ink); }
+
+/* Collapsed shows the opening paragraph and hides the rest. Organimo clamps
+   on a line count, which works because its bodies run twelve lines and the
+   cut lands far from the end; ours are two paragraphs, so a line clamp cuts
+   a word in half and reads as a bug. Every documented benefit body is two
+   paragraphs, so hiding the second is a whole-thought disclosure: nothing
+   is ever truncated mid-sentence and the toggle always has work to do.
+   Applied by script, never by the markup. */
+.pdp-acc__body.is-clamped > p + p { display: none; }
+
+.pdp-acc__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--acc-line);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: var(--pdp-body);
+  font-weight: var(--w-semi);
+  line-height: var(--acc-line);
+  cursor: pointer;
+}
+
+.pdp-acc__more:focus-visible {
+  outline: 0;
+  box-shadow: var(--ring);
+  border-radius: var(--r-pill);
+}
+
+.pdp-acc__pm {
+  width: 28px;
+  height: 28px;
+}
+
+.pdp-acc__pm > svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+/* Expanded reads as a minus: the bar stays, the stem goes. */
+.pdp-acc [aria-expanded="true"] .pdp-acc__pm-v { display: none; }
+
+@media (min-width: 900px) {
+  .pdp-acc__grid {
+    grid-template-columns: 2fr 13fr 2fr 13fr 2fr;
+  }
+  .pdp-acc__ben:nth-child(odd)  { grid-column: 2; }
+  .pdp-acc__ben:nth-child(even) { grid-column: 4; }
+
+  /* Theirs sits at x 141 with the title at x 291, a 40px channel after
+     the 112px circle. */
+  .pdp-acc__ben {
+    --pdp-medallion: 112px;
+    column-gap: 40px;
+  }
+}
+
+/* ==========================================================================
+   2 · SKŁAD I DAWKI · two hairline tables
+   Doses print exactly as the frozen data gives them, `etykieta*` included.
+   Mobile-first: each row is a small block; from 700px it is a real table.
+   ========================================================================== */
+
+.pdp-acc__tbl {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.pdp-acc__tbl tr {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--sp-4);
+  row-gap: 2px;
+  align-items: baseline;
+  padding-block: 14px;
+  border-top: 1px solid var(--acc-rule);
+}
+
+.pdp-acc__tbl tr:last-child { border-bottom: 1px solid var(--acc-rule); }
+
+.pdp-acc__tbl th,
+.pdp-acc__tbl td {
+  padding: 0;
+  border: 0;
+  font-size: var(--pdp-body);
+  line-height: var(--acc-line);
+  font-weight: var(--w-regular);
+  text-align: left;
+  color: var(--ink);
+}
+
+.pdp-acc__tbl th {
+  font-weight: var(--w-semi);
+  letter-spacing: -.01em;
+}
+
+/* The frozen numbers are never the smallest type in the panel: the mono
+   value sits at the full 15px body size, same as the label beside it. */
+.pdp-acc__tbl td.mono {
+  font-size: var(--pdp-body);
+  letter-spacing: -.01em;
+}
+
+.pdp-acc__dose { justify-self: end; white-space: nowrap; }
+.pdp-acc__role { color: var(--ink-muted); }
+
+/* On one narrow column the role gets its own line under name and dose. */
+.pdp-acc__tbl--dose .pdp-acc__role { grid-column: 1 / -1; }
+.pdp-acc__tbl--spec tr { grid-template-columns: minmax(0, 1fr); }
+
+.pdp-acc__note {
+  margin: var(--sp-4) 0 0;
+  max-width: 62ch;
+  font-size: var(--t-caption);
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.pdp-acc__tbl--spec { margin-top: clamp(40px, 3.6vw, 52px); }
+
+@media (min-width: 700px) {
+  .pdp-acc__tbl { display: table; }
+  .pdp-acc__tbl tbody { display: table-row-group; }
+
+  .pdp-acc__tbl tr {
+    display: table-row;
+    padding-block: 0;
+    border-top: 0;
+  }
+  .pdp-acc__tbl tr:last-child { border-bottom: 0; }
+
+  .pdp-acc__tbl th,
+  .pdp-acc__tbl td {
+    display: table-cell;
+    padding: 17px var(--sp-6) 17px 0;
+    border-top: 1px solid var(--acc-rule);
+    vertical-align: baseline;
+  }
+  .pdp-acc__tbl tr:last-child > * { border-bottom: 1px solid var(--acc-rule); }
+  .pdp-acc__tbl th:last-child,
+  .pdp-acc__tbl td:last-child { padding-right: 0; }
+
+  /* The two stacked tables are one grid: both label columns take the same
+     share of the same inset width, so the value column starts at one x
+     in both (306px label -> values at x 437 at 1440). */
+  .pdp-acc__tbl th { width: 26%; }
+  .pdp-acc__dose { width: 14%; justify-self: auto; }
+}
+
+/* ==========================================================================
+   3 · FAQ · nested hairline rows
+   ========================================================================== */
+
+.pdp-acc__q { border-top: 1px solid var(--acc-rule); }
+.pdp-acc__q:last-child { border-bottom: 1px solid var(--acc-rule); }
+
+.pdp-acc__qh { margin: 0; }
+
+.pdp-acc__qbtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  width: 100%;
+  padding: 22px 0 24px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit; /* size and weight come from .t-h3 */
+  text-align: left;
+  cursor: pointer;
+}
+
+.pdp-acc__qbtn:focus-visible { outline-offset: -2px; }
+.pdp-acc__qbtn:hover { color: var(--ink-2); }
+
+/* The row title is 22.4px, so the shared .5em arrow would be 11px: hold it
+   at the size it has in the big rows. */
+.pdp-acc__arrow--sm {
+  width: 15px;
+  height: 15px;
+}
+
+.pdp-acc__a {
+  display: block;
+  padding: 0 0 26px;
+  max-width: 68ch;
+  font-size: var(--pdp-body);
+  line-height: var(--acc-line);
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.pdp-acc__a > p { margin: 0; }
+.pdp-acc__a > p + p { margin-top: var(--acc-line); }
+.pdp-acc__a .mono { font-size: .94em; color: var(--ink); }
+
+/* The mandatory legal line is legible, never a whisper: tokens.css gives
+   .disclaimer the cyan rule and the darker ink, and this holds it at the
+   full 15px body size instead of dropping it to 13px caption. */
+.pdp-acc__a.disclaimer {
+  padding-left: var(--sp-4);
+  font-size: var(--pdp-body);
+  line-height: var(--acc-line);
+  color: var(--ink-2);
+}

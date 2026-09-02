@@ -1,0 +1,550 @@
+/* ==========================================================================
+   ITP — PDP TECHNOLOGY BAND
+   Five blocks, in organimo's own order:
+
+     1  navy chapter      full-bleed band, one centred statement
+                          ref/organimo/desktop-1440-h05.png — theirs is a
+                          100vh photograph (measured: 1440x900, `h-100vh@lg`).
+                          Ours is built: navy ground, cyan bloom, a hairline
+                          droplet plume and the capsule it leaves. Held at
+                          max(640px, 84vh) = 756px at 1440x900.
+     2  marquee           edge-to-edge display line on the charcoal band
+                          ref/organimo/desktop-1440-03.png / -07.png.
+                          Centred so the line clips at BOTH edges.
+     3  absorption rows   full-bleed 1px ink hairline rows, mono numerals and
+                          bars proportional to the documented percentages.
+     4  two-price split   .pdp-split with the vertical hairline running gutter
+                          to gutter, ref/organimo/desktop-1440-04.png, over
+                          four hairline-separated pillar columns.
+     5  wkrótce           two quiet hairline cards. No price, no buy.
+
+   Measured values taken from core and matched here: section padding-block
+   74.64px, feature band 149.29/93.30, H2 55.98/61.58/-0.05em, body
+   14.93/22.39, micro 13.06 and 11.20, gutter 46.65px, radius 14.93px, and
+   the 1px ink hairline at full strength.
+
+   The accordion above draws its own bottom hairline, so block 1 declares no
+   border-top. Every rule is scoped under a .pdp-tech-* class. Owner: tech.
+   ========================================================================== */
+
+/* ==========================================================================
+   1 · NAVY CHAPTER
+   ========================================================================== */
+
+.pdp-tech-chapter {
+  display: grid;
+  align-content: center;
+  /* Organimo runs this band at 100vh. Ours is a chapter inside a longer
+     page, so it takes 84vh with a hard 640px floor. */
+  min-height: max(640px, 84vh);
+  overflow: hidden;
+  background:
+    /* the bloom: the plume's destination, top-right, and the one bright
+       thing on the ground. Everything left of the capsule stays clean. */
+    radial-gradient(22% 26% at 91% 17%, var(--cyan-glow), transparent 70%),
+    radial-gradient(60% 70% at 84% 34%, var(--cyan-haze), transparent 64%),
+    linear-gradient(180deg, var(--navy-950), var(--navy-900) 46%, var(--navy-950));
+}
+
+.pdp-tech-chapter__field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pdp-tech-chapter__field > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* The stage is the composition (capsule + plume) as one group. At 1440 it
+   sits in the right half, beside the copy. Narrow viewports move it under
+   the copy (see the media block at the foot). */
+.pdp-tech-chapter__stage {
+  transform-origin: 0 0;
+}
+
+/* The droplets are hairlines, not blobs: stroke only, and the stroke stays
+   1px however far the viewBox is scaled to cover the band. */
+.pdp-tech-chapter__drops circle {
+  fill: var(--cyan);
+  fill-opacity: .12;
+  stroke: var(--cyan);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The capsule is the subject: a solid --navy-800 shell, a cyan inner bloom
+   at the open end, the cap a step lighter, and a cyan hairline edge at .65
+   so it reads as an object from across the room. */
+.pdp-tech-chapter__shell {
+  fill: var(--navy-800);
+}
+.pdp-tech-chapter__glow {
+  fill: url(#tech-capsule-bloom);
+}
+.pdp-tech-chapter__bloom-a { stop-color: var(--cyan); stop-opacity: .28; }
+.pdp-tech-chapter__bloom-b { stop-color: var(--cyan); stop-opacity: 0; }
+
+.pdp-tech-chapter__cap {
+  fill: var(--navy-700);
+}
+.pdp-tech-chapter__seam {
+  stroke: var(--cyan);
+  stroke-opacity: .55;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.pdp-tech-chapter__edge {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-opacity: .65;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.pdp-tech-chapter__inner {
+  position: relative;
+}
+
+/* The copy sits in the hero copy box the buy box already uses — offset 3,
+   span 13 — on clean ground, left-aligned, the capsule to its right. */
+.pdp-tech-chapter__copy {
+  display: grid;
+  justify-items: start;
+  text-align: left;
+}
+
+.pdp-tech-chapter .pdp-tech-chapter__eyebrow {
+  margin: 0;
+  color: var(--cyan-soft);
+}
+
+.pdp-tech-chapter__title {
+  margin: var(--sp-6) 0 0;
+}
+
+.pdp-tech-chapter__lede {
+  margin: var(--sp-6) 0 0;
+  max-width: 54ch;
+}
+
+.pdp-tech-chapter__cta {
+  margin: var(--sp-8) 0 0;
+}
+
+/* ==========================================================================
+   2 · MARQUEE
+   Core gives the band and the .28em word padding at the H2 step. Organimo's
+   ribbon runs ≈150px type on a ≈200px band, 2.7× its H2; at the H2 step
+   ours read as a headline in a stripe. So the track is raised to ≥2× H2:
+   116px on a 180px band at 1440, and centred so the overflowing line is
+   cut off at both edges instead of wrapping or trailing off to the right.
+   ========================================================================== */
+
+.pdp-tech-marquee .pdp-marquee__track {
+  justify-content: center;
+  font-size: clamp(3.5rem, 8.06vw, 7.25rem);   /* 56 -> 116px */
+  padding-block: clamp(14px, 1.8vw, 26px);      /* band 137 -> 180px */
+}
+
+/* Space Mono runs wide and tall beside Inter Black, so the technical
+   parameter is pulled in to sit on the same line — same treatment as the
+   statement band's lead. Cyan marks it as the measured value. */
+.pdp-tech-marquee .mono {
+  font-weight: var(--w-bold);
+  font-size: .88em;
+  letter-spacing: -.05em;
+  word-spacing: -.3em;
+  color: var(--cyan);
+}
+
+/* The interpuncts between repeats — organimo's separator, in cyan. */
+.pdp-tech-marquee .pdp-marquee__track > span:nth-child(2n) {
+  color: var(--cyan);
+}
+
+/* ==========================================================================
+   3 · ABSORPTION NUMBERS
+   ========================================================================== */
+
+.pdp-tech-abs__head {
+  display: grid;
+  gap: var(--sp-5);
+  justify-items: start;
+}
+.pdp-tech-abs__head > * { margin: 0; }
+.pdp-tech-abs__head .t-micro { color: var(--ink-muted); }
+
+.pdp-tech-abs__table {
+  /* One source for the row template, shared by the column labels. The value
+     column is FIXED, not auto: sized to content it would be wider on the
+     `10 000 %` row than on the others, every row's bar track would differ,
+     and the four bars would no longer share one scale. */
+  --tech-abs-cols: 40px minmax(0, 420px) minmax(0, 1fr) 210px;
+  margin-top: clamp(32px, 3.3vw, 48px);
+}
+
+.pdp-tech-abs__cols {
+  display: grid;
+  grid-template-columns: var(--tech-abs-cols);
+  gap: 0 var(--sp-6);
+  margin: 0 0 var(--sp-3);
+  color: var(--ink-faint);
+}
+.pdp-tech-abs__cols > span:first-child { grid-column: 2; }
+
+.pdp-tech-abs__cols > span:last-child  {
+  grid-column: 4;
+  justify-self: end;
+  padding-inline-end: 58px;
+}
+
+.pdp-tech-abs__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--pdp-line);
+}
+.pdp-tech-abs__row { border-bottom: 1px solid var(--pdp-line); }
+
+.pdp-tech-abs__row-in {
+  display: grid;
+  grid-template-columns: var(--tech-abs-cols);
+  align-items: center;
+  gap: 0 var(--sp-6);
+  padding-block: var(--sp-6);
+}
+
+.pdp-tech-abs__n { color: var(--ink-faint); }
+
+.pdp-tech-abs__name {
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* The bar. A 1px ink outline with a cyan interior — the ITP hairline
+   data-viz voice — measured against the 10 000 % scale maximum. */
+.pdp-tech-abs__track {
+  position: relative;
+  height: 16px;
+}
+.pdp-tech-abs__track::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--line);
+}
+.pdp-tech-abs__bar {
+  display: block;
+  height: 100%;
+  border: 1px solid var(--pdp-line);
+  background: var(--cyan);
+}
+
+/* Proportional to the real figures, never normalised into a ramp. The row
+   order is frozen in scripts/pdp_data.py: EllagiSol™ 10 000 %, NADPro™
+   4 440 %, ResveraSol™ 4 330 %, CurcuSol™ 4 020 %, and 10 000 % is the
+   scale maximum — so the first bar is more than twice every other. */
+.pdp-tech-abs__row:nth-child(1) .pdp-tech-abs__bar { width: 100%; }
+.pdp-tech-abs__row:nth-child(2) .pdp-tech-abs__bar { width: 44.4%; }
+.pdp-tech-abs__row:nth-child(3) .pdp-tech-abs__bar { width: 43.3%; }
+.pdp-tech-abs__row:nth-child(4) .pdp-tech-abs__bar { width: 40.2%; }
+
+/* The percentages are the column: every one of the four right-aligns on the
+   same edge, and the multiple hangs in a reserved lane past it so a single
+   documented `100×` cannot knock the numerals out of alignment. */
+.pdp-tech-abs__val {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  padding-inline-end: 58px;
+  min-width: 12ch;
+}
+
+.pdp-tech-abs__pct {
+  font-size: clamp(1.5rem, 2.15vw, 1.94rem);   /* 24 -> 31px */
+  font-weight: var(--w-bold);
+  letter-spacing: -.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Only EllagiSol™ carries a documented multiple, so the chip marks the top
+   of the scale rather than repeating on every row. */
+.pdp-tech-abs__mult {
+  position: absolute;
+  inset-inline-end: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid var(--line-cyan);
+  border-radius: var(--r-pill);
+  padding: 3px 10px 2px;
+  font-size: var(--pdp-micro-sm);
+  font-weight: var(--w-bold);
+  letter-spacing: .02em;
+  line-height: 1.4;
+  color: var(--cyan-ink);
+  white-space: nowrap;
+}
+
+.pdp-tech-abs__note {
+  margin: var(--sp-7) 0 0;
+  max-width: 74ch;
+  font-size: var(--pdp-micro-sm);
+  line-height: 1.65;
+  color: var(--ink-muted);
+}
+
+/* ==========================================================================
+   4 · TWO PRICES
+   ========================================================================== */
+
+.pdp-tech-price__head {
+  display: grid;
+  gap: var(--sp-5);
+  justify-items: start;
+}
+.pdp-tech-price__head > * { margin: 0; }
+.pdp-tech-price__head .t-micro { color: var(--ink-muted); }
+.pdp-tech-price__lead { max-width: 64ch; }
+
+/* The split. Core draws the vertical hairline; this adds the horizontal one
+   above it, full bleed, and the column padding either side of the rule. */
+.pdp-tech-price__split {
+  margin-top: clamp(40px, 4.3vw, 62px);
+  border-top: 1px solid var(--pdp-line);
+}
+
+.pdp-tech-price__route {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  padding: clamp(32px, 3.4vw, 49px) var(--pdp-gutter);
+}
+.pdp-tech-price__route > * { margin: 0; }
+
+/* Organimo's split puts the rule at x 512 and starts the right column at
+   614 — a ~100px trough around the hairline, wider than the page gutter.
+   Below 900px the split stacks and the trough is not needed. */
+@media (min-width: 900px) {
+  .pdp-tech-price__split { --tech-trough: clamp(40px, 6.87vw, 99px); }
+  .pdp-tech-price__route { padding-inline-end: var(--tech-trough); }
+  .pdp-tech-price__route--set {
+    padding-inline: var(--tech-trough) var(--pdp-gutter);
+  }
+}
+
+.pdp-tech-price__route-label { color: var(--ink); }
+
+/* Space Mono sets a full-width word space, which at 56px opens a hole in
+   `249 zł`. Pulled in to the same measure the statement band uses. */
+.pdp-tech-price__fig {
+  margin-top: var(--sp-3);
+  font-size: clamp(2.5rem, 3.888vw, 3.499rem);  /* 40 -> 56px, the H2 step */
+  font-weight: var(--w-bold);
+  letter-spacing: -.04em;
+  word-spacing: -.28em;
+  line-height: 1;
+}
+
+/* Cyan is the personalization accent (tokens §1), and the set price is what
+   personalization buys. The open-store price stays in ink: the asymmetry
+   between 249 and 179 is the point of the section, so it is shown, not
+   softened. */
+.pdp-tech-price__route--set .pdp-tech-price__fig { color: var(--cyan-deep); }
+
+.pdp-tech-price__unit {
+  margin-top: var(--sp-2);
+  color: var(--ink-faint);
+}
+
+.pdp-tech-price__note {
+  margin-top: var(--sp-5);
+  max-width: 36ch;
+}
+
+.pdp-tech-price__cta {
+  margin-top: var(--sp-7);
+  flex-direction: column;
+  gap: 5px;
+  min-height: 0;
+  padding: 15px 32px;
+  text-align: center;
+}
+.pdp-tech-price__cta-sub {
+  font-size: var(--pdp-micro-sm);
+  font-weight: var(--w-regular);
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: .74;
+}
+
+/* The four pillars: mono numerals over hairline-separated columns. */
+.pdp-tech-price__pillars { border-top: 1px solid var(--pdp-line); }
+
+.pdp-tech-price__pillar-grid {
+  list-style: none;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pdp-tech-price__pillar {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-3);
+  padding: clamp(28px, 2.9vw, 42px) var(--sp-6);
+}
+.pdp-tech-price__pillar > * { margin: 0; }
+.pdp-tech-price__pillar + .pdp-tech-price__pillar {
+  border-left: 1px solid var(--pdp-line);
+}
+.pdp-tech-price__pillar:first-child { padding-inline-start: 0; }
+.pdp-tech-price__pillar:last-child  { padding-inline-end: 0; }
+
+.pdp-tech-price__num {
+  font-size: var(--pdp-micro);
+  font-weight: var(--w-bold);
+  letter-spacing: .04em;
+  line-height: 1;
+  color: var(--cyan-deep);
+}
+
+/* ==========================================================================
+   5 · WKRÓTCE
+   ========================================================================== */
+
+.pdp-tech-soon__head {
+  display: grid;
+  gap: var(--sp-5);
+  justify-items: start;
+  margin-bottom: clamp(32px, 3.4vw, 48px);
+}
+.pdp-tech-soon__head > * { margin: 0; }
+.pdp-tech-soon__head .t-micro { color: var(--ink-muted); }
+
+.pdp-tech-soon__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+}
+
+.pdp-tech-soon__card {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: var(--sp-7);
+  align-items: center;
+  padding: clamp(24px, 2.4vw, 34px);
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--pdp-r-md);
+}
+
+.pdp-tech-soon__pk {
+  width: 88px;
+  height: auto;
+  opacity: .78;
+}
+
+.pdp-tech-soon__body {
+  display: grid;
+  justify-items: start;
+  gap: var(--sp-3);
+}
+.pdp-tech-soon__body > * { margin: 0; }
+
+.pdp-tech-soon__chip {
+  font-size: var(--pdp-micro-sm);
+  color: var(--ink-muted);
+}
+
+/* ==========================================================================
+   NARROW VIEWPORTS — 390x844 is the second capture width.
+   ========================================================================== */
+
+@media (max-width: 899px) {
+  /* One idea per screen: copy at the top, then the capsule and its plume
+     in a 320px field pinned to the foot of the band, the bloom where the
+     plume lands. The section reserves the field's height below the copy so
+     the object is never cropped behind the text, whatever the lede length.
+     The stage is moved, not re-drawn: viewBox 1440x720 sliced into 390x320
+     scales at .444 and shows units x 281–1159, so the composition
+     (x 770–1380, y 85–480, centre 1075,283) is brought to (720, 380). */
+  .pdp-tech-chapter {
+    align-content: start;
+    min-height: 0;
+    padding-bottom: 340px;
+    background: linear-gradient(180deg, var(--navy-950), var(--navy-900) 46%, var(--navy-950));
+  }
+  .pdp-tech-chapter__field {
+    inset: auto 0 0;
+    height: 320px;
+    background:
+      radial-gradient(30% 40% at 74% 28%, var(--cyan-glow), transparent 70%),
+      radial-gradient(80% 90% at 60% 60%, var(--cyan-haze), transparent 64%);
+  }
+  .pdp-tech-chapter__stage {
+    transform: translate(-355px, 97px);
+  }
+
+  /* The row template collapses to name over value, bar beneath, and the
+     column labels go: at 390 they would cost more than they explain. */
+  .pdp-tech-abs__cols { display: none; }
+
+  .pdp-tech-abs__row-in {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: var(--sp-2) var(--sp-4);
+    padding-block: var(--sp-5);
+  }
+  .pdp-tech-abs__n    { grid-column: 1 / -1; }
+  .pdp-tech-abs__name { grid-column: 1; }
+  .pdp-tech-abs__val  { grid-column: 2; min-width: 0; }
+  .pdp-tech-abs__track {
+    grid-column: 1 / -1;
+    margin-top: var(--sp-2);
+  }
+
+  .pdp-tech-price__pillar-grid { grid-template-columns: minmax(0, 1fr); }
+  .pdp-tech-price__pillar {
+    padding-inline: 0;
+    padding-block: var(--sp-6);
+  }
+  .pdp-tech-price__pillar + .pdp-tech-price__pillar {
+    border-left: 0;
+    border-top: 1px solid var(--pdp-line);
+  }
+
+  .pdp-tech-soon__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 559px) {
+  /* The absorption figure and the ingredient name cannot share a line at
+     390: the numeral keeps the mono size and takes its own row. */
+  .pdp-tech-abs__row-in { grid-template-columns: minmax(0, 1fr); }
+  /* Stacked, the value has the row to itself, so the multiple sits beside
+     the numeral instead of hanging in a reserved lane. */
+  .pdp-tech-abs__val {
+    grid-column: 1;
+    justify-content: flex-start;
+    gap: var(--sp-3);
+    padding-inline-end: 0;
+    margin-top: var(--sp-2);
+  }
+  .pdp-tech-abs__mult {
+    position: static;
+    transform: none;
+    flex: none;
+  }
+
+  .pdp-tech-soon__card {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    gap: var(--sp-5);
+  }
+}

@@ -1,0 +1,100 @@
+/* ========================================================================
+   ITP — PDP STATEMENT BAND
+   The statement is the editorial head of the accordion stack: a mono lead-in
+   and outlined BioSNEDS™ pill, followed by one regular-weight display voice.
+   The shared bottom hairline remains the seam into the accordion rows.
+   ======================================================================== */
+
+.pdp-statement {
+  /* Keep the section spacious without turning it into a padded component. */
+  padding-block: clamp(48px, 3.889vw, 56px);
+}
+
+.pdp-statement__body {
+  /* One column in from the outer gutter, one wider column than the old card. */
+  --o: 1;
+  --c: 31;
+  display: grid;
+  gap: var(--sp-6);
+  justify-items: start;
+}
+
+/* Micro-label: lead words plus the boxed last word, on one baseline. */
+.pdp-statement__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px var(--sp-2);
+  margin: 0;
+}
+
+.pdp-statement__lead {
+  /* Full-width, five-line desktop declaration; the following accordion rows
+     remain subordinate but not footer-small. */
+  max-width: none;
+  margin: 0;
+  font-size: clamp(2.2rem, 2.59vw, 2.33rem);
+  font-weight: var(--w-semibold);
+  line-height: 1.125;
+  letter-spacing: -.04em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* The technical phrase is still a deliberate mono/tabular device, but it
+   occupies the same typographic run as the surrounding editorial sentence. */
+.pdp-statement__lead .mono {
+  font-family: var(--font-mono);
+  font-size: 1em;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: -.065em;
+  word-spacing: -.04em;
+  font-variant-ligatures: none;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  vertical-align: 0;
+}
+
+@media (max-width: 899px) {
+  .pdp-statement {
+    /* A 50px-class top/bottom rhythm keeps the hand-off to the rows visible. */
+    padding-block: 52px 48px;
+  }
+
+  .pdp-statement__body {
+    --om: 0;
+    --cm: 32;
+    gap: var(--sp-6);
+  }
+
+  .pdp-statement__label {
+    gap: 4px var(--sp-2);
+  }
+
+  .pdp-statement__label .t-micro,
+  .pdp-statement__label .pill {
+    font-size: var(--pdp-micro-sm);
+    line-height: 1.2;
+  }
+
+  .pdp-statement__label .pill {
+    padding-block: 1px;
+    padding-inline: 9px;
+  }
+
+  .pdp-statement__lead {
+    max-width: 100%;
+    font-size: clamp(1.25rem, 5.55vw, 1.375rem);
+    font-weight: var(--w-regular);
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  .pdp-statement__lead .mono {
+    font-size: .94em;
+    font-weight: var(--w-medium);
+    letter-spacing: -.055em;
+    word-spacing: -.03em;
+  }
+}

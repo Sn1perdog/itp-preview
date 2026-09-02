@@ -1,0 +1,740 @@
+/* ==========================================================================
+   ITP — PDP BUY BOX
+   Organimo counterpart: ref/organimo/desktop-1440-00.png, mobile-390-00.png,
+   mobile-390-01.png. Measured off their live DOM (ref/organimo/geometry.json):
+
+     gallery box   x 175  y 179  536 x 536   -> offset-3/32, w-13/32
+     copy box      x 735  y 179  w 512       -> offset-16/32
+     thumb strip   5 squares, 96 x 96, 14px gutters, 13px under the stage
+     hero section  ends at y 908; both columns bottom out around y 825
+     hairlines     1px solid ink at full strength, never a faint grey
+
+   The pill nav floats over this section and contributes no flow height
+   (chrome publishes --pdp-promo-h and --pdp-nav-h), so the padding-top here
+   is what puts the two column tops on organimo's y 179.
+
+   Every rule is scoped under .pdp-buybox. Owner: buybox.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   SECTION FRAME
+   Organimo's hero does not use the 74.6px section rhythm: it clears the
+   floating nav at the top and bottoms out 83px above the next hairline.
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox {
+  /* 62px promo + 117px = organimo's y 179 for both column tops. */
+  padding-block: calc(var(--pdp-nav-h, 76px) + 41px) 83px;
+  overflow: clip;
+}
+
+/* The core wash is absolutely positioned, so the content needs a layer. */
+.pdp-buybox__wash { z-index: 0; }
+
+.pdp-buybox__grid {
+  position: relative;
+  z-index: 1;
+  row-gap: var(--sp-7);
+  align-items: start;
+}
+
+/* --------------------------------------------------------------------------
+   COLUMNS
+   The gallery keeps organimo's offsets exactly. The copy column is given 16
+   columns instead of 13 and then clamped back to 13/16 = 81.25 % of that
+   track, which is the measured 512-547px measure at every width. Every row
+   keeps it, the trust line included: its 86 characters break into two
+   balanced lines rather than running into the gutter.
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox__gallery { --o: 3; --c: 13; }
+.pdp-buybox__copy    { --o: 16; --c: 16; }
+
+.pdp-buybox__copy > * { max-width: 81.25%; }
+
+/* --------------------------------------------------------------------------
+   GALLERY STAGE
+   A true square: the 13-column track is 547px at 1440 and the stage caps at
+   organimo's measured 536. Deep navy-to-charcoal field, one cyan bloom
+   around the bottle where organimo blows purple smoke, and a floor: a
+   contact shadow under the base and the bottle mirrored into it.
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox__stage {
+  position: relative;
+  width: 100%;
+  max-width: 536px;
+  aspect-ratio: 1;
+  border-radius: var(--pdp-r-md);
+  overflow: hidden;
+  /* The bloom is wider and lower than the silhouette (70 x 60 % at 50 % 60 %)
+     so it shows around the bottle, not behind it; a corner vignette keeps
+     the packshot the brightest thing in the square, and the field darkens
+     towards the floor so the reflection has something to sink into. */
+  background:
+    radial-gradient(70% 60% at 50% 60%,
+      var(--cyan-glow) 0%, var(--cyan-haze) 44%, transparent 72%),
+    radial-gradient(112% 86% at 50% 46%,
+      transparent 42%, rgba(6, 15, 31, .34) 78%, rgba(6, 15, 31, .58) 100%),
+    radial-gradient(130% 78% at 50% 2%, var(--navy-700) 0%, transparent 58%),
+    linear-gradient(180deg, transparent 74%, rgba(6, 15, 31, .45) 100%),
+    linear-gradient(168deg, var(--navy-800) 0%, var(--navy-900) 46%, var(--charcoal) 100%);
+}
+
+.pdp-buybox__view {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  padding: 26px 26px 54px;
+  z-index: 1;
+}
+.pdp-buybox__view[hidden] { display: none; }
+
+/* The bottle stands on the lower third: the content box is 426px tall at
+   1440 and the wrap fills it, so the base lands at y 456 of 536 with
+   room for the reflection to fade out under it before the dot pager. */
+.pdp-buybox__view--pack {
+  padding: 30px 26px 80px;
+  place-items: center;
+}
+
+.pdp-buybox__pack-wrap {
+  position: relative;
+  height: 100%;
+  max-width: 100%;
+}
+
+.pdp-buybox__pack {
+  display: block;
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}
+
+/* Contact shadow: the symbol's own cast shadow ends at 99 % of its box, and
+   the bottle's base sits at ~97 %. The ellipse straddles that line, half
+   the bottle's height again in width, so the base reads as touching. */
+.pdp-buybox__pack-wrap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 96.5%;
+  width: 160%;
+  height: 9%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(50% 50% at 50% 50%,
+    rgba(3, 10, 22, .78) 0%, rgba(3, 10, 22, .4) 38%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Reflection: the same symbol flipped so its base meets the base above,
+   at a quarter strength, fading out over the top 34 % of its height. */
+.pdp-buybox__pack-refl {
+  position: absolute;
+  left: 0;
+  top: 95.5%;
+  height: 100%;
+  width: 100%;
+  transform: scaleY(-1);
+  transform-origin: 50% 50%;
+  opacity: .25;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 34%);
+  mask-image: linear-gradient(to top, #000 0%, transparent 34%);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   THE FOUR DATA VIEWS
+   Organimo's second thumb onward opens a different scene inside the same
+   window. Ours are laboratory plates: an ivory ground (the documented
+   artefact draws its own fills in ink at 16 % and needs one), a hairline
+   frame, a mono head row, and the figure centred underneath.
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox__plate {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 18px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 18px 20px 20px;
+  background: var(--ivory-bright);
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--pdp-r-sm);
+}
+
+.pdp-buybox__plate-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--pdp-line);
+}
+.pdp-buybox__plate-head-r { color: var(--ink-muted); }
+.pdp-buybox__plate-head .pill { color: var(--ink); }
+
+/* The figure area centres its content vertically but keeps the column
+   track full width, so a wide schematic can use the whole plate instead of
+   collapsing to its intrinsic 300-unit width. */
+.pdp-buybox__plate-fig {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--sp-5);
+  width: 100%;
+  min-height: 0;
+}
+
+/* 02 · the documented artefact figure. Its own markup is shared with other
+   sections but nothing styles the two class-based variants, so the two
+   layouts it can arrive in are handled here, scoped to this section. */
+.pdp-buybox__artefact { width: 100%; }
+.pdp-buybox__artefact svg { width: 100%; height: auto; }
+
+.pdp-buybox__artefact .gainbar {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(60px, 1fr) minmax(0, auto);
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  font-size: var(--pdp-body);
+  padding-block: 10px;
+}
+.pdp-buybox__artefact .gainbar + .gainbar { border-top: 1px solid var(--pdp-line); }
+.pdp-buybox__artefact .gainbar__track {
+  height: 8px;
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+.pdp-buybox__artefact .gainbar__track > i {
+  display: block;
+  height: 100%;
+  background: var(--fc, var(--cyan-deep));
+}
+.pdp-buybox__artefact .gainbar__val {
+  font-family: var(--font-mono);
+  font-weight: var(--w-bold);
+  font-size: var(--pdp-micro);
+}
+
+.pdp-buybox__artefact .mito {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-4);
+  text-align: center;
+}
+.pdp-buybox__artefact .mito__ring { width: 168px; height: 168px; }
+.pdp-buybox__artefact .mito__txt { display: grid; gap: 6px; }
+.pdp-buybox__artefact .mito__num {
+  font-family: var(--font-mono);
+  font-weight: var(--w-bold);
+  font-size: var(--pdp-h3);
+  letter-spacing: -.03em;
+}
+.pdp-buybox__artefact .mito__sub {
+  font-size: var(--pdp-micro);
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
+/* 03 · the dose card. Full-strength ink hairlines between rows; the dose
+   itself is mono, `etykieta*` included, and keeps its footnote. */
+.pdp-buybox__doses { margin: 0; align-self: center; width: 100%; }
+
+.pdp-buybox__dose {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--sp-4);
+  padding-block: 13px;
+  border-bottom: 1px solid var(--pdp-line);
+}
+.pdp-buybox__dose:first-child { border-top: 1px solid var(--pdp-line); }
+
+.pdp-buybox__dose-n {
+  display: grid;
+  gap: 3px;
+  font-size: var(--pdp-body);
+  font-weight: var(--w-semi);
+  letter-spacing: var(--pdp-ls-head);
+}
+.pdp-buybox__dose-role {
+  font-weight: var(--w-regular);
+  font-size: var(--pdp-micro);
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+.pdp-buybox__dose-v {
+  margin: 0;
+  font-size: var(--pdp-body);
+  font-weight: var(--w-bold);
+  letter-spacing: -.02em;
+}
+
+.pdp-buybox__doses-note {
+  margin: 0;
+  align-self: end;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+/* 04 · the absorption figure. `od 40× do 100×` is the only sanctioned
+   general wording, so it is set whole and nothing is split out of it. */
+.pdp-buybox__abs { gap: var(--sp-6); width: 100%; }
+.pdp-buybox__abs-fig {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.19vw, 1.97rem);
+  font-weight: var(--w-bold);
+  letter-spacing: -.03em;
+  color: var(--ink);
+}
+.pdp-buybox__abs-art { width: 100%; max-width: 300px; height: auto; }
+
+/* 05 · the BioSNEDS mark. */
+.pdp-buybox__mark {
+  width: min(100%, 220px);
+  height: auto;
+  color: var(--fc, var(--cyan-deep));
+}
+
+/* --------------------------------------------------------------------------
+   DOT PAGER — bottom centre, on the image.
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox__dots {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 9px;
+  padding: 0;
+}
+.pdp-buybox__dots .pdp-dot { outline-offset: 4px; }
+
+/* --------------------------------------------------------------------------
+   THUMBNAIL STRIP — five squares under the stage, 96px at 1440.
+   Thumb 1 is the packshot on its navy field; thumbs 2–5 are miniatures of
+   the plate each opens, on the plate's own ivory ground.
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox__thumbs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+  max-width: 536px;
+  margin-top: 14px;
+}
+
+.pdp-buybox__thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--pdp-r-sm);
+  background: var(--ivory-bright);
+  color: var(--fc, var(--cyan-deep));
+  cursor: pointer;
+  overflow: hidden;
+}
+.pdp-buybox__thumb:hover { background: var(--ivory-white); }
+
+/* Active thumb: an ink ring outside the hairline, held off the square by
+   2px of ground so it reads on the ivory data thumbs and on the navy
+   packshot thumb alike. */
+.pdp-buybox__thumb[aria-current="true"] {
+  background: var(--ivory-white);
+  box-shadow: 0 0 0 2px var(--ivory), 0 0 0 3px var(--pdp-line);
+}
+
+/* That ink ring is a two-class selector, so it outranks the global
+   :focus-visible box-shadow. Give the one state its own keyboard
+   indicator rather than letting the ring disappear under it. */
+.pdp-buybox__thumb[aria-current="true"]:focus-visible {
+  outline: 2px solid var(--cyan-deep);
+  outline-offset: 5px;
+}
+
+.pdp-buybox__thumb--pack {
+  padding: 6px;
+  background: var(--navy-900);
+  background-image:
+    radial-gradient(64% 50% at 50% 66%, var(--cyan-haze) 0%, transparent 72%);
+}
+.pdp-buybox__thumb--pack:hover,
+.pdp-buybox__thumb--pack[aria-current="true"] { background-color: var(--navy-800); }
+
+.pdp-buybox__thumb-pack { height: 100%; width: auto; }
+
+/* The miniature fills the square edge to edge: its 96-unit viewBox maps
+   1:1 onto the 94px inside the hairline at 1440, and every stroke is
+   non-scaling so the figure keeps 1–2.6px lines when the strip shrinks. */
+.pdp-buybox__thumb-fig {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pdp-buybox__thumb-fig path,
+.pdp-buybox__thumb-fig circle,
+.pdp-buybox__thumb-fig ellipse,
+.pdp-buybox__thumb-fig rect { vector-effect: non-scaling-stroke; }
+
+/* Thumb 2 ships four artefact miniatures; the button's slug keeps one. */
+.pdp-buybox__thumb-art { display: none; }
+[data-buybox-art="digestease"]   .pdp-buybox__thumb-art[data-art="digestease"],
+[data-buybox-art="neurosynapse"] .pdp-buybox__thumb-art[data-art="neurosynapse"],
+[data-buybox-art="inflamshield"] .pdp-buybox__thumb-art[data-art="inflamshield"],
+[data-buybox-art="vitalcore"]    .pdp-buybox__thumb-art[data-art="vitalcore"] { display: block; }
+
+/* Thumb 3: one row per ingredient, stepped down a 14-unit pitch; the last
+   row keeps no hairline under it. */
+.pdp-buybox__thumb-row:nth-of-type(2) { transform: translateY(14px); }
+.pdp-buybox__thumb-row:nth-of-type(3) { transform: translateY(28px); }
+.pdp-buybox__thumb-row:nth-of-type(4) { transform: translateY(42px); }
+.pdp-buybox__thumb-row:last-of-type path:last-child { display: none; }
+
+/* Thumb 4: the sanctioned range, whole, in the plate's mono. */
+.pdp-buybox__thumb-txt {
+  font-family: var(--font-mono);
+  font-weight: var(--w-bold);
+  font-size: 9px;
+  letter-spacing: -.02em;
+  fill: var(--pdp-line);
+}
+
+/* --------------------------------------------------------------------------
+   COPY COLUMN — vertical rhythm, top to bottom, in organimo's order.
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox__copy {
+  display: grid;
+  align-content: start;
+}
+
+.pdp-buybox__title   { margin-top: 17px; }
+.pdp-buybox__sub     { margin-top: 20px; }
+.pdp-buybox__bullets { margin-top: 30px; }
+.pdp-buybox__price   { margin-top: 32px; }
+.pdp-buybox__why-row { margin-top: 12px; }
+.pdp-buybox__buy     { margin-top: 26px; }
+.pdp-buybox__alt     { margin-top: 22px; }
+.pdp-buybox__note    { margin-top: 26px; }
+.pdp-buybox__goal    { margin-top: 22px; }
+
+/* Trust line: three hairline marks where organimo's five gold stars are.
+   The marks sit on the first line's cap height, since the text runs two. */
+.pdp-buybox__trust {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin: 0;
+}
+.pdp-buybox__marks {
+  display: inline-flex;
+  gap: 5px;
+  flex: none;
+  margin-top: 1px;
+  color: var(--fc, var(--cyan-deep));
+}
+.pdp-buybox__marks svg { width: 13px; height: 13px; }
+
+/* Organimo sets this row at 13.06px / 600 uppercase. Space Mono has a fixed
+   0.6em advance, so their 34-character star line and our frozen
+   86-character line are not the same problem: 86 characters at 11px are
+   568px against the ~484px left beside the marks on the 13/32 measure, and
+   the sentence may not be reworded. So it is two lines by design,
+   balanced so the break falls at a separator instead of leaving one word
+   on the second line, and the shipping window never splits. .t-micro--sm
+   already carries the weight (700) and the full ink, so it still reads as
+   a label and not as fine print. */
+.pdp-buybox__trust-t {
+  line-height: 1.4;
+  text-wrap: balance;
+}
+.pdp-buybox__trust-t .mono { white-space: nowrap; }
+
+/* One 21px line on the measured 13/32 measure. Where a formula's sub-line
+   runs past it, the two lines are balanced rather than left with a
+   three-word orphan — the sentence itself is frozen. */
+.pdp-buybox__sub {
+  font-size: clamp(1.0625rem, 1.458vw, 1.3125rem);  /* 17 -> 21px */
+  line-height: 1.32;
+  font-weight: var(--w-medium);
+  letter-spacing: var(--pdp-ls-head);
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+
+/* Three icon bullets. */
+.pdp-buybox__bullets {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pdp-buybox__bullet {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.pdp-buybox__bullet-mark { background: transparent; }
+.pdp-buybox__bullet-t {
+  font-size: var(--pdp-body);
+  line-height: var(--pdp-body-lh);
+  letter-spacing: var(--ls-body);
+}
+
+/* Space Mono runs wide next to Inter at 15px and its space is broad enough
+   that `170 mg` reads as `170  mg`. Pull the dose in so it stays one
+   parameter inside the sentence. */
+.pdp-buybox__bullet-t .mono {
+  font-size: .94em;
+  letter-spacing: -.02em;
+  word-spacing: -.14em;
+}
+
+/* One glyph per row: the bullets token carries only its line of text, so
+   the three marks ship in one svg and CSS chooses which is drawn. */
+.pdp-buybox__bullet:nth-child(1) .pdp-buybox__bm--b,
+.pdp-buybox__bullet:nth-child(1) .pdp-buybox__bm--c,
+.pdp-buybox__bullet:nth-child(2) .pdp-buybox__bm--a,
+.pdp-buybox__bullet:nth-child(2) .pdp-buybox__bm--c,
+.pdp-buybox__bullet:nth-child(3) .pdp-buybox__bm--a,
+.pdp-buybox__bullet:nth-child(3) .pdp-buybox__bm--b { display: none; }
+
+/* --------------------------------------------------------------------------
+   PRICE — the two documented numbers, split by a vertical hairline.
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox__price {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-block: 1px solid var(--pdp-line);
+}
+.pdp-buybox__price-cell {
+  display: grid;
+  gap: 8px;
+  padding-block: 16px;
+}
+.pdp-buybox__price-cell + .pdp-buybox__price-cell {
+  padding-left: var(--sp-6);
+  border-left: 1px solid var(--pdp-line);
+}
+.pdp-buybox__price-label { margin: 0; color: var(--ink-muted); }
+
+.pdp-buybox__price-open {
+  margin: 0;
+  font-size: clamp(1.75rem, 2.777vw, 2.5rem);   /* 28 -> 40px */
+  font-weight: var(--w-bold);
+  letter-spacing: -.05em;
+  line-height: 1;
+}
+.pdp-buybox__price-set {
+  margin: 0;
+  align-self: end;
+  font-size: clamp(1.125rem, 1.528vw, 1.375rem); /* 18 -> 22px */
+  font-weight: var(--w-bold);
+  letter-spacing: -.04em;
+  line-height: 1;
+  color: var(--ink-2);
+}
+
+.pdp-buybox__why-row { margin-bottom: 0; }
+.pdp-buybox__why {
+  font-family: var(--font-mono);
+  font-size: var(--pdp-micro-sm);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  text-decoration: none;
+  border-bottom: 1px solid var(--cyan-deep);
+  padding-bottom: 2px;
+  color: var(--ink);
+}
+.pdp-buybox__why:hover { border-bottom-color: var(--navy-900); }
+
+/* --------------------------------------------------------------------------
+   CTA — one dominant pill, a stepper to its left, everything else quieter.
+   ----------------------------------------------------------------------- */
+
+/* The stepper and the pill share a row; the two lines under them belong to
+   the pill, not to the stepper, so on desktop the whole block is one grid
+   and the row hands its children over to it. */
+.pdp-buybox__buy-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-3);
+}
+
+@media (min-width: 900px) {
+  .pdp-buybox__buy {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--sp-3);
+  }
+  .pdp-buybox__buy-row { display: contents; }
+  .pdp-buybox__qty { grid-row: 1; grid-column: 1; }
+  .pdp-buybox__cta { grid-row: 1; grid-column: 2; }
+  .pdp-buybox__cta-sub,
+  .pdp-buybox__cart { grid-column: 2; }
+}
+
+.pdp-buybox__qty {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 6px;
+  min-height: 56px;
+  border: 1px solid var(--pdp-line);
+  border-radius: var(--r-pill);
+  background: var(--ivory-white);
+}
+.pdp-buybox__qty-btn {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.pdp-buybox__qty-btn:hover { background: var(--ivory-sunk); }
+.pdp-buybox__qty-btn svg { width: 14px; height: 14px; }
+.pdp-buybox__qty-val {
+  min-width: 26px;
+  text-align: center;
+  font-size: var(--pdp-body);
+  font-weight: var(--w-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.pdp-buybox__cta { flex: 1 1 auto; }
+
+/* The two CTA subs are sentences, not parameters: Inter, sentence case.
+   Uppercase mono is reserved here for labels, doses and prices. */
+.pdp-buybox__cta-sub,
+.pdp-buybox__alt-sub {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+.pdp-buybox__cta-sub { margin-top: 10px; }
+.pdp-buybox__cart {
+  margin: 8px 0 0;
+  font-size: var(--pdp-micro-sm);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  font-weight: var(--w-bold);
+  color: var(--ink);
+}
+.pdp-buybox__cart::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--fc, var(--cyan-deep));
+  vertical-align: 1px;
+}
+
+.pdp-buybox__alt { display: grid; justify-items: start; gap: 10px; }
+
+/* --------------------------------------------------------------------------
+   STAGE I NOTE AND THE Cel ROW
+   ----------------------------------------------------------------------- */
+
+.pdp-buybox__note {
+  margin-bottom: 0;
+  font-size: 12px;
+  line-height: 1.62;
+  color: var(--ink-muted);
+}
+.pdp-buybox__note b { color: var(--ink); font-weight: var(--w-bold); }
+
+.pdp-buybox__goal {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: var(--sp-4);
+  margin: 22px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid var(--pdp-line);
+}
+.pdp-buybox__goal-k { color: var(--ink-muted); padding-top: 3px; }
+.pdp-buybox__goal-v {
+  margin: 0;
+  font-size: var(--pdp-body);
+  line-height: var(--pdp-body-lh);
+  letter-spacing: var(--ls-body);
+}
+
+/* ==========================================================================
+   NARROW — 390 first: the gallery is a full-bleed square above the copy,
+   exactly as mobile-390-00.png does it, and the CTA runs the full width.
+   ========================================================================== */
+
+@media (max-width: 899px) {
+  .pdp-buybox {
+    padding-block: calc(var(--pdp-nav-h, 60px) + 16px) 44px;
+  }
+
+  .pdp-buybox__grid { row-gap: 26px; }
+
+  /* Out to both edges: no gutter, no radius, like organimo's phone hero. */
+  .pdp-buybox__gallery { margin-inline: calc(-1 * var(--pdp-gutter)); }
+
+  .pdp-buybox__stage {
+    max-width: none;
+    border-radius: 0;
+  }
+
+  /* The stage bleeds to both edges, so the strip under it walks back inside
+     the gutter. Auto width, because a 100 % width plus those margins would
+     push the last thumb past the right edge. */
+  .pdp-buybox__thumbs {
+    width: auto;
+    max-width: none;
+    margin-inline: var(--pdp-gutter);
+    gap: 10px;
+  }
+
+  .pdp-buybox__view { padding: 20px 18px 46px; }
+  .pdp-buybox__view--pack { padding: 16px 18px 68px; }
+
+  .pdp-buybox__copy > * { max-width: 100%; }
+
+  .pdp-buybox__plate { padding: 15px 16px 16px; gap: 14px; }
+  .pdp-buybox__dose { padding-block: 11px; }
+}
+
+@media (max-width: 620px) {
+  /* Organimo's phone hero carries no thumb strip: the dot pager on the
+     image is the whole gallery control, and the fold keeps its ~80px for
+     the title and sub-line. The five views stay reachable by the dots. */
+  .pdp-buybox__thumbs { display: none; }
+
+  /* Stepper on its own full-width row, then the dominant CTA at full
+     width. Two 56px pills side by side do not fit 350px. */
+  .pdp-buybox__buy-row { display: grid; gap: 10px; }
+  .pdp-buybox__qty { justify-content: space-between; min-height: 50px; }
+  .pdp-buybox__alt-btn { width: 100%; }
+
+  .pdp-buybox__price-cell + .pdp-buybox__price-cell { padding-left: var(--sp-4); }
+  .pdp-buybox__goal { grid-template-columns: 64px minmax(0, 1fr); gap: var(--sp-3); }
+}
