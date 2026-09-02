@@ -302,19 +302,16 @@
    4 · TWO PRICES
    ========================================================================== */
 
-.pdp-tech-price__head {
-  display: grid;
-  gap: var(--sp-5);
-  justify-items: start;
-}
-.pdp-tech-price__head > * { margin: 0; }
-.pdp-tech-price__head .t-micro { color: var(--ink-muted); }
-.pdp-tech-price__lead { max-width: 64ch; }
+/* The head block is gone from the markup: the section opens on the split, so
+   its own top padding and the split's top margin would stack into an empty
+   band under the absorption note. Both are dropped; the hairline is the
+   section's first mark. */
+.pdp-tech-price { padding-block-start: 0; }
 
 /* The split. Core draws the vertical hairline; this adds the horizontal one
    above it, full bleed, and the column padding either side of the rule. */
 .pdp-tech-price__split {
-  margin-top: clamp(40px, 4.3vw, 62px);
+  margin-top: 0;
   border-top: 1px solid var(--pdp-line);
 }
 
