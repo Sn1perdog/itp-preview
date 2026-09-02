@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Analiza zdrowia | ITP</title>
-<meta name="description" content="Bezpłatna analiza zdrowia ITP — 12 pytań w 4 blokach, około 5–7 minut, bez konta. Wynik z sześcioma obszarami obciążenia i rekomendacją zatwierdzaną przez specjalistę.">
+<meta name="description" content="Bezpłatna analiza zdrowia ITP. 12 pytań w 4 blokach, około 5–7 minut, bez zakładania konta. Wynik pokazuje sześć obszarów obciążenia. Dobór formuł zatwierdza specjalista.">
 <link rel="stylesheet" href="../styles/tokens.css">
 <style>
 /* ==========================================================================
@@ -57,7 +57,7 @@
   padding: var(--sp-4) var(--sp-5);
   margin-bottom: var(--sp-7);
 }
-.qnotice p { font-size: var(--t-body-sm); color: var(--cyan-ink); font-weight: var(--w-medium); }
+.qnotice p { flex: 1 1 22rem; font-size: var(--t-body-sm); color: var(--cyan-ink); font-weight: var(--w-medium); }
 .qnotice__actions { display: flex; gap: var(--sp-3); }
 
 /* Progress rail — calm and tiny, Function Health voice */
@@ -405,7 +405,7 @@
         <div class="qpanel">
 
           <div class="qnotice" id="q-notice" hidden>
-            <p id="q-notice-text">Wracasz do analizy — przywróciliśmy Twoje odpowiedzi.</p>
+            <p id="q-notice-text">Twoje odpowiedzi czekały w&nbsp;pamięci tej przeglądarki razem z&nbsp;priorytetem i&nbsp;numerem pytania. Klucz nazywa się itp-quiz i&nbsp;nic z&nbsp;niego nie wychodzi do&nbsp;sieci. Wracasz dokładnie do&nbsp;tego miejsca, w&nbsp;którym analiza się zatrzymała.</p>
             <div class="qnotice__actions">
               <a class="btn btn--primary btn--sm" id="q-notice-result" href="result.html" hidden>Zobacz wynik</a>
               <button class="btn btn--ghost btn--sm" id="q-restart" type="button">Zacznij od nowa</button>
@@ -430,8 +430,7 @@
             <!-- ============================================= Q0 · PRIORITY -->
             <section class="qscreen" id="s0" data-type="priority" aria-labelledby="s0-h">
               <h2 class="t-d2" id="s0-h" tabindex="-1">Jaki jest Twój <span class="t-accent">priorytet</span> na&nbsp;najbliższe 90&nbsp;dni?</h2>
-              <p class="t-lead qscreen__sub">Wybierz jeden obszar — stanie się osią Twojej analizy.
-                Pozostałe obszary również zbadamy.</p>
+              <p class="t-lead qscreen__sub">Wybierz jeden obszar. Wynik nazwie potem obszar główny i&nbsp;obszar wspierający.</p>
               <div class="qscreen__body">
                 <div class="comb" role="radiogroup" aria-labelledby="s0-h">
                   <div class="combcell"><span class="combcell__ring"></span>
@@ -465,7 +464,7 @@
             <!-- ================================== BLOK 1 · STAN OBECNY -->
             <section class="qscreen" id="s1" data-type="slider" hidden aria-labelledby="s1-h">
               <h2 class="t-d2" id="s1-h" tabindex="-1">Poranny poziom energii</h2>
-              <p class="t-lead qscreen__sub">Jak zwykle czujesz się w&nbsp;pierwszej godzinie po&nbsp;przebudzeniu?</p>
+              <p class="t-lead qscreen__sub">Jak zwykle czujesz się w&nbsp;pierwszej godzinie po&nbsp;przebudzeniu? Nie licz najlepszego ani najgorszego dnia. Weź swój najbardziej powtarzalny poranek z&nbsp;ostatniego miesiąca.</p>
               <div class="qscreen__body">
                 <div class="qslider is-untouched" id="q1-slider">
                   <div class="qslider__readout">
@@ -473,7 +472,7 @@
                       <span class="qslider__num" id="q1-num">05</span>
                       <span class="qslider__den">/ 10</span>
                     </span>
-                    <span class="qslider__desc" id="q1-desc">Przesuń suwak lub użyj strzałek</span>
+                    <span class="qslider__desc" id="q1-desc">Przeciągnij suwak albo przesuń go strzałkami</span>
                   </div>
                   <input class="qrange" id="q1-range" type="range" min="1" max="10" step="1" value="5"
                          aria-labelledby="s1-h" aria-describedby="q1-desc"
@@ -482,12 +481,16 @@
                     <span>1 · Wyczerpany</span><span>10 · Pełnia sił</span>
                   </div>
                 </div>
+                <p class="t-caption" style="margin-top:var(--sp-7);max-width:52ch">
+                  Suwak podpisuje każdy stopień słowem i&nbsp;pokazuje je, gdy
+                  ruszysz go myszką albo strzałkami. Piątka to&nbsp;Umiarkowanie,
+                  ósemka Bardzo dobrze.</p>
               </div>
             </section>
 
             <section class="qscreen" id="s2" data-type="radio" data-q="q2" hidden aria-labelledby="s2-h">
               <h2 class="t-d2" id="s2-h" tabindex="-1">Jakość snu</h2>
-              <p class="t-lead qscreen__sub">Oceń ostatnie 2–4 tygodnie.</p>
+              <p class="t-lead qscreen__sub">Uśrednij ostatnie 2–4 tygodnie.</p>
               <div class="qscreen__body">
                 <div class="qopts" role="radiogroup" aria-labelledby="s2-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Dobra"><span class="option__key">1</span>Dobra</button>
@@ -499,7 +502,7 @@
 
             <section class="qscreen" id="s3" data-type="radio" data-q="q3" hidden aria-labelledby="s3-h">
               <h2 class="t-d2" id="s3-h" tabindex="-1">Częstotliwość stresu</h2>
-              <p class="t-lead qscreen__sub">Jak często odczuwasz napięcie, które utrudnia funkcjonowanie?</p>
+              <p class="t-lead qscreen__sub">Jak często napięcie utrudnia Ci dzień?</p>
               <div class="qscreen__body">
                 <div class="qopts" role="radiogroup" aria-labelledby="s3-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Rzadko"><span class="option__key">1</span>Rzadko</button>
@@ -512,7 +515,7 @@
             <!-- ===================== BLOK 2 · FIZJOLOGIA I STYL ŻYCIA -->
             <section class="qscreen" id="s4" data-type="radio" data-q="q4" hidden aria-labelledby="s4-h">
               <h2 class="t-d2" id="s4-h" tabindex="-1">Trudności trawienne</h2>
-              <p class="t-lead qscreen__sub">Wzdęcia, ciężkość, nieregularność — jak często się pojawiają?</p>
+              <p class="t-lead qscreen__sub">Na ile doskwierają Ci wzdęcia, ciężkość i&nbsp;nieregularne wypróżnienia?</p>
               <div class="qscreen__body">
                 <div class="qopts" role="radiogroup" aria-labelledby="s4-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Brak"><span class="option__key">1</span>Brak</button>
@@ -524,7 +527,7 @@
 
             <section class="qscreen" id="s5" data-type="radio" data-q="q5" hidden aria-labelledby="s5-h">
               <h2 class="t-d2" id="s5-h" tabindex="-1">Aktywność fizyczna</h2>
-              <p class="t-lead qscreen__sub">Świadomy ruch: trening, szybki spacer, basen, rower.</p>
+              <p class="t-lead qscreen__sub">Liczy się każdy świadomy ruch: trening, szybki spacer, basen, rower.</p>
               <div class="qscreen__body">
                 <div class="qopts" role="radiogroup" aria-labelledby="s5-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Prawie żadna"><span class="option__key">1</span>Prawie żadna</button>
@@ -536,7 +539,7 @@
 
             <section class="qscreen" id="s6" data-type="radio" data-q="q6" hidden aria-labelledby="s6-h">
               <h2 class="t-d2" id="s6-h" tabindex="-1">Model diety</h2>
-              <p class="t-lead qscreen__sub">Wybierz model najbliższy Twojej codzienności.</p>
+              <p class="t-lead qscreen__sub">Wybierz to, co najbliżej opisuje Twój zwykły tydzień. Dieta nie zmienia punktacji. Trafia do&nbsp;specjalisty jako kontekst.</p>
               <div class="qscreen__body">
                 <div class="qopts qopts--cols" role="radiogroup" aria-labelledby="s6-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Standardowa"><span class="option__key">1</span>Standardowa</button>
@@ -551,7 +554,7 @@
             <!-- ==================== BLOK 3 · STYMULANTY I RÓWNOWAGA -->
             <section class="qscreen" id="s7" data-type="radio" data-q="q7" hidden aria-labelledby="s7-h">
               <h2 class="t-d2" id="s7-h" tabindex="-1">Kofeina</h2>
-              <p class="t-lead qscreen__sub">Kawa, herbata, napoje energetyczne — typowy dzień.</p>
+              <p class="t-lead qscreen__sub">Policz kawę, herbatę i&nbsp;napoje energetyczne z&nbsp;typowego dnia.</p>
               <div class="qscreen__body">
                 <div class="qopts" role="radiogroup" aria-labelledby="s7-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Brak"><span class="option__key">1</span>Brak</button>
@@ -563,7 +566,7 @@
 
             <section class="qscreen" id="s8" data-type="radio" data-q="q8" hidden aria-labelledby="s8-h">
               <h2 class="t-d2" id="s8-h" tabindex="-1">Alkohol</h2>
-              <p class="t-lead qscreen__sub">Typowy tydzień, szczerze.</p>
+              <p class="t-lead qscreen__sub">Oceń typowy tydzień.</p>
               <div class="qscreen__body">
                 <div class="qopts" role="radiogroup" aria-labelledby="s8-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Brak"><span class="option__key">1</span>Brak</button>
@@ -575,7 +578,7 @@
 
             <section class="qscreen" id="s9" data-type="radio" data-q="q9" hidden aria-labelledby="s9-h">
               <h2 class="t-d2" id="s9-h" tabindex="-1">Obecna suplementacja</h2>
-              <p class="t-lead qscreen__sub">To pomaga uniknąć dublowania składników.</p>
+              <p class="t-lead qscreen__sub">Pojedyncze produkty to witamina D albo magnez kupiony w&nbsp;aptece bez żadnego planu. Złożony schemat zaczyna się przy kilku preparatach dziennie.</p>
               <div class="qscreen__body">
                 <div class="qopts" role="radiogroup" aria-labelledby="s9-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Nie"><span class="option__key">1</span>Nie</button>
@@ -588,7 +591,7 @@
             <!-- ==================================== BLOK 4 · METRYKI -->
             <section class="qscreen" id="s10" data-type="radio" data-q="q10" hidden aria-labelledby="s10-h">
               <h2 class="t-d2" id="s10-h" tabindex="-1">Ostatnie badania krwi</h2>
-              <p class="t-lead qscreen__sub">Morfologia, lipidogram, glukoza lub szersze panele.</p>
+              <p class="t-lead qscreen__sub">Wystarczy zwykła morfologia, lipidogram, glukoza albo szerszy panel z&nbsp;laboratorium. Zaznaczasz samą datę i&nbsp;żadnych liczb z&nbsp;badania nie wpisujesz. Etap&nbsp;I obywa się bez skanów, OCR i&nbsp;plików.</p>
               <div class="qscreen__body">
                 <div class="qopts qopts--cols" role="radiogroup" aria-labelledby="s10-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="Do 3 miesięcy"><span class="option__key">1</span>Do 3&nbsp;miesięcy</button>
@@ -601,7 +604,7 @@
 
             <section class="qscreen" id="s11" data-type="radio" data-q="q11" hidden aria-labelledby="s11-h">
               <h2 class="t-d2" id="s11-h" tabindex="-1">Wiek</h2>
-              <p class="t-lead qscreen__sub">Przedział wystarczy — nie potrzebujemy dokładnej daty.</p>
+              <p class="t-lead qscreen__sub">Wystarczy przedział wieku.</p>
               <div class="qscreen__body">
                 <div class="qopts qopts--cols" role="radiogroup" aria-labelledby="s11-h">
                   <button class="option" type="button" role="radio" aria-checked="false" data-value="18–29"><span class="option__key">1</span>18–29</button>
@@ -614,8 +617,8 @@
 
             <section class="qscreen" id="s12" data-type="number" hidden aria-labelledby="s12-h">
               <h2 class="t-d2" id="s12-h" tabindex="-1">Masa ciała</h2>
-              <p class="t-lead qscreen__sub">Używamy jej wyłącznie do oszacowania dawek.
-                Zostaje w&nbsp;Twojej przeglądarce.</p>
+              <p class="t-lead qscreen__sub">Podajesz masę ciała tylko po&nbsp;to, żebyśmy oszacowali dawki.
+                Liczba zostaje w&nbsp;pamięci tej przeglądarki razem z&nbsp;resztą odpowiedzi i&nbsp;znika w&nbsp;chwili, gdy ją stąd usuniesz.</p>
               <div class="qscreen__body">
                 <div class="field">
                   <label class="field__label" for="q12-in">Masa ciała (kg)</label>
@@ -625,12 +628,14 @@
                            aria-describedby="q12-help q-error">
                     <span class="qkg__unit" aria-hidden="true">kg</span>
                   </div>
-                  <p class="t-caption" id="q12-help">Wartość od 30 do 250 kg. Możesz użyć przecinka, np. 72,5.</p>
+                  <p class="t-caption" id="q12-help">Wpisz liczbę od 30 do 250, z&nbsp;przecinkiem, jeśli tak wygodniej, na przykład 72,5.</p>
                 </div>
                 <p class="t-caption" style="margin-top:var(--sp-7);max-width:52ch">
-                  Wynik obliczamy prostą, jawną heurystyką — oszacowanie obciążeń
-                  oczekuje walidacji specjalisty (odpowiedź do 48&nbsp;h).
-                  Analiza nie zastępuje konsultacji lekarskiej.</p>
+                  Wynik powstaje z&nbsp;jawnej heurystyki, czyli ze&nbsp;spisanego
+                  z&nbsp;góry zestawu reguł punktowych. Zestaw formuł ogląda potem
+                  specjalista z&nbsp;Instytutu. Ręcznie. Potwierdza go albo zmienia
+                  i&nbsp;w&nbsp;ciągu 48&nbsp;h pisze do&nbsp;Ciebie z&nbsp;uzasadnieniem
+                  doboru każdej formuły.</p>
               </div>
             </section>
 
@@ -660,13 +665,18 @@
             </div>
             <div class="stat">
               <span class="stat__num">0</span>
-              <span class="stat__label">kont — dane pozostają w&nbsp;tej przeglądarce</span>
+              <span class="stat__label">kont, odpowiedzi zostają w&nbsp;tej przeglądarce</span>
             </div>
             <div class="stat">
               <span class="stat__num">48<span class="qfacts__unit">h</span></span>
               <span class="stat__label">na zatwierdzenie przez specjalistę</span>
             </div>
           </div>
+          <p class="t-caption" style="max-width:74ch">Sześć poziomów obciążenia
+            zobaczysz zaraz po&nbsp;dwunastym pytaniu, pełny plan i&nbsp;mini-raport&nbsp;PDF
+            odblokowuje dopiero podany e-mail. Wstecz wraca do&nbsp;każdego pytania
+            z&nbsp;zaznaczoną odpowiedzią i&nbsp;możesz ją zmienić do&nbsp;samego końca
+            analizy.</p>
           <p class="disclaimer">Platforma ma charakter edukacyjny i rekomendacyjny
             i nie zastępuje konsultacji lekarskiej.</p>
         </div>
@@ -709,9 +719,9 @@
       <div>
         <h4>Współpraca</h4>
         <div class="sitefoot__links">
-          <a href="affiliate.html#specjalisci">Dla specjalistów — 20 %</a>
-          <a href="affiliate.html#partnerzy">Program detaliczny — 10–15 %</a>
-          <a href="affiliate.html#white-label">B2B / white-label — 10 %</a>
+          <a href="affiliate.html#specjalisci">Dla specjalistów · 20 %</a>
+          <a href="affiliate.html#partnerzy">Program detaliczny · 10–15 %</a>
+          <a href="affiliate.html#white-label">B2B / white-label · 10 %</a>
           <a href="hero.html#instytut">Instytut i badania</a>
         </div>
       </div>
@@ -887,19 +897,19 @@
     var s = screens[state.pos];
     var type = s.getAttribute('data-type');
     if (type === 'priority') {
-      return state.priority ? null : 'Wybierz jeden obszar, aby rozpocząć analizę.';
+      return state.priority ? null : 'Najpierw wybierz jeden z sześciu obszarów.';
     }
     if (type === 'slider') {
       return ('q1' in state.answers) ? null
-        : 'Przesuń suwak (lub użyj strzałek), aby ocenić poziom energii.';
+        : 'Ustaw suwak. Strzałki na klawiaturze też zadziałają.';
     }
     if (type === 'radio') {
       var q = s.getAttribute('data-q');
-      return (q in state.answers) ? null : 'Wybierz jedną odpowiedź, aby przejść dalej.';
+      return (q in state.answers) ? null : 'Wybierz jedną odpowiedź.';
     }
     if (type === 'number') {
       var v = parseKg(kgInput.value);
-      if (v === null) return 'Podaj masę ciała w kilogramach — liczba od 30 do 250.';
+      if (v === null) return 'Wpisz masę ciała w kilogramach. Liczba od 30 do 250.';
       state.answers.q12 = v;
       return null;
     }
@@ -1056,7 +1066,7 @@
     if (markTouched || ('q1' in state.answers)) {
       sliderBox.classList.remove('is-untouched');
       sliderDesc.textContent = DESCRIPTORS[v - 1];
-      slider.setAttribute('aria-valuetext', v + ' z 10 — ' + DESCRIPTORS[v - 1]);
+      slider.setAttribute('aria-valuetext', v + ' z 10, ' + DESCRIPTORS[v - 1]);
     } else {
       slider.setAttribute('aria-valuetext', v + ' z 10');
     }
@@ -1138,7 +1148,7 @@
     });
     slider.value = 5;
     sliderBox.classList.add('is-untouched');
-    sliderDesc.textContent = 'Przesuń suwak lub użyj strzałek';
+    sliderDesc.textContent = 'Przeciągnij suwak albo przesuń go strzałkami';
     renderSlider(false);
     kgInput.value = '';
     elNotice.hidden = true;
@@ -1157,7 +1167,7 @@
       elNotice.hidden = false;
       if (saved.completedAt) {
         elNoticeText.textContent =
-          'Twoja analiza jest już ukończona — możesz zobaczyć wynik lub zacząć od nowa.';
+          'Analiza jest gotowa. Możesz otworzyć wynik albo zacząć od nowa.';
         elNoticeResult.hidden = false;
         state.pos = TOTAL;
       } else {

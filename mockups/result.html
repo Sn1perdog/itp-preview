@@ -763,22 +763,22 @@ main [hidden] { display: none !important; }
         <ol class="proc__steps" id="proc-steps" aria-live="polite">
           <li class="proc__step" data-step="1">
             <span class="proc__step-num">01</span>
-            <span>Odczyt odpowiedzi z analizy</span>
+            <span>Wczytujemy Twoje odpowiedzi</span>
             <span class="proc__step-status">oczekuje</span>
           </li>
           <li class="proc__step" data-step="2">
             <span class="proc__step-num">02</span>
-            <span>Normalizacja obciążeń w sześciu obszarach</span>
+            <span>Normalizujemy obciążenie w sześciu obszarach</span>
             <span class="proc__step-status">oczekuje</span>
           </li>
           <li class="proc__step" data-step="3">
             <span class="proc__step-num">03</span>
-            <span>Wyznaczenie obszaru głównego i wspierającego</span>
+            <span>Wskazujemy obszar główny i wspierający</span>
             <span class="proc__step-status">oczekuje</span>
           </li>
           <li class="proc__step" data-step="4">
             <span class="proc__step-num">04</span>
-            <span>Dobór formuł PERSONA — reguła obszar&nbsp;→&nbsp;formuła</span>
+            <span>Dobieramy formuły PERSONA regułą obszar&nbsp;→&nbsp;formuła</span>
             <span class="proc__step-status">oczekuje</span>
           </li>
         </ol>
@@ -799,9 +799,10 @@ main [hidden] { display: none !important; }
       <p class="t-lead persona-note" id="persona-teaser"><!-- teaser · JS --></p>
 
       <div class="example-note" id="example-note" hidden>
-        <span><b>To profil przykładowy.</b> Nie znaleźliśmy w tej przeglądarce poprawnych
-        odpowiedzi z analizy — poniższe wartości ilustrują działanie wyniku.</span>
-        <a class="btn btn--cyan btn--sm" href="quiz.html">Wykonaj własną analizę — 5–7 min</a>
+        <span><b>To profil przykładowy.</b> W tej przeglądarce nie ma zapisanych odpowiedzi
+        z&nbsp;analizy. Konta nie zakładasz. Własna analiza to dwanaście pytań w&nbsp;czterech
+        blokach, od stanu obecnego po metryki.</span>
+        <a class="btn btn--cyan btn--sm" href="quiz.html">Wykonaj własną analizę · 5–7 min</a>
       </div>
 
       <ul class="hexmap" id="hexmap"><!-- six hexagons · JS --></ul>
@@ -813,8 +814,12 @@ main [hidden] { display: none !important; }
 
       <div class="map-close">
         <p class="t-caption hexmap-caption">
-          Wartości w <span class="mono">%</span> to znormalizowane obciążenie obszaru wyliczone
-          z&nbsp;dwunastu odpowiedzi analizy — wyższa wartość oznacza większe obciążenie.
+          Każdy obszar ma jedną wartość w skali <span class="mono">0–100%</span>.
+          Wyższa wartość oznacza więcej uwagi dla obszaru w&nbsp;planie.
+          Poranną energię podajesz na suwaku od 1 do 10. Sen i&nbsp;stres wybierasz
+          z&nbsp;trzech odpowiedzi. Wartości zaokrąglamy do liczb całkowitych.
+          Przy dwóch identycznych wynikach pierwszeństwo dostaje obszar zgodny
+          z&nbsp;Twoim priorytetem na najbliższe 90&nbsp;dni.
         </p>
         <p class="disclaimer">
           Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje konsultacji lekarskiej.
@@ -863,8 +868,8 @@ main [hidden] { display: none !important; }
         <p class="gate__status" id="gate-status" role="status" aria-live="polite"></p>
 
         <div class="gate__meta">
-          <p class="t-caption">W Etapie I odpowiedź specjalisty przygotowywana jest
-          <b>ręcznie — w ciągu 48&nbsp;h</b> od odblokowania wyniku.</p>
+          <p class="t-caption">W Etapie I Twój plan trafia do specjalisty, który przygotowuje
+          odpowiedź ręcznie i odsyła ją w ciągu <b>48&nbsp;h</b> od odblokowania wyniku.</p>
           <p class="t-caption mono" style="font-size:var(--t-micro);letter-spacing:var(--ls-mono);text-transform:uppercase;color:var(--ink-faint)">
             Makieta etapu I · formularz niczego nie wysyła · odblokowanie działa lokalnie
           </p>
@@ -879,28 +884,29 @@ main [hidden] { display: none !important; }
           <li class="unlock-item">
             <span class="index-num" aria-hidden="true">01</span>
             <p class="unlock-item__title">3 formuły PERSONA</p>
-            <p class="unlock-item__cap">Dobrane regułą obszar&nbsp;→&nbsp;formuła do obszaru
-            głównego i&nbsp;wspierającego Twojego profilu.</p>
+            <p class="unlock-item__cap">Reguła obszar&nbsp;→&nbsp;formuła schodzi po Twoich
+            obszarach od najwyżej obciążonego do najniżej. Katalog PERSONA ma cztery formuły.
+            Plan zabiera z tej listy pierwsze trzy różne.</p>
           </li>
           <li class="unlock-item">
             <span class="index-num" aria-hidden="true">02</span>
             <p class="unlock-item__title">Uzasadnienie planu</p>
-            <p class="unlock-item__cap">Punkt po punkcie: które odpowiedzi z&nbsp;analizy
-            zdecydowały o&nbsp;doborze.</p>
+            <p class="unlock-item__cap">Przy każdej formule zobaczysz te odpowiedzi
+            z&nbsp;analizy, na których oparliśmy jej dobór.</p>
           </li>
           <li class="unlock-item">
             <span class="index-num" aria-hidden="true">03</span>
             <p class="unlock-item__title">Cena zestawu</p>
             <p class="price"><span class="price__now">179 zł/szt.</span>
               <span class="price__was">249 zł</span></p>
-            <p class="unlock-item__cap">Niższa cena w&nbsp;zestawie jest nagrodą za
-            udostępnienie danych z&nbsp;analizy — zamiast ceny otwartego sklepu.</p>
+            <p class="unlock-item__cap">Udostępnienie danych z&nbsp;analizy obniża cenę
+            pojedynczej formuły z&nbsp;ceny otwartego sklepu do ceny zestawu personalizowanego.</p>
           </li>
           <li class="unlock-item">
             <span class="index-num" aria-hidden="true">04</span>
             <p class="unlock-item__title">Mini-raport PDF</p>
-            <p class="unlock-item__cap">Wersja wyniku do druku — mapa sześciu obszarów
-            i&nbsp;plan w&nbsp;jednym dokumencie.</p>
+            <p class="unlock-item__cap">Mapa sześciu obszarów i&nbsp;plan w&nbsp;jednym
+            dokumencie, gotowym do druku.</p>
           </li>
         </ol>
       </aside>
@@ -915,7 +921,7 @@ main [hidden] { display: none !important; }
   <section class="locked st-hide-unlocked" id="plan-zablokowany" hidden>
     <div class="wrap">
       <div class="locked__panel" role="img"
-           aria-label="Plan personalizowany — zablokowany do czasu podania adresu e-mail">
+           aria-label="Plan personalizowany, zablokowany do czasu podania adresu e-mail">
         <div class="locked__body" aria-hidden="true">
           <div style="display:grid;gap:12px">
             <div class="redact redact--head" style="width:46%"></div>
@@ -962,8 +968,8 @@ main [hidden] { display: none !important; }
             </svg>
             Zablokowane
           </span>
-          <p class="locked__stamp-note">Pełny plan, uzasadnienie i cena zestawu odblokują się
-          po podaniu adresu e-mail powyżej.</p>
+          <p class="locked__stamp-note">Te pasy nic nie zasłaniają.
+          Planu jeszcze nie ma w tej stronie.</p>
         </div>
       </div>
     </div>
@@ -974,8 +980,8 @@ main [hidden] { display: none !important; }
     <div class="wrap">
       <p class="print-head print-only" id="print-identity"><!-- identity line · JS --></p>
       <p class="eyebrow">Twój plan · 90 dni</p>
-      <h2 class="t-d3" style="max-width:22ch;margin-top:var(--sp-5)">Plan personalizowany —
-        <span class="t-accent">zweryfikuje go specjalista</span></h2>
+      <h2 class="t-d3" style="max-width:22ch;margin-top:var(--sp-5)">Plan personalizowany.
+        <span class="t-accent">Sprawdzi go specjalista.</span></h2>
       <p class="t-lead" style="max-width:56ch;margin-top:var(--sp-5)" id="plan-lead"><!-- JS --></p>
 
       <div class="plan__grid">
@@ -985,9 +991,13 @@ main [hidden] { display: none !important; }
             <ul class="why-list" id="why-list"><!-- rationale bullets · JS --></ul>
           </div>
           <p class="biosneds-note">
-            Wszystkie formuły wykorzystują technologię <b>BioSNEDS™</b> —
-            <span class="mono">od 40× do 100×</span> wzrost wchłaniania,
-            w zależności od składnika.
+            Każda formuła korzysta z technologii <b>BioSNEDS™</b>. Nośnik nanoemulguje
+            składniki lipofilowe in situ w przewodzie pokarmowym i ma parametry oceniane
+            w badaniach PAMPA, PK i farmakokinetycznych. Technologia jest licencjonowana.
+            Dostarczamy ją razem z laboratorium Verdant Nature. Wchłanianie rośnie
+            <span class="mono">od 40× do 100×</span>, w zależności od składnika.
+            Kwas elagowy z EllagiSol™ trzyma górny koniec tego zakresu i osiąga
+            <span class="mono">10 000 % (100×)</span>.
             <a class="link" href="biosneds.html">Zobacz dane</a>
           </p>
           <p class="disclaimer">
@@ -1007,29 +1017,36 @@ main [hidden] { display: none !important; }
         <p class="eyebrow">Cena zestawu</p>
         <h2 class="t-d3">Dlaczego w zestawie <span class="mono" style="letter-spacing:0">179&nbsp;zł/szt.</span>,
           a osobno <span class="mono" style="letter-spacing:0">249&nbsp;zł</span>?</h2>
-        <p class="t-lead">Asymetria jest celowa — niższa cena planu wynika z czterech reguł modelu ITP.</p>
+        <p class="t-lead">Niższa cena planu wynika z czterech reguł modelu ITP.</p>
       </div>
 
       <div class="grid grid--4 pillars">
         <div class="card pillar">
           <span class="index-num">01</span>
           <h3 class="t-d4">Logika diagnostyczna</h3>
-          <p class="t-caption">Niższa cena jest nagrodą za udostępnienie danych zdrowotnych z analizy.</p>
+          <p class="t-caption">Niższa cena jest nagrodą za udostępnienie danych zdrowotnych
+          z analizy.</p>
         </div>
         <div class="card pillar">
           <span class="index-num">02</span>
           <h3 class="t-d4">Logika przemysłowa</h3>
-          <p class="t-caption">Subskrypcja pozwala produkować just-in-time, bez magazynowania.</p>
+          <p class="t-caption">Subskrypcja mówi nam z wyprzedzeniem, ile zestawów i w jakim
+          składzie mamy wyprodukować w najbliższym miesiącu. Produkcja idzie just-in-time
+          i nie wymaga magazynu gotowych opakowań.</p>
         </div>
         <div class="card pillar">
           <span class="index-num">03</span>
           <h3 class="t-d4">Logika synergii</h3>
-          <p class="t-caption">Składniki zestawu działają razem, rozkładając obciążenie biologiczne.</p>
+          <p class="t-caption">Składniki w zestawie działają razem i rozkładają obciążenie
+          biologiczne na trzy formuły. Trzy formuły dzielą między siebie dawki, zamiast
+          dublować ten sam składnik. Żaden składnik nie powtarza się w dwóch formułach
+          PERSONA.</p>
         </div>
         <div class="card pillar">
           <span class="index-num">04</span>
           <h3 class="t-d4">Logika klubu</h3>
-          <p class="t-caption">Wysoka cena detaliczna chroni prestiż marki i zniechęca do przypadkowych zakupów.</p>
+          <p class="t-caption">Wysoka cena detaliczna chroni prestiż marki i zniechęca do
+          przypadkowych zakupów pojedynczych opakowań z półki.</p>
         </div>
       </div>
 
@@ -1050,22 +1067,26 @@ main [hidden] { display: none !important; }
         <div class="card card--lift" style="padding:clamp(24px,3vw,40px)">
           <p class="eyebrow eyebrow--bare">Mini-raport PDF</p>
           <h3 class="t-d4">Zabierz wynik ze sobą</h3>
-          <p class="t-caption">Raport zawiera sześć obszarów obciążenia, uzasadnienie planu
-          i skład formuł — do pokazania lekarzowi lub specjaliście.</p>
+          <p class="t-caption">Raport zbiera sześć obszarów obciążenia, uzasadnienie planu
+          i skład trzech formuł PERSONA w jednym dokumencie gotowym do druku. U góry stoi
+          Twój adres.</p>
           <div class="btn-row">
             <button class="btn btn--primary" type="button" id="print-btn">Pobierz mini-raport (PDF)</button>
           </div>
-          <p class="t-caption" style="color:var(--ink-faint)">Otwiera systemowe okno wydruku —
-          wybierz „Zapisz jako PDF”.</p>
+          <p class="t-caption" style="color:var(--ink-faint)">Otworzy się systemowe okno wydruku
+          z opcją „Zapisz jako PDF”. Drukarki oszczędzające tusz gubią geometrię heksagonów.
+          Na wydruku mapa zamienia się w tabelę wartości.</p>
         </div>
         <div class="card card--tech" style="padding:clamp(24px,3vw,40px)">
           <p class="eyebrow eyebrow--bare">Weryfikacja specjalisty</p>
           <h3 class="t-d4">Odpowiedź w ciągu <span class="mono" style="letter-spacing:0">48&nbsp;h</span></h3>
-          <p class="t-caption">W Etapie I każdy plan weryfikuje człowiek — specjalista przygotowuje
-          odpowiedź ręcznie i wysyła ją na adres
-          <span class="mono report__email" id="report-email">—</span>.
-          Platforma nie jest autonomicznym botem AI.</p>
-          <p class="t-caption"><a class="link" href="hero.html#kontakt">Masz pytanie? Napisz do nas</a></p>
+          <p class="t-caption">Specjalista odpisuje ręcznie na
+          <span class="mono report__email" id="report-email">Twój adres</span>.
+          Platforma nie jest autonomicznym botem AI. Etap I nie prowadzi kont ani transakcji.
+          Termin liczymy od odblokowania. Zanim odpowiedź do Ciebie wróci, specjalista
+          sprawdza dobór trzech formuł, uzasadnienie planu i sześć wartości obciążenia
+          z analizy.</p>
+          <p class="t-caption"><a class="link" href="hero.html#kontakt">Napisz do nas</a></p>
         </div>
       </div>
     </div>
@@ -1106,9 +1127,9 @@ main [hidden] { display: none !important; }
       <div>
         <h4>Współpraca</h4>
         <div class="sitefoot__links">
-          <a href="affiliate.html#specjalisci">Dla specjalistów — 20 %</a>
-          <a href="affiliate.html#partnerzy">Program detaliczny — 10–15 %</a>
-          <a href="affiliate.html#white-label">B2B / white-label — 10 %</a>
+          <a href="affiliate.html#specjalisci">Dla specjalistów · 20 %</a>
+          <a href="affiliate.html#partnerzy">Program detaliczny · 10–15 %</a>
+          <a href="affiliate.html#white-label">B2B / white-label · 10 %</a>
           <a href="hero.html#instytut">Instytut i badania</a>
         </div>
       </div>
@@ -1349,25 +1370,25 @@ main [hidden] { display: none !important; }
     var out = [], a = profile.answers || {};
     out.push('<b>' + mainArea.label + ' <span class="mono">' + profile.scores[mainArea.k] +
       '%</span></b> i <b>' + supportArea.label + ' <span class="mono">' +
-      profile.scores[supportArea.k] + '%</span></b> to najwyżej obciążone obszary — ' +
-      'plan zaczyna się od nich.');
+      profile.scores[supportArea.k] + '%</span></b> to dwa najwyżej obciążone obszary ' +
+      'Twojego profilu. Trzecia formuła wchodzi z kolejnego obszaru na tej liście.');
     var q1 = Number(a.q1);
     if (isFinite(q1) && q1 >= 1 && q1 <= 10) {
       out.push(q1 <= 4
-        ? '<b>Poranna energia ' + q1 + '/10</b> — organizm zaczyna dzień z deficytem regeneracji.'
+        ? 'Rano startujesz z poziomu <b>' + q1 + '/10</b>. To deficyt regeneracji jeszcze przed pierwszym zadaniem dnia.'
         : (q1 >= 8
-          ? '<b>Poranna energia ' + q1 + '/10</b> — dobra baza do pracy nad pozostałymi obszarami.'
-          : '<b>Poranna energia ' + q1 + '/10</b> — umiarkowana rezerwa do odbudowania.'));
+          ? 'Poranna energia <b>' + q1 + '/10</b> jest bazą do pracy nad pozostałymi obszarami.'
+          : 'Poranna energia <b>' + q1 + '/10</b> zostawia umiarkowaną rezerwę do odbudowania.'));
     }
-    if (a.q2 === 'Słaba') out.push('<b>Słaba jakość snu</b> ogranicza nocną regenerację — stąd wsparcie faz snu.');
-    else if (a.q2 === 'Przeciętna') out.push('<b>Przeciętna jakość snu</b> — rezerwa do odzyskania w fazach głębokich.');
+    if (a.q2 === 'Słaba') out.push('<b>Słaba jakość snu</b> ogranicza nocną regenerację.');
+    else if (a.q2 === 'Przeciętna') out.push('Sen wypada <b>przeciętnie</b>.');
     if (a.q3 === 'Prawie codziennie') out.push('<b>Stres niemal codziennie</b> utrzymuje stałe obciążenie regeneracji.');
-    if (a.q4 === 'Wyraźne') out.push('<b>Wyraźne trudności trawienne</b> — priorytet dla bariery jelitowej.');
-    else if (a.q4 === 'Łagodne') out.push('<b>Łagodne trudności trawienne</b> — profilaktyczne wsparcie mikrobiomu.');
-    if (a.q7 === 'Wysoka') out.push('<b>Wysoka podaż kofeiny</b> może maskować zmęczenie i spłycać sen.');
+    if (a.q4 === 'Wyraźne') out.push('<b>Wyraźne trudności trawienne</b> stawiają barierę jelitową na pierwszym miejscu.');
+    else if (a.q4 === 'Łagodne') out.push('Trudności trawienne są <b>łagodne</b>. DigestEase Pro pracuje tu profilaktycznie na mikrobiomie.');
+    if (a.q7 === 'Wysoka') out.push('<b>Wysoka podaż kofeiny</b> może maskować zmęczenie i spłycać sen, zwłaszcza przy dawkach po południu.');
     if (a.q8 === 'Często') out.push('<b>Częsty alkohol</b> dodatkowo obciąża regenerację i jakość snu.');
-    if (a.q9 === 'Tak, złożony schemat') out.push('<b>Złożona obecna suplementacja</b> — plan ograniczamy do trzech formuł, aby uniknąć dublowania składników.');
-    if (a.q10 === 'Ponad rok' || a.q10 === 'Nie pamiętam') out.push('<b>Badania krwi ponad rok temu</b> — warto odświeżyć panel podstawowy i pokazać go specjaliście.');
+    if (a.q9 === 'Tak, złożony schemat') out.push('Masz <b>złożony schemat suplementacji</b>. Plan ograniczamy do trzech formuł, żeby nie dublować składników.');
+    if (a.q10 === 'Ponad rok' || a.q10 === 'Nie pamiętam') out.push('<b>Badania krwi ponad rok temu</b>. Panel podstawowy warto odświeżyć przed konsultacją.');
     return out.slice(0, 5);
   }
 
@@ -1397,10 +1418,10 @@ main [hidden] { display: none !important; }
     }
 
     document.getElementById('persona-teaser').innerHTML =
-      'Widzimy obszar główny i obszar wspierający: <b>' + mainArea.label +
-      '</b> (obciążenie <span class="mono">' + profile.scores[mainArea.k] +
-      '%</span>) oraz <b>' + supportArea.label +
-      '</b> (<span class="mono">' + profile.scores[supportArea.k] + '%</span>).';
+      'Widzimy obszar główny i obszar wspierający. <b>' + mainArea.label +
+      '</b> <span class="mono">' + profile.scores[mainArea.k] +
+      '%</span>, <b>' + supportArea.label +
+      '</b> <span class="mono">' + profile.scores[supportArea.k] + '%</span>.';
   }
 
   function renderHexes() {
@@ -1425,8 +1446,8 @@ main [hidden] { display: none !important; }
     pt.innerHTML = '';
     AREAS.forEach(function (a) {
       var tr = el('tr', null,
-        '<td>' + a.label + (a.k === mainArea.k ? ' — obszar główny' :
-          a.k === supportArea.k ? ' — wspierający' : '') + '</td>' +
+        '<td>' + a.label + (a.k === mainArea.k ? ' · obszar główny' :
+          a.k === supportArea.k ? ' · wspierający' : '') + '</td>' +
         '<td class="num">' + profile.scores[a.k] + '%</td>');
       pt.appendChild(tr);
     });
@@ -1435,9 +1456,7 @@ main [hidden] { display: none !important; }
   function renderPlan() {
     document.getElementById('plan-lead').innerHTML =
       (profile.isExample ? 'Przykładowy zestaw' : 'Twój zestaw') +
-      ' trzech formuł PERSONA odpowiada na obszar główny <b>' + mainArea.label +
-      '</b> i wspierający <b>' + supportArea.label + '</b>. Każda pozycja ma uzasadnienie — ' +
-      'nic nie trafia do planu bez powodu.';
+      ' to trzy formuły PERSONA. Oleje CBD i grzyby funkcjonalne dochodzą do katalogu wkrótce.';
 
     var why = document.getElementById('why-list');
     why.innerHTML = '';
@@ -1450,7 +1469,7 @@ main [hidden] { display: none !important; }
       var card = el('article', 'card card--lift fcard');
       card.style.setProperty('--fc', f.color);
       var ing = f.ingredients.map(function (row) {
-        return '<li><span>' + row[0] + '</span><span class="dose">' + (row[1] || '—') + '</span></li>';
+        return '<li><span>' + row[0] + '</span><span class="dose">' + row[1] + '</span></li>';
       }).join('');
       var reasons = item.reasons.map(function (r) {
         return r.label + ' <span class="mono">' + r.score + '%</span>';
@@ -1464,7 +1483,7 @@ main [hidden] { display: none !important; }
         '</div>' +
         '<ul class="fcard__ing">' + ing + '</ul>' +
         '<p class="t-caption"><b>Cel:</b> ' + f.goal + '</p>' +
-        '<p class="fcard__why">W planie, bo: ' + reasons + ' obciążenia.</p>' +
+        '<p class="fcard__why">Odpowiada na obciążenie: ' + reasons + '.</p>' +
         '<div class="fcard__foot">' +
           '<span class="price"><span class="price__now">179 zł<span class="price__unit">/szt.</span></span>' +
           '<span class="price__was">249 zł</span></span>' +
@@ -1477,15 +1496,15 @@ main [hidden] { display: none !important; }
     document.getElementById('set-math').innerHTML =
       '<div class="stat"><span class="stat__num">' + (n * PRICE_SET) + ' zł</span>' +
         '<span class="stat__label">' + (profile.isExample ? 'zestaw przykładowy' : 'Twój zestaw') +
-        ' — ' + n + ' × 179 zł</span></div>' +
+        ' · ' + n + ' × 179 zł</span></div>' +
       '<div class="stat"><span class="stat__num">' + (n * PRICE_OPEN) + ' zł</span>' +
-        '<span class="stat__label">te same formuły osobno — ' + n + ' × 249 zł</span></div>' +
+        '<span class="stat__label">te same formuły osobno · ' + n + ' × 249 zł</span></div>' +
       '<div class="stat"><span class="stat__num">−' + (n * (PRICE_OPEN - PRICE_SET)) + ' zł</span>' +
         '<span class="stat__label">różnica w cyklu miesięcznym</span></div>';
   }
 
   function renderIdentity() {
-    var email = unlock && unlock.email ? unlock.email : '—';
+    var email = unlock && unlock.email ? unlock.email : 'Twój adres';
     var when = fmtDate(unlock && unlock.unlockedAt) ||
                new Date().toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' });
     var id = document.getElementById('print-identity');

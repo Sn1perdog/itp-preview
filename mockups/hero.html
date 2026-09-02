@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Instytut Terapii Personalizowanych — spersonalizowana droga do zdrowia | ITP</title>
-<meta name="description" content="Zrozum aktualne potrzeby swojego organizmu i otrzymaj uzasadniony plan: suplementacja PERSONA, technologia BioSNEDS™, urządzenia wspierające i opieka specjalisty.">
+<title>Instytut Terapii Personalizowanych · spersonalizowana droga do zdrowia | ITP</title>
+<meta name="description" content="Zrozum aktualne potrzeby swojego organizmu i otrzymaj uzasadniony plan. Suplementacja PERSONA, technologia BioSNEDS™, urządzenia wspierające i opieka specjalisty.">
 <link rel="stylesheet" href="../styles/tokens.css">
 <style>
 /* ============================================================ HERO ==== */
@@ -340,6 +340,9 @@
 .mono-meta{font-family:var(--font-mono);font-size:var(--t-micro);
   letter-spacing:var(--ls-mono-wide);text-transform:uppercase;color:var(--cyan-soft);}
 .map-forms{display:inline-flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;}
+/* Obszar główny / wspierający: nazwa i wartość to dwa osobne elementy,
+   nie jeden łańcuch zlepiony pauzą. */
+.map-area-row .mono{display:inline-flex;gap:var(--sp-3);align-items:baseline;}
 </style>
 </head>
 <body>
@@ -432,7 +435,7 @@
       <div class="hero-stats">
         <div class="stat-row">
           <div class="stat"><span class="stat__num">4</span><span class="stat__label">formuły PERSONA</span></div>
-          <div class="stat"><span class="stat__num">40×–100×</span><span class="stat__label">wzrost wchłaniania — BioSNEDS™, zależnie od&nbsp;składnika</span></div>
+          <div class="stat"><span class="stat__num">40×–100×</span><span class="stat__label">wchłanianie w&nbsp;technologii BioSNEDS™, zależnie od&nbsp;składnika</span></div>
           <div class="stat"><span class="stat__num">12</span><span class="stat__label">pytań analizy · 5–7 minut</span></div>
           <div class="stat"><span class="stat__num">249&nbsp;→&nbsp;179&nbsp;zł</span><span class="stat__label">za sztukę w&nbsp;planie personalizowanym</span></div>
         </div>
@@ -451,15 +454,15 @@
     <div class="mirror-list">
       <div class="mirror-row" data-itp-reveal>
         <span class="mirror-tag">Energia</span>
-        <p class="mirror-line">Budzisz się zmęczony, mimo ośmiu godzin snu.</p>
+        <p class="mirror-line">Osiem godzin snu. Budzisz się zmęczony.</p>
       </div>
       <div class="mirror-row" data-itp-reveal style="--rvd:.08s">
         <span class="mirror-tag">Sen</span>
-        <p class="mirror-line">Wieczorem myśli nie zwalniają, choć ciało prosi o&nbsp;sen.</p>
+        <p class="mirror-line">Ciało prosi o&nbsp;sen. Myśli nie zwalniają.</p>
       </div>
       <div class="mirror-row" data-itp-reveal style="--rvd:.16s">
         <span class="mirror-tag">Trawienie</span>
-        <p class="mirror-line">Po posiłku zamiast energii czujesz ciężkość.</p>
+        <p class="mirror-line">Po posiłku ciężkość trzyma cię przy biurku.</p>
       </div>
       <div class="mirror-row" data-itp-reveal style="--rvd:.24s">
         <span class="mirror-tag">Koncentracja</span>
@@ -467,8 +470,9 @@
       </div>
     </div>
     <div class="mirror-close" data-itp-reveal>
-      <p class="t-lead">To nie są cztery osobne problemy. To jeden wzorzec obciążenia
-        organizmu — i&nbsp;da się go zmierzyć.</p>
+      <p class="t-lead">Za każdym z&nbsp;tych zdań stoi ten sam wzorzec obciążenia
+        organizmu, mierzalny w&nbsp;sześciu obszarach. Analiza obejmuje energię, sen,
+        stres, trawienie, koncentrację i&nbsp;odporność.</p>
       <a class="link" href="quiz.html">Sprawdź swój wzorzec</a>
     </div>
   </div>
@@ -480,8 +484,7 @@
     <div class="section-head">
       <p class="eyebrow">Proces</p>
       <h2 class="t-d2" id="steps-h">Jak to działa.</h2>
-      <p class="t-lead">Od pierwszego pytania do planu z&nbsp;opieką — jedna ścieżka,
-        cztery kroki, człowiek na końcu każdej decyzji.</p>
+      <p class="t-lead">Od pierwszego pytania do gotowego planu.</p>
     </div>
     <div class="steps">
 
@@ -491,13 +494,13 @@
           <span class="step-num">01</span>
           <h3>Analiza <span class="mono" style="font-size:.72em;color:var(--ink-muted)">(5&nbsp;min)</span></h3>
           <p>Dwanaście pytań o&nbsp;energię, sen, stres, trawienie i&nbsp;styl życia.
-             Bez zakładania konta — odpowiedzi zapisują się wyłącznie w&nbsp;Twojej przeglądarce.</p>
+             Nie zakładasz konta, a&nbsp;odpowiedzi zapisują się wyłącznie w&nbsp;Twojej przeglądarce.</p>
         </div>
         <div class="step-art">
           <div class="artefact">
             <div class="mono-line"><span>Analiza zdrowia</span><span>Pytanie 07/12</span></div>
             <div class="progress"><div class="progress__track"><div class="progress__fill" style="width:58%"></div></div></div>
-            <div class="art-row is-picked"><span>Jakość snu — przeciętna</span><span class="mono">B</span></div>
+            <div class="art-row is-picked"><span>Jakość snu</span><span class="mono">przeciętna</span></div>
           </div>
         </div>
       </div>
@@ -507,9 +510,9 @@
         <div class="step-body">
           <span class="step-num">02</span>
           <h3>Dobór i&nbsp;uzasadnienie</h3>
-          <p>Odpowiedzi łączą się z&nbsp;czterema formułami PERSONA i&nbsp;technologią
-             BioSNEDS™. Każda pozycja planu ma jawne uzasadnienie: dlaczego ten
-             składnik, w&nbsp;tej formie, dla Ciebie.</p>
+          <p>Twoje odpowiedzi spotykają się z&nbsp;czterema formułami PERSONA
+             i&nbsp;technologią BioSNEDS™. Przy każdej pozycji planu podajemy
+             składnik, jego formę i&nbsp;powód doboru.</p>
         </div>
         <div class="step-art">
           <div class="artefact">
@@ -525,8 +528,8 @@
         <div class="step-body">
           <span class="step-num">03</span>
           <h3>Zatwierdzenie specjalisty</h3>
-          <p>Zanim plan do Ciebie trafi, przegląda go człowiek. Platforma
-             rekomenduje — decyzję zawsze waliduje specjalista.</p>
+          <p>Plan przegląda specjalista kliniczny i&nbsp;bierze za niego
+             odpowiedzialność. Dopiero po jego zatwierdzeniu rekomendacja trafia do Ciebie.</p>
         </div>
         <div class="step-art">
           <div class="artefact">
@@ -537,7 +540,7 @@
                 <span class="t-caption">przegląd rekomendacji</span></div>
               <span class="art-status">Zatwierdzono</span>
             </div>
-            <p class="t-caption">Etap I: odpowiedź przygotowywana ręcznie, do&nbsp;48&nbsp;h.</p>
+            <p class="t-caption">W&nbsp;Etapie I odpowiedź przygotowuje człowiek, do&nbsp;48&nbsp;h.</p>
           </div>
         </div>
       </div>
@@ -547,14 +550,15 @@
         <div class="step-body">
           <span class="step-num">04</span>
           <h3>Twój plan i&nbsp;opieka</h3>
-          <p>Zestaw personalizowany w&nbsp;cenie <span class="mono">179&nbsp;zł/szt.</span>,
-             harmonogram przyjmowania i&nbsp;kontrola postępów. Plan zmienia się razem z&nbsp;Tobą.</p>
+          <p>Zestaw personalizowany za <span class="mono">179&nbsp;zł/szt.</span>
+             Do tego harmonogram przyjmowania i&nbsp;kontrola postępów co 30 dni.
+             Po każdej kontroli specjalista może skorygować dawki i&nbsp;skład zestawu.</p>
         </div>
         <div class="step-art">
           <div class="artefact">
             <div class="mono-line"><span>Twój plan</span><span>30 dni</span></div>
-            <div class="art-row"><span class="f-dot f-dot--4"></span><span>Rano — VitalCore™</span><span class="mono">1 kaps.</span></div>
-            <div class="art-row"><span class="f-dot f-dot--2"></span><span>Wieczorem — NeuroSynapse</span><span class="mono">1 kaps.</span></div>
+            <div class="art-row"><span class="f-dot f-dot--4"></span><span>VitalCore™</span><span class="mono">rano · 1 kaps.</span></div>
+            <div class="art-row"><span class="f-dot f-dot--2"></span><span>NeuroSynapse</span><span class="mono">wieczorem · 1 kaps.</span></div>
             <div class="art-row"><span>Kontrola postępów</span><span class="mono">co 30 dni</span></div>
           </div>
         </div>
@@ -571,13 +575,13 @@
     <div class="section-head">
       <p class="eyebrow">Podgląd wyniku</p>
       <h2 class="t-d2" id="map-h">Twoja Mapa Zdrowia.</h2>
-      <p class="t-lead">Wynik analizy to sześć obszarów z&nbsp;poziomem obciążenia
-        i&nbsp;przypisana etykieta personalizacji. Przełącz przykładowe profile,
-        aby zobaczyć, jak zmienia się mapa.</p>
+      <p class="t-lead">Mapa pokazuje, gdzie organizm jest najbardziej obciążony,
+        i&nbsp;nazywa cały ten wzorzec jedną etykietą personalizacji. Przełącz
+        przykładowe profile poniżej i&nbsp;zobacz, jak zmienia się rozkład obciążenia.</p>
     </div>
     <div class="map-grid">
       <div class="map-left">
-        <span class="chip chip--draft">Przykładowe profile — to nie jest wynik analizy</span>
+        <span class="chip chip--draft">Podgląd na przykładowych profilach</span>
         <div class="map-toggle" role="group" aria-label="Przykładowe profile">
           <button type="button" data-map-profile aria-pressed="true">Regeneracja nocna</button>
           <button type="button" data-map-profile aria-pressed="false">Energia komórkowa</button>
@@ -588,14 +592,14 @@
           <strong data-map-label>Regeneracja nocna</strong>
         </div>
         <div class="map-areas">
-          <div class="map-area-row"><span>Obszar główny</span><span class="mono" data-map-main>Sen — 74%</span></div>
-          <div class="map-area-row"><span>Obszar wspierający</span><span class="mono" data-map-sup>Stres — 66%</span></div>
+          <div class="map-area-row"><span>Obszar główny</span><span class="mono"><span data-map-main-name>Sen</span><span data-map-main-val>74%</span></span></div>
+          <div class="map-area-row"><span>Obszar wspierający</span><span class="mono"><span data-map-sup-name>Stres</span><span data-map-sup-val>66%</span></span></div>
           <div class="map-area-row"><span>Formuły w planie</span><span class="map-forms" data-map-forms><span class="chip"><span class="f-dot f-dot--2"></span>&nbsp;NeuroSynapse</span> <span class="chip"><span class="f-dot f-dot--4"></span>&nbsp;VitalCore™</span></span></div>
         </div>
         <a class="btn btn--primary" href="quiz.html">Rozpocznij analizę</a>
-        <p class="hero-micro">Twój wynik powstaje z&nbsp;12 pytań i&nbsp;jest zatwierdzany przez specjalistę</p>
+        <p class="hero-micro">Wynik powstaje z&nbsp;12 odpowiedzi i&nbsp;jest zatwierdzany przez specjalistę</p>
       </div>
-      <div class="honey" data-honey aria-label="Mapa Zdrowia — sześć obszarów z poziomem obciążenia (przykład)">
+      <div class="honey" data-honey aria-label="Przykładowa Mapa Zdrowia z sześcioma obszarami i poziomem obciążenia">
         <div class="honey-row">
           <div class="hex hexcell" data-area="en"><span class="val">58%</span><span class="lbl">Energia</span></div>
           <div class="hex hexcell is-main" data-area="sn"><span class="val">74%</span><span class="lbl">Sen</span></div>
@@ -619,17 +623,18 @@
     <div class="section-head">
       <p class="eyebrow">Dowód technologiczny</p>
       <h2 class="t-d2" id="tech-h">Technologia <span class="t-accent">BioSNEDS™</span>.</h2>
-      <p class="t-lead">Self-Nanoemulsifying Delivery System: nanoemulgacja in situ
-        substancji lipofilowych. Technologia licencjonowana, dostarczana
-        z&nbsp;laboratorium Verdant Nature — zaprojektowana, aby zwiększyć
-        biodostępność wybranych składników.</p>
+      <p class="t-lead">BioSNEDS™ to Self-Nanoemulsifying Delivery System.
+        W&nbsp;kontakcie z&nbsp;płynem jelitowym formuła sama tworzy nanoemulsję
+        substancji lipofilowych in&nbsp;situ i&nbsp;w&nbsp;tej postaci docierają one
+        do ściany jelita. Technologia jest licencjonowana i&nbsp;powstaje razem
+        z&nbsp;laboratorium Verdant Nature.</p>
     </div>
     <div class="tech-grid">
 
       <figure class="tech-stage" style="margin:0">
         <div class="tech-scene-wrap">
           <svg class="tech-scene" data-stage="1" viewBox="0 0 560 360" role="img"
-     aria-label="Schemat: kapsułka BioSNEDS w przekroju jelita cienkiego uwalnia nanoemulsję w trzech etapach">
+     aria-label="Kapsułka BioSNEDS w przekroju jelita cienkiego uwalnia nanoemulsję w trzech etapach">
   <g class="villi" stroke-width="1.4"><path d="M0 54 Q 20 84 40 54 T 80 54 T 120 54 T 160 54 T 200 54 T 240 54 T 280 54 T 320 54 T 360 54 T 400 54 T 440 54 T 480 54 T 520 54 T 560 54 "/><path d="M0 306 Q 20 276 40 306 T 80 306 T 120 306 T 160 306 T 200 306 T 240 306 T 280 306 T 320 306 T 360 306 T 400 306 T 440 306 T 480 306 T 520 306 T 560 306 "/></g>
   <g class="villi villi--hi" stroke-width="1"><path d="M0 44 Q 20 66 40 44 T 80 44 T 120 44 T 160 44 T 200 44 T 240 44 T 280 44 T 320 44 T 360 44 T 400 44 T 440 44 T 480 44 T 520 44 T 560 44 "/><path d="M0 316 Q 20 294 40 316 T 80 316 T 120 316 T 160 316 T 200 316 T 240 316 T 280 316 T 320 316 T 360 316 T 400 316 T 440 316 T 480 316 T 520 316 T 560 316 "/></g>
   <g stroke="#2C5B8F" stroke-width="1" opacity=".55">
@@ -650,7 +655,7 @@
     <path d="M160 163 h18 a17 17 0 0 1 0 34 h-18" fill="none" stroke="#0B1F3A" stroke-width="1.4"/>
   </g>
 </svg>
-          <span class="tech-corner tech-corner--tl">Jelito cienkie — przekrój</span>
+          <span class="tech-corner tech-corner--tl">Przekrój jelita cienkiego</span>
           <span class="tech-corner tech-corner--br">Nanoemulgacja in&nbsp;situ</span>
         </div>
         <figcaption class="tech-cap">
@@ -696,9 +701,9 @@
           </div>
         </div>
         <p class="abs-foot">Parametry oceniane w&nbsp;badaniach PAMPA, PK
-          i&nbsp;farmakokinetycznych. Skala liniowa; 100&nbsp;% = forma standardowa.
-          Wyższa biodostępność wybranych składników przekłada się na większą
-          skuteczność — większy potencjał wykorzystania składników przez organizm.</p>
+          i&nbsp;farmakokinetycznych, na skali liniowej, gdzie 100&nbsp;% oznacza
+          formę standardową. Wyższa biodostępność wybranych składników przekłada się na
+          większą skuteczność.</p>
         <a class="link" href="biosneds.html">Poznaj technologię BioSNEDS™</a>
       </div>
 
@@ -712,8 +717,8 @@
     <div class="section-head section-head--center">
       <p class="eyebrow eyebrow--bare">Ekosystem</p>
       <h2 class="t-d2" id="eco-h">Jeden plan. Trzy filary.</h2>
-      <p class="t-lead">Analiza spina wszystko w&nbsp;jedną całość: formuły dobrane
-        pod Twój profil, terapie wspierające i&nbsp;człowieka, który czuwa nad planem.</p>
+      <p class="t-lead">Plan łączy formuły PERSONA, terapie offline w&nbsp;pracowniach
+        „Art of Regeneration” i&nbsp;opiekę specjalisty.</p>
     </div>
     <div class="eco">
       <div class="eco-node">
@@ -734,7 +739,7 @@
       <div class="eco-vertical">
         <div class="card card--lift eco-card" data-itp-reveal>
           <h3>Formuły BioSNEDS™</h3>
-          <p>Cztery formuły PERSONA, łączone w&nbsp;zestaw pod Twój profil.</p>
+          <p>Cztery formuły PERSONA. Do zestawu wchodzą tylko te dopasowane do obszarów z&nbsp;Twojej Mapy Zdrowia.</p>
           <div class="art-row"><span class="f-dot f-dot--1"></span><span>DigestEase Pro</span><span class="mono">trawienie</span></div>
           <div class="art-row"><span class="f-dot f-dot--2"></span><span>NeuroSynapse</span><span class="mono">spokój</span></div>
           <div class="art-row"><span class="f-dot f-dot--3"></span><span>InflamShield</span><span class="mono">tarcza</span></div>
@@ -743,7 +748,7 @@
         </div>
         <div class="card card--lift eco-card" data-itp-reveal style="--rvd:.1s">
           <h3>Urządzenia terapeutyczne</h3>
-          <p>Terapie wspierające offline, w&nbsp;pracowniach „Art of Regeneration”.</p>
+          <p>Terapie offline, w&nbsp;pracowniach „Art of Regeneration”.</p>
           <div class="art-row"><span>Inhalacje H₂-O₂</span><span class="mono">8 kaniul</span></div>
           <div class="art-row"><span>Magnetoterapia</span><span class="mono">PEMF</span></div>
           <div class="art-row"><span>Terapia dźwiękiem</span><span class="mono">432 Hz</span></div>
@@ -752,7 +757,7 @@
         </div>
         <div class="card card--lift eco-card" data-itp-reveal style="--rvd:.2s">
           <h3>Opieka specjalisty</h3>
-          <p>Human-in-the-loop: każdą rekomendację waliduje człowiek, nie algorytm.</p>
+          <p>Po starcie planu specjalista prowadzi Twój plan i&nbsp;widzi wyniki w&nbsp;Panelu Terapeuty.</p>
           <div class="art-approve" style="padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm)">
             <span class="art-avatar"><svg width="18" height="18" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M13 1.5 23.4 7.25v11.5L13 24.5 2.6 18.75V7.25L13 1.5Z" stroke="#00CFFF" stroke-width="1.8"/><circle cx="13" cy="13" r="3.1" fill="#00CFFF"/></svg></span>
             <div><strong style="font-size:var(--t-body-sm)">Panel Terapeuty</strong><br>
@@ -774,9 +779,10 @@
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">Instytut</p>
-      <h2 class="t-d2" id="inst-h">Zaplecze, nie obietnice.</h2>
-      <p class="t-lead">Za platformą stoi jednostka badawcza, realna produkcja
-        laboratoryjna i&nbsp;współpraca z&nbsp;uczelniami — nie anonimowa marka.</p>
+      <h2 class="t-d2" id="inst-h">Zaplecze zamiast obietnic.</h2>
+      <p class="t-lead">Za platformą stoi jednostka badawcza AILaBioTech, realna
+        produkcja w&nbsp;laboratorium partnerskim Verdant Nature i&nbsp;współpraca
+        naukowa z&nbsp;SGGW oraz Uniwersytetem Przyrodniczym we Wrocławiu.</p>
     </div>
 
     <div class="org-row" data-itp-reveal>
@@ -794,28 +800,28 @@
         <h3>Dobra Praktyka Wytwarzania (GMP)</h3>
         <p class="t-caption">Formuły PERSONA powstają w&nbsp;reżimie GMP
           w&nbsp;laboratorium partnerskim Verdant Nature.</p>
-        <div class="cert-scan"><span>Skan certyfikatu — w przygotowaniu</span></div>
+        <div class="cert-scan"><span>Skan certyfikatu w przygotowaniu</span></div>
       </div>
       <div class="cert" data-itp-reveal style="--rvd:.1s">
         <div class="cert-seal" aria-hidden="true">ISO</div>
         <h3>System zarządzania jakością (ISO)</h3>
-        <p class="t-caption">Procesy produkcji i&nbsp;kontroli serii objęte
-          systemem zarządzania jakością ISO.</p>
-        <div class="cert-scan"><span>Skan certyfikatu — w przygotowaniu</span></div>
+        <p class="t-caption">Produkcja i&nbsp;kontrola każdej serii działają w&nbsp;systemie
+          zarządzania jakością ISO.</p>
+        <div class="cert-scan"><span>Skan certyfikatu w przygotowaniu</span></div>
       </div>
     </div>
 
     <div class="grid grid--2" style="margin-top:var(--sp-8)">
       <figure class="card card--lift quote-card" data-itp-reveal>
-        <span class="chip chip--draft">Cytat roboczy — oczekuje na autoryzację</span>
-        <blockquote>„Personalizacja zaczyna się od pomiaru, nie od półki
-          z&nbsp;suplementami.”</blockquote>
+        <span class="chip chip--draft">Cytat roboczy, przed autoryzacją</span>
+        <blockquote>„Zanim cokolwiek zalecę, chcę wiedzieć, co pokazuje
+          pomiar.”</blockquote>
         <figcaption>Specjalista żywienia klinicznego · współpraca z&nbsp;Instytutem</figcaption>
       </figure>
       <figure class="card card--lift quote-card" data-itp-reveal style="--rvd:.1s">
-        <span class="chip chip--draft">Cytat roboczy — oczekuje na autoryzację</span>
+        <span class="chip chip--draft">Cytat roboczy, przed autoryzacją</span>
         <blockquote>„Rekomendacja bez uzasadnienia to zgadywanie. Naszym standardem
-          jest jawna logika każdego składnika.”</blockquote>
+          jest jawna logika każdego składnika w&nbsp;zestawie.”</blockquote>
         <figcaption>Zespół badawczy AILaBioTech</figcaption>
       </figure>
     </div>
@@ -826,7 +832,7 @@
         <div class="fac-row"><span class="idx">01</span><span>Inhalacje wodorowo-tlenowe H₂-O₂</span><span class="par">stanowisko · 8 kaniul</span></div>
         <div class="fac-row"><span class="idx">02</span><span>Magnetoterapia PEMF</span><span class="par">pole magnetyczne</span></div>
         <div class="fac-row"><span class="idx">03</span><span>Lampy plazmowe</span><span class="par">terapia światłem</span></div>
-        <div class="fac-row"><span class="idx">04</span><span>Terapia dźwiękiem — gongi, misy tybetańskie, kamertony</span><span class="par">432 Hz</span></div>
+        <div class="fac-row"><span class="idx">04</span><span>Terapia dźwiękiem gongami, misami tybetańskimi i kamertonami</span><span class="par">432 Hz</span></div>
         <div class="fac-row"><span class="idx">05</span><span>Deska Sadhu</span><span class="par">praktyka uważności</span></div>
         <div class="fac-row"><span class="idx">06</span><span>Masaż ajurwedyjski</span><span class="par">praca z ciałem</span></div>
       </div>
@@ -847,11 +853,11 @@
         <span class="anchor-tag">Chaos</span>
         <h3>Przypadkowa suplementacja z&nbsp;półki</h3>
         <div class="anchor-list">
-          <div class="anchor-item"><span class="m">—</span><span>Produkty wybierane pod wpływem reklam i&nbsp;mód</span></div>
-          <div class="anchor-item"><span class="m">—</span><span>Standardowe formy składników lipofilowych o&nbsp;ograniczonym wchłanianiu</span></div>
-          <div class="anchor-item"><span class="m">—</span><span>Składniki, które się dublują lub wzajemnie wykluczają</span></div>
-          <div class="anchor-item"><span class="m">—</span><span>Brak uzasadnienia, brak nadzoru, brak planu</span></div>
-          <div class="anchor-item"><span class="m">—</span><span>Koszty rosną, rezultat pozostaje przypadkowy</span></div>
+          <div class="anchor-item"><span class="m">−</span><span>Produkty wybierane pod wpływem reklam i&nbsp;mód</span></div>
+          <div class="anchor-item"><span class="m">−</span><span>Standardowe formy składników lipofilowych o&nbsp;ograniczonym wchłanianiu</span></div>
+          <div class="anchor-item"><span class="m">−</span><span>Składniki, które się dublują lub wzajemnie wykluczają</span></div>
+          <div class="anchor-item"><span class="m">−</span><span>Brak uzasadnienia, brak nadzoru, brak planu</span></div>
+          <div class="anchor-item"><span class="m">−</span><span>Koszty rosną, rezultat pozostaje przypadkowy</span></div>
         </div>
       </div>
 
@@ -860,19 +866,19 @@
         <h3>Plan personalizowany pod nadzorem specjalisty</h3>
         <div class="anchor-list">
           <div class="anchor-item"><span class="m">+</span><span>Dobór na podstawie 12-pytaniowej analizy Twojego profilu</span></div>
-          <div class="anchor-item"><span class="m">+</span><span>BioSNEDS™: <span class="mono">od 40× do 100×</span> wyższe wchłanianie, w&nbsp;zależności od składnika</span></div>
+          <div class="anchor-item"><span class="m">+</span><span>Wchłanianie <span class="mono">od 40× do 100×</span> wyższe w&nbsp;technologii BioSNEDS™, zależnie od składnika</span></div>
           <div class="anchor-item"><span class="m">+</span><span>Jawne uzasadnienie każdego składnika w&nbsp;planie</span></div>
           <div class="anchor-item"><span class="m">+</span><span>Zatwierdzenie specjalisty i&nbsp;opieka po starcie planu</span></div>
         </div>
         <div class="anchor-price">
-          <div class="price"><span class="price__was">249 zł</span><span class="price__now">179 zł</span><span class="price__unit">/ szt. w zestawie personalizowanym</span></div>
+          <div class="price"><span class="price__was">249 zł</span><span class="price__now">179 zł</span><span class="price__unit">za sztukę w zestawie personalizowanym</span></div>
           <p class="t-caption" style="color:var(--on-navy-muted);margin-top:var(--sp-3);max-width:44ch">
             Niższa cena w&nbsp;planie to nagroda za udostępnienie danych
-            z&nbsp;analizy. Składniki zestawu działają w&nbsp;synergii, rozkładając
-            obciążenie biologiczne. Subskrypcja pozwala produkować just-in-time,
-            bez magazynowania. Cena detaliczna <span class="mono">249&nbsp;zł</span>
-            w&nbsp;sklepie otwartym chroni prestiż marki i&nbsp;zniechęca do
-            przypadkowych zakupów.</p>
+            z&nbsp;analizy. Składniki zestawu działają razem i&nbsp;rozkładają
+            obciążenie biologiczne, a&nbsp;subskrypcja pozwala produkować
+            just-in-time, bez magazynowania i&nbsp;bez nadprodukcji. Cena detaliczna
+            <span class="mono">249&nbsp;zł</span> w&nbsp;sklepie otwartym chroni
+            prestiż marki i&nbsp;zniechęca do przypadkowych zakupów.</p>
         </div>
       </div>
 
@@ -924,9 +930,9 @@
       <div>
         <h4>Współpraca</h4>
         <div class="sitefoot__links">
-          <a href="affiliate.html#specjalisci">Dla specjalistów — 20 %</a>
-          <a href="affiliate.html#partnerzy">Program detaliczny — 10–15 %</a>
-          <a href="affiliate.html#white-label">B2B / white-label — 10 %</a>
+          <a href="affiliate.html#specjalisci">Dla specjalistów · 20 %</a>
+          <a href="affiliate.html#partnerzy">Program detaliczny · 10–15 %</a>
+          <a href="affiliate.html#white-label">B2B / white-label · 10 %</a>
           <a href="hero.html#instytut">Instytut i badania</a>
         </div>
       </div>
@@ -934,7 +940,7 @@
       <div>
         <h4>Newsletter</h4>
         <p class="t-caption" style="color:var(--on-navy-muted);margin-bottom:var(--sp-4)">
-          Raz w miesiącu: biodostępność, profilaktyka, badania. Bez sprzedaży.
+          Raz w miesiącu piszemy o biodostępności, profilaktyce i badaniach. Nic nie sprzedajemy.
         </p>
         <form class="field" data-itp-newsletter novalidate>
           <label class="field__label" for="nl-email">Adres e-mail</label>
@@ -952,17 +958,17 @@
     <div class="legal-grid" style="margin-bottom:var(--sp-9)">
       <div id="bezpieczenstwo">
         <h3>Bezpieczeństwo i&nbsp;dane</h3>
-        <p>Analiza działa bez konta — odpowiedzi zapisują się wyłącznie w&nbsp;Twojej
-          przeglądarce. Dane zdrowotne przetwarzamy zgodnie z&nbsp;RODO i&nbsp;wyłącznie
-          w&nbsp;celu przygotowania rekomendacji. Platforma nie jest systemem diagnozy
-          medycznej i&nbsp;nie działa autonomicznie: każdą rekomendację waliduje
-          specjalista.</p>
+        <p>Analiza działa bez konta. Odpowiedzi zapisują się wyłącznie
+          w&nbsp;Twojej przeglądarce. Dane zdrowotne przetwarzamy zgodnie
+          z&nbsp;RODO i&nbsp;wyłącznie w&nbsp;celu przygotowania rekomendacji.
+          Platforma nie jest systemem diagnozy medycznej i&nbsp;nie działa
+          autonomicznie. Każdą rekomendację waliduje specjalista.</p>
       </div>
       <div id="kontakt">
         <h3>Kontakt</h3>
         <dl class="legal-rows">
           <div><dt>Operator</dt><dd>VHO Sp. z o.o.</dd></div>
-          <div><dt>Badania</dt><dd>AILaBioTech — Instytut Terapii Personalizowanych</dd></div>
+          <div><dt>Badania</dt><dd>AILaBioTech, Instytut Terapii Personalizowanych</dd></div>
           <div><dt>Nauka</dt><dd>SGGW · Uniwersytet Przyrodniczy we Wrocławiu</dd></div>
           <div><dt>Współpraca</dt><dd><a class="link" href="affiliate.html">Program poleceń i partnerstwa</a></dd></div>
         </dl>
@@ -1281,8 +1287,10 @@ var E=[[0,1],[0,2],[0,5],[0,9],[0,68],[1,2],[1,7],[1,10],[1,53],[2,11],[2,53],[3
     });
     var btns = [].slice.call(document.querySelectorAll('[data-map-profile]'));
     var label = document.querySelector('[data-map-label]');
-    var mainEl = document.querySelector('[data-map-main]');
-    var supEl = document.querySelector('[data-map-sup]');
+    var mainName = document.querySelector('[data-map-main-name]');
+    var mainVal = document.querySelector('[data-map-main-val]');
+    var supName = document.querySelector('[data-map-sup-name]');
+    var supVal = document.querySelector('[data-map-sup-val]');
     var formsEl = document.querySelector('[data-map-forms]');
     var anim = 0, animEnd = 0;
 
@@ -1292,8 +1300,10 @@ var E=[[0,1],[0,2],[0,5],[0,9],[0,68],[1,2],[1,7],[1,10],[1,53],[2,11],[2,53],[3
         b.setAttribute('aria-pressed', String(i === idx));
       });
       label.textContent = p.label;
-      mainEl.textContent = p.main[1] + ' \u2014 ' + p.v[p.main[0]] + '%';
-      supEl.textContent = p.sup[1] + ' \u2014 ' + p.v[p.sup[0]] + '%';
+      mainName.textContent = p.main[1];
+      mainVal.textContent = p.v[p.main[0]] + '%';
+      supName.textContent = p.sup[1];
+      supVal.textContent = p.v[p.sup[0]] + '%';
       formsEl.innerHTML = p.forms.map(function (f) {
         return '<span class="chip"><span class="f-dot f-dot--' + f[0] +
           '"></span>&nbsp;' + f[1] + '</span>';
@@ -1346,8 +1356,8 @@ var E=[[0,1],[0,2],[0,5],[0,9],[0,68],[1,2],[1,7],[1,10],[1,53],[2,11],[2,53],[3
     var pause = document.querySelector('[data-tech-pause]');
     var CAPS = [
       'Kapsu\u0142ka BioSNEDS\u2122 dociera do jelita cienkiego.',
-      'Kontakt z p\u0142ynem jelitowym uruchamia samonanoemulgacj\u0119 \u2014 nanoemulsja powstaje in situ.',
-      'Nanoemulsja zwi\u0119ksza powierzchni\u0119 kontaktu ze \u015bcian\u0105 jelita \u2014 wi\u0119kszy potencja\u0142 wykorzystania sk\u0142adnik\u00f3w przez organizm.'
+      'Kontakt z p\u0142ynem jelitowym uruchamia samonanoemulgacj\u0119. Nanoemulsja powstaje in situ.',
+      'Nanoemulsja zwi\u0119ksza powierzchni\u0119 kontaktu ze \u015bcian\u0105 jelita. Organizm ma wi\u0119kszy potencja\u0142 wykorzystania sk\u0142adnik\u00f3w.'
     ];
     var stage = 1, timer = 0, playing = false;
     function setStage(n) {

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sklep PERSONA — cztery formuły BioSNEDS™ | ITP</title>
-<meta name="description" content="DigestEase Pro, NeuroSynapse, InflamShield i VitalCore™ — cztery formuły PERSONA w technologii BioSNEDS™. 249 zł w sklepie otwartym, 179 zł/szt. w zestawie personalizowanym.">
+<title>Sklep PERSONA · cztery formuły BioSNEDS™ | ITP</title>
+<meta name="description" content="DigestEase Pro, NeuroSynapse, InflamShield i VitalCore™. Cztery formuły PERSONA w technologii BioSNEDS™. 249 zł w sklepie otwartym, 179 zł/szt. w zestawie personalizowanym.">
 <link rel="stylesheet" href="../styles/tokens.css">
 <script>
 /* Ukryta karta (headless / tło): przejścia CSS mogą nigdy nie ruszyć, więc
@@ -260,6 +260,24 @@ sup { font-size: 11px; line-height: 0; }
   display: flex; flex-wrap: wrap; column-gap: var(--sp-5); row-gap: var(--sp-2);
   align-items: baseline;
 }
+
+/* CTA dwuwierszowe: intencja w pierwszym wierszu, warunek w drugim.
+   Zastępuje myślnik, który wcześniej sklejał obie części w jedną linię. */
+.btn--stack { flex-direction: column; gap: 2px; padding-block: 10px;
+              line-height: 1.2; height: auto; text-align: center; }
+.btn__sub { font-weight: var(--w-regular); font-size: var(--t-caption);
+            opacity: .74; letter-spacing: 0; }
+.cta-inline {
+  display: inline-grid; gap: 2px; justify-items: start;
+  color: inherit; text-decoration: none;
+}
+.cta-inline b {
+  font-weight: var(--w-semi);
+  border-bottom: 2px solid var(--cyan); padding-bottom: 1px;
+  transition: border-color var(--dur-2) var(--ease);
+}
+.cta-inline:hover b { border-color: var(--navy-900); }
+.cta-inline span { font-size: var(--t-caption); color: var(--ink-muted); }
 
 .qty {
   display: inline-flex; align-items: center;
@@ -961,15 +979,17 @@ sup { font-size: 11px; line-height: 0; }
     <div class="wrap">
       <div class="store-hero__head">
         <p class="eyebrow">PERSONA · Sklep formuł</p>
-        <h1 class="t-d1">Cztery formuły.<br>Jedna zasada: <span class="t-accent">wchłanianie</span>.</h1>
+        <h1 class="t-d1">Cztery formuły.<br>Wszystko zależy od <span class="t-accent">wchłaniania</span>.</h1>
       </div>
 
       <div class="store-hero__grid">
         <div class="store-hero__copy">
           <p class="t-lead">
-            DigestEase&nbsp;Pro, NeuroSynapse, InflamShield i&nbsp;VitalCore™ — cztery
-            precyzyjne kompozycje w&nbsp;technologii BioSNEDS™, która zwiększa
-            wchłanianie wybranych składników
+            Każdą z czterech formuł PERSONA zaprojektowaliśmy pod jeden obszar
+            organizmu: DigestEase&nbsp;Pro, NeuroSynapse, InflamShield
+            i&nbsp;VitalCore™. Wszystkie cztery prowadzi ta sama technologia
+            BioSNEDS™. Pełna nazwa brzmi Self&#8209;Nanoemulsifying Delivery
+            System. Wchłanianie wybranych składników rośnie
             <span class="mono">od 40× do 100×</span>, w&nbsp;zależności od składnika.
           </p>
           <div class="btn-row">
@@ -987,7 +1007,7 @@ sup { font-size: 11px; line-height: 0; }
 
         <figure class="stage" data-itp-reveal>
           <div class="stage__row" role="img"
-               aria-label="Opakowania czterech formuł PERSONA — DigestEase Pro na pierwszym planie">
+               aria-label="Opakowania czterech formuł PERSONA, DigestEase Pro na pierwszym planie">
             <svg class="pk stage__lead" viewBox="0 0 260 380" aria-hidden="true"><use href="#pack-f1"/></svg>
             <svg class="pk stage__mini stage__mini--f1" viewBox="0 0 260 380" style="--fc:var(--f1-digest)" aria-hidden="true"><use href="#pack-mini"/></svg>
             <svg class="pk stage__mini stage__mini--f2" viewBox="0 0 260 380" style="--fc:var(--f2-neuro)" aria-hidden="true"><use href="#pack-mini"/></svg>
@@ -1009,7 +1029,7 @@ sup { font-size: 11px; line-height: 0; }
         </div>
         <div class="fact fact--price">
           <span class="fact__num">249 zł <span class="fact__to" aria-hidden="true">→</span> <span class="fact__set">179 zł/szt.</span></span>
-          <span class="fact__label">sklep otwarty → zestaw personalizowany po analizie ·
+          <span class="fact__label">cena w sklepie otwartym i cena sztuki w zestawie po analizie ·
             <a href="#dlaczego-dwie-ceny">dlaczego dwie ceny?</a></span>
         </div>
         <div class="fact">
@@ -1027,10 +1047,15 @@ sup { font-size: 11px; line-height: 0; }
         <p class="eyebrow">Formuły</p>
         <h2 class="t-d2">Skład jawny.<br>Dawki w mono.</h2>
         <p class="t-lead">
-          Każda formuła to kompozycja składników w systemie BioSNEDS™ —
-          nanoemulgacja in-situ substancji lipofilnych, realizowana z laboratorium
-          Verdant&nbsp;Nature. Parametry oceniane w badaniach PAMPA, PK
-          i&nbsp;farmakokinetycznych. <a class="link" href="biosneds.html">Poznaj technologię</a>
+          Kurkumina, resweratrol i&nbsp;kwas
+          elagowy są lipofilne: lubią tłuszcz i&nbsp;w wodnej treści jelita
+          zbijają się w&nbsp;grudki, przez które ściana jelita przepuszcza tylko
+          ułamek dawki. Nośnik BioSNEDS™ tworzy z&nbsp;nich nanoemulsję dopiero
+          w&nbsp;kontakcie z&nbsp;treścią jelita. Tyle znaczy in&nbsp;situ.
+          Technologia jest na licencji realizowanej z&nbsp;laboratorium
+          Verdant&nbsp;Nature. Parametry technologii są oceniane w&nbsp;badaniach
+          PAMPA, PK i&nbsp;farmakokinetycznych.
+          <a class="link" href="biosneds.html">Poznaj technologię</a>
         </p>
       </div>
 
@@ -1068,8 +1093,12 @@ sup { font-size: 11px; line-height: 0; }
           <h3 class="t-d3">DigestEase Pro</h3>
           <p class="formula__tag">Zdrowy układ trawienny</p>
           <p class="formula__desc">
-            Cztery składniki jednego celu: integralność bariery jelitowej,
-            wsparcie mikrobiomu i produkcja maślanu.
+            Wybierz tę formułę, jeśli trawienie jest Twoim wąskim gardłem.
+            Bariera jelitowa to jedna warstwa komórek. Tyle dzieli treść jelita
+            od Twojej krwi. Maślan jest
+            paliwem komórek jelita grubego. Wolny maślan wchłania się już
+            w&nbsp;górnym odcinku przewodu pokarmowego i&nbsp;dopiero tributyryna
+            donosi go dalej.
           </p>
           <table class="params">
             <colgroup><col class="c-skladnik"><col class="c-dawka"><col class="c-rola"></colgroup>
@@ -1084,23 +1113,23 @@ sup { font-size: 11px; line-height: 0; }
               </tr>
               <tr>
                 <td>BerberiSol™</td>
-                <td class="mono">—<sup>*</sup></td>
+                <td class="mono">etykieta<sup>*</sup></td>
                 <td>Wsparcie mikrobiomu</td>
               </tr>
               <tr>
                 <td>QuerceSol™</td>
-                <td class="mono">—<sup>*</sup></td>
+                <td class="mono">etykieta<sup>*</sup></td>
                 <td>Wsparcie bariery jelitowej</td>
               </tr>
               <tr>
                 <td>BioButyrin™ (tributyryna)</td>
-                <td class="mono">—<sup>*</sup></td>
+                <td class="mono">etykieta<sup>*</sup></td>
                 <td>Produkcja maślanu</td>
               </tr>
             </tbody>
           </table>
-          <p class="params__note"><sup>*</sup> Pełna specyfikacja dawek zostanie
-            opublikowana na etykiecie produktu.</p>
+          <p class="params__note"><sup>*</sup> Dawki BerberiSolu™, QuerceSolu™
+            i BioButyrinu™ podamy w pełnej specyfikacji na etykiecie produktu.</p>
           <div class="buy">
             <div class="buy__prices">
               <div class="price">
@@ -1108,7 +1137,7 @@ sup { font-size: 11px; line-height: 0; }
                 <span class="price__unit">sklep otwarty · 1 szt.</span>
               </div>
               <p class="buy__alt">179 zł/szt.
-                <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
+                <small>w zestawie personalizowanym po analizie · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
               </p>
             </div>
             <div class="buy__row">
@@ -1117,12 +1146,14 @@ sup { font-size: 11px; line-height: 0; }
                 <span class="qty__val" data-qty-val aria-live="polite">1</span>
                 <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
               </div>
-              <button type="button" class="btn btn--primary" data-add="digestease">
-                Kup bez analizy — cena standardowa
+              <button type="button" class="btn btn--primary btn--stack" data-add="digestease">
+                <span>Kup bez analizy</span>
+                <span class="btn__sub">cena standardowa</span>
               </button>
             </div>
-            <a class="btn btn--ghost" href="quiz.html">
-              Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu
+            <a class="btn btn--ghost btn--stack" href="quiz.html">
+              <span>Sprawdź swoje dopasowanie</span>
+              <span class="btn__sub">otrzymaj rekomendację i cenę planu</span>
             </a>
           </div>
         </div>
@@ -1154,8 +1185,12 @@ sup { font-size: 11px; line-height: 0; }
           <h3 class="t-d3">NeuroSynapse</h3>
           <p class="formula__tag">Siła spokoju</p>
           <p class="formula__desc">
-            Kompozycja dla układu nerwowego pod presją: aktywacja szlaków GABA,
-            neuroprotekcja i optymalizacja faz snu.
+            ApigenSol™ aktywuje szlaki GABA, czyli główny hamulec ośrodkowego
+            układu nerwowego, i&nbsp;właśnie od siły tego hamulca zależy, jak
+            szybko wieczorem zwalniasz. Melatonina w&nbsp;tej dawce jest sygnałem
+            zmroku. Fazy snu
+            układają się w&nbsp;cykle i&nbsp;dopiero w&nbsp;głębokich fazach mózg
+            wypłukuje z&nbsp;siebie produkty przemiany materii.
           </p>
           <table class="params">
             <colgroup><col class="c-skladnik"><col class="c-dawka"><col class="c-rola"></colgroup>
@@ -1192,15 +1227,16 @@ sup { font-size: 11px; line-height: 0; }
               <span class="qty__val" data-qty-val aria-live="polite">1</span>
               <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
             </div>
-            <button type="button" class="btn btn--primary" data-add="neurosynapse">
-              Kup bez analizy — cena standardowa
+            <button type="button" class="btn btn--primary btn--stack" data-add="neurosynapse">
+              <span>Kup bez analizy</span>
+              <span class="btn__sub">cena standardowa</span>
             </button>
           </div>
           <p class="buy-match">
             <span class="buy__alt">179 zł/szt.
-              <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
+              <small>w zestawie personalizowanym po analizie · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
             </span>
-            <a class="link" href="quiz.html">Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu</a>
+            <a class="cta-inline" href="quiz.html"><b>Sprawdź swoje dopasowanie</b><span>otrzymaj rekomendację i cenę planu</span></a>
           </p>
         </div>
       </article>
@@ -1228,9 +1264,14 @@ sup { font-size: 11px; line-height: 0; }
           <h3 class="t-d3">InflamShield</h3>
           <p class="formula__tag">Tarcza przeciwzapalna</p>
           <p class="formula__desc">
-            Odpowiedź na przewlekłe obciążenie zapalne: hamowanie NF-κB oraz
-            szlaków COX/LOX i ochrona komórkowa. Dwa z trzech składników mają
-            udokumentowany wzrost biodostępności w BioSNEDS™.
+            Stan zapalny o&nbsp;niskim nasileniu nie boli. Organizm potrafi
+            utrzymywać go latami. NF-κB to
+            włącznik stanu zapalnego w&nbsp;komórce. Kurkumina z&nbsp;CurcuSolu™
+            i&nbsp;kwercetyna z&nbsp;NADPro™ hamują ten włącznik oraz szlaki
+            COX/LOX, z&nbsp;których organizm produkuje mediatory bólu
+            i&nbsp;obrzęku. Bez nośnika kurkumina wchłania się słabo
+            i&nbsp;dopiero BioSNEDS™ daje jej większy potencjał wykorzystania
+            przez organizm.
           </p>
           <table class="params">
             <colgroup><col class="c-skladnik"><col class="c-dawka"><col class="c-rola"></colgroup>
@@ -1269,15 +1310,16 @@ sup { font-size: 11px; line-height: 0; }
               <span class="qty__val" data-qty-val aria-live="polite">1</span>
               <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
             </div>
-            <button type="button" class="btn btn--primary" data-add="inflamshield">
-              Kup bez analizy — cena standardowa
+            <button type="button" class="btn btn--primary btn--stack" data-add="inflamshield">
+              <span>Kup bez analizy</span>
+              <span class="btn__sub">cena standardowa</span>
             </button>
           </div>
           <p class="buy-match">
             <span class="buy__alt">179 zł/szt.
-              <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
+              <small>w zestawie personalizowanym po analizie · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
             </span>
-            <a class="link" href="quiz.html">Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu</a>
+            <a class="cta-inline" href="quiz.html"><b>Sprawdź swoje dopasowanie</b><span>otrzymaj rekomendację i cenę planu</span></a>
           </p>
         </div>
       </article>
@@ -1312,10 +1354,14 @@ sup { font-size: 11px; line-height: 0; }
           <h3 class="t-d3">VitalCore™</h3>
           <p class="formula__tag">Długowieczność i energia komórkowa</p>
           <p class="formula__desc">
-            Formuła długowieczności: stymulacja mitofagii, ochrona DNA
-            i wsparcie bioenergetyczne. Z EllagiSol™ — składnikiem o najwyższym
-            udokumentowanym wzroście wchłaniania:
-            <span class="mono">10&nbsp;000&nbsp;%&nbsp;(100×)</span>.
+            <span class="mono">10&nbsp;000&nbsp;%&nbsp;(100×)</span>. Tyle wynosi
+            wzrost wchłaniania EllagiSolu™ w BioSNEDS™ i jest to najwyższa
+            wartość udokumentowana dla tej technologii. Ten sam kwas elagowy
+            stymuluje w&nbsp;VitalCore™ mitofagię. Nowe mitochondria komórka
+            buduje z&nbsp;części zużytych. W&nbsp;łańcuchu oddechowym
+            mitochondrium powstaje energia dla całej komórki i&nbsp;ten fragment
+            zasila CoQXorb™. Struktur komórkowych i&nbsp;DNA pilnuje
+            OmegaSol DHA™.
           </p>
           <table class="params">
             <colgroup><col class="c-skladnik"><col class="c-dawka"><col class="c-rola"></colgroup>
@@ -1352,15 +1398,16 @@ sup { font-size: 11px; line-height: 0; }
               <span class="qty__val" data-qty-val aria-live="polite">1</span>
               <button type="button" class="qty__btn" data-qty-plus aria-label="Zwiększ ilość">+</button>
             </div>
-            <button type="button" class="btn btn--primary" data-add="vitalcore">
-              Kup bez analizy — cena standardowa
+            <button type="button" class="btn btn--primary btn--stack" data-add="vitalcore">
+              <span>Kup bez analizy</span>
+              <span class="btn__sub">cena standardowa</span>
             </button>
           </div>
           <p class="buy-match">
             <span class="buy__alt">179 zł/szt.
-              <small>w zestawie personalizowanym · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
+              <small>w zestawie personalizowanym po analizie · <a href="#dlaczego-dwie-ceny">dlaczego?</a></small>
             </span>
-            <a class="link" href="quiz.html">Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu</a>
+            <a class="cta-inline" href="quiz.html"><b>Sprawdź swoje dopasowanie</b><span>otrzymaj rekomendację i cenę planu</span></a>
           </p>
         </div>
       </article>
@@ -1373,12 +1420,12 @@ sup { font-size: 11px; line-height: 0; }
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Model cenowy</p>
-        <h2 class="t-d2">Dwie ceny.<br>Jedna strategia.</h2>
+        <h2 class="t-d2">Dwie ceny.<br>Żadna nie jest promocją.</h2>
         <p class="t-lead">
-          <span class="mono">249 zł</span> w sklepie otwartym i
-          <span class="mono">179 zł/szt.</span> w zestawie personalizowanym —
-          różnica <span class="mono">70 zł</span> na sztuce nie jest promocją.
-          To architektura modelu, oparta na czterech logikach.
+          W sklepie otwartym płacisz za sztukę <span class="mono">249 zł</span>.
+          W zestawie personalizowanym ta sama formuła kosztuje
+          <span class="mono">179 zł/szt.</span> Niższa cena jest wpisana w model
+          równie mocno jak skład kapsułki.
         </p>
       </div>
 
@@ -1386,30 +1433,28 @@ sup { font-size: 11px; line-height: 0; }
         <div class="card pillar" data-itp-reveal>
           <span class="index-num">01</span>
           <h3>Logika diagnostyczna</h3>
-          <p>Niższa cena jest nagrodą za udostępnienie danych zdrowotnych.
-             Analiza pozwala dobrać formuły, które w Twoim profilu mają
-             uzasadnienie — a nie te, które akurat wpadły do koszyka.</p>
+          <p>Dajesz nam dane o swoim zdrowiu w analizie. Niższa cena jest
+             nagrodą za to udostępnienie.</p>
         </div>
         <div class="card pillar" data-itp-reveal>
           <span class="index-num">02</span>
           <h3>Logika przemysłowa</h3>
-          <p>Subskrypcja pozwala produkować just-in-time i nie magazynować.
-             Zamiast płacić za magazyn, płacisz za świeżą partię — dlatego
-             sztuka w planie kosztuje mniej.</p>
+          <p>Przewidywalny popyt z subskrypcji pozwala produkować just-in-time
+             i nie magazynować. Brak magazynu zdejmuje koszt z ceny każdej
+             sztuki.</p>
         </div>
         <div class="card pillar" data-itp-reveal>
           <span class="index-num">03</span>
           <h3>Logika synergii</h3>
-          <p>Składniki w spersonalizowanym zestawie działają razem,
-             rozkładając obciążenie biologiczne. Zestaw jest projektowany jako
-             całość, nie jako suma pojedynczych zakupów.</p>
+          <p>Cztery produkty kupione osobno to cztery osobne decyzje. Zestaw
+             projektujemy jako całość, żeby składniki działały razem
+             i rozkładały obciążenie biologiczne.</p>
         </div>
         <div class="card pillar" data-itp-reveal>
           <span class="index-num">04</span>
           <h3>Logika klubu</h3>
-          <p>Wysoka cena detaliczna chroni prestiż marki i zniechęca do
-             przypadkowych zakupów. Do niższej ceny prowadzi jedna droga:
-             analiza i plan.</p>
+          <p>Wysoka cena detaliczna jest w tym modelu celowa. Chroni prestiż
+             marki i zniechęca do przypadkowych zakupów.</p>
         </div>
       </div>
 
@@ -1417,23 +1462,22 @@ sup { font-size: 11px; line-height: 0; }
         <div class="set-hero__lead">
           <p class="eyebrow eyebrow--bare">Zestaw personalizowany</p>
           <p class="set-hero__price">179 zł<small>/szt.</small></p>
-          <p class="set-hero__meta">w subskrypcji planu — zamiast
-            <span class="mono">249 zł</span>, czyli <span class="mono">70 zł</span>
-            różnicy na każdej sztuce.</p>
+          <p class="set-hero__meta">Tyle kosztuje sztuka w subskrypcji planu,
+            kiedy formuły wynikają z Twojej analizy.</p>
           <a class="btn btn--primary btn--lg" href="quiz.html">Rozpocznij analizę</a>
           <p class="set-hero__micro">Bezpłatnie · około 5–7 minut · uzasadniony wynik</p>
         </div>
         <ul class="compare__list">
           <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <span>Formuły dobrane z analizy <span class="mono">(5–7 min)</span> i uzasadnione</span></li>
+            <span>Formuły wynikają z analizy, która zajmuje <span class="mono">5–7 minut</span></span></li>
           <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Każda rekomendacja zatwierdzana przez specjalistę</li>
+            Każdą rekomendację zatwierdza specjalista</li>
           <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Składniki zaprojektowane, by działać razem</li>
+            Składniki dobrane tak, żeby działać razem</li>
           <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Produkcja just-in-time — zawsze świeża partia</li>
+            Produkcja just-in-time, więc partia jest zawsze świeża</li>
           <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <span><span class="mono">179 zł/szt.</span> zamiast <span class="mono">249 zł</span> — <span class="mono">70 zł</span> różnicy na sztuce</span></li>
+            <span><span class="mono">179 zł/szt.</span> zamiast <span class="mono">249 zł</span> w sklepie otwartym</span></li>
           <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#00CFFF" stroke-width="1.8" stroke-linecap="round"/></svg>
             <span>Wysyłka w <span class="mono">24–48 h</span></span></li>
         </ul>
@@ -1443,8 +1487,8 @@ sup { font-size: 11px; line-height: 0; }
         <div class="open-panel__head">
           <p class="eyebrow eyebrow--bare">Sklep otwarty</p>
           <p class="open-panel__price">249 zł <span>/ szt.</span></p>
-          <p class="open-panel__note">Bez analizy, od ręki — wysoka cena
-            detaliczna chroni prestiż marki.</p>
+          <p class="open-panel__note">Kupujesz bez analizy i bez czekania,
+            a cena zostaje detaliczna.</p>
         </div>
         <ul class="compare__list">
           <li><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="#7FE4FF" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -1456,20 +1500,22 @@ sup { font-size: 11px; line-height: 0; }
         </ul>
         <ul class="compare__list">
           <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.56)" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Bez doboru pod Twój profil zdrowia</li>
+            Nikt nie sprawdza, czy ta formuła pasuje do Twojego profilu</li>
           <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.56)" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Bez zatwierdzenia specjalisty i uzasadnienia</li>
+            Nie ma zatwierdzenia specjalisty ani uzasadnienia wyboru</li>
           <li class="is-off"><svg class="mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8" stroke="rgba(247,246,241,.56)" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Bez synergii zestawu i ceny planu</li>
+            Zostajesz przy cenie detalicznej, poza logiką zestawu</li>
         </ul>
       </div>
 
       <div class="btn-row btn-row--center pricing-cta">
-        <a class="btn btn--primary btn--lg" href="quiz.html">
-          Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu
+        <a class="btn btn--primary btn--lg btn--stack" href="quiz.html">
+          <span>Sprawdź swoje dopasowanie</span>
+          <span class="btn__sub">otrzymaj rekomendację i cenę planu</span>
         </a>
-        <a class="btn btn--ghost btn--lg" href="#formuly">
-          Kup bez analizy — cena standardowa
+        <a class="btn btn--ghost btn--lg btn--stack" href="#formuly">
+          <span>Kup bez analizy</span>
+          <span class="btn__sub">cena standardowa</span>
         </a>
       </div>
 
@@ -1484,12 +1530,12 @@ sup { font-size: 11px; line-height: 0; }
   <section class="section section--ivory" id="wkrotce">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">W przygotowaniu</p>
+        <p class="eyebrow">Kolejne linie</p>
         <h2 class="t-d2">Etap I to cztery formuły.</h2>
         <p class="t-lead">
-          Oleje CBD i grzyby funkcyjne dołączą do ekosystemu później — gdy
-          przejdą tę samą ścieżkę technologiczną. Do tego czasu nie sprzedajemy
-          ich i nie wyceniamy.
+          Oleje CBD i grzyby funkcyjne przechodzą tę samą ścieżkę technologiczną
+          co cztery formuły PERSONA. Do czasu jej zakończenia ich nie sprzedajemy
+          i nie wyceniamy.
         </p>
       </div>
       <div class="soon-stage" data-itp-reveal>
@@ -1498,12 +1544,10 @@ sup { font-size: 11px; line-height: 0; }
           <div class="soon-card__body">
             <span class="soon-chip">Wkrótce</span>
             <h3>Oleje CBD</h3>
-            <p>Kolejna linia w przygotowaniu. Pojawi się w sklepie dopiero
-               z pełną specyfikacją i tą samą dyscypliną doboru.</p>
+            <p>Trafią do sklepu z pełną specyfikacją składu i z tą samą
+               dyscypliną doboru, którą stosujemy przy czterech formułach.</p>
             <p class="soon-meta">
               <span>Linia · oleje CBD</span>
-              <span>Status · w przygotowaniu</span>
-              <span>Zasada · bez ceny do premiery</span>
             </p>
           </div>
         </article>
@@ -1512,12 +1556,10 @@ sup { font-size: 11px; line-height: 0; }
           <div class="soon-card__body">
             <span class="soon-chip">Wkrótce</span>
             <h3>Grzyby funkcyjne</h3>
-            <p>Linia adaptogenna w przygotowaniu. Bez daty, bez ceny — do
-               czasu, aż będzie gotowa naprawdę.</p>
+            <p>Adaptogeny są w opracowaniu. Do doboru wejdą, gdy analiza będzie
+               umiała uzasadnić konkretny gatunek.</p>
             <p class="soon-meta">
               <span>Linia · adaptogeny</span>
-              <span>Status · w przygotowaniu</span>
-              <span>Zasada · bez ceny do premiery</span>
             </p>
           </div>
         </article>
@@ -1558,8 +1600,8 @@ sup { font-size: 11px; line-height: 0; }
         <div data-cart-items></div>
         <div class="cart-empty" data-cart-empty hidden>
           <h3 class="t-d4">Twój koszyk jest pusty.</h3>
-          <p>Dodaj formułę ze sklepu otwartego albo przejdź analizę
-             i otrzymaj zestaw w cenie <span class="mono">179 zł/szt.</span></p>
+          <p>Dodaj formułę ze sklepu otwartego albo przejdź analizę, żeby dostać
+             zestaw w cenie <span class="mono">179 zł/szt.</span></p>
           <div class="btn-row">
             <a class="btn btn--ghost" href="#formuly" data-cart-close-link>Przejrzyj formuły</a>
             <a class="btn btn--primary" href="quiz.html">Rozpocznij analizę</a>
@@ -1568,7 +1610,7 @@ sup { font-size: 11px; line-height: 0; }
       </div>
       <div class="cart-panel__foot" data-cart-foot>
         <div class="cart-line cart-line--sum">
-          <span>Razem — sklep otwarty</span><b data-cart-sum>0 zł</b>
+          <span>Razem w sklepie otwartym</span><b data-cart-sum>0 zł</b>
         </div>
         <div class="cart-line cart-line--alt">
           <span>Te same pozycje w zestawie personalizowanym</span><b data-cart-alt>0 zł</b>
@@ -1586,7 +1628,7 @@ sup { font-size: 11px; line-height: 0; }
         <div data-checkout-lines></div>
         <div style="margin-top:var(--sp-5);display:grid;gap:var(--sp-3)">
           <div class="cart-line cart-line--sum">
-            <span>Razem — sklep otwarty</span><b data-checkout-sum>0 zł</b>
+            <span>Razem w sklepie otwartym</span><b data-checkout-sum>0 zł</b>
           </div>
           <div class="cart-line cart-line--alt">
             <span>W zestawie personalizowanym (<span class="mono">179 zł/szt.</span>)</span>
@@ -1598,8 +1640,9 @@ sup { font-size: 11px; line-height: 0; }
         </div>
         <div class="checkout-note" style="margin-top:var(--sp-6)">
           <b>To jest makieta.</b> W Etapie I platforma nie prowadzi sprzedaży:
-          nie składamy żadnego zamówienia i nie pobieramy płatności. Koszyk
-          zapisuje się wyłącznie w Twojej przeglądarce.
+          nie składamy zamówienia i nie pobieramy płatności. Etap I nie zakłada
+          też kont użytkownika ani automatycznego odczytu wyników badań. Koszyk
+          zapisuje się w Twojej przeglądarce i zniknie, gdy ją wyczyścisz.
         </div>
         <p class="disclaimer" style="margin-top:var(--sp-5)">
           Platforma ma charakter edukacyjny i rekomendacyjny i nie zastępuje
@@ -1607,8 +1650,9 @@ sup { font-size: 11px; line-height: 0; }
         </p>
       </div>
       <div class="cart-panel__foot">
-        <a class="btn btn--primary btn--block" href="quiz.html" style="height:auto;padding-block:12px">
-          Sprawdź swoje dopasowanie — otrzymaj rekomendację i cenę planu
+        <a class="btn btn--primary btn--block btn--stack" href="quiz.html" style="height:auto;padding-block:12px">
+          <span>Sprawdź swoje dopasowanie</span>
+          <span class="btn__sub">otrzymaj rekomendację i cenę planu</span>
         </a>
         <button type="button" class="btn btn--ghost btn--block" data-cart-back>
           Wróć do koszyka
@@ -1654,9 +1698,9 @@ sup { font-size: 11px; line-height: 0; }
       <div>
         <h4>Współpraca</h4>
         <div class="sitefoot__links">
-          <a href="affiliate.html#specjalisci">Dla specjalistów — 20 %</a>
-          <a href="affiliate.html#partnerzy">Program detaliczny — 10–15 %</a>
-          <a href="affiliate.html#white-label">B2B / white-label — 10 %</a>
+          <a href="affiliate.html#specjalisci">Dla specjalistów · 20 %</a>
+          <a href="affiliate.html#partnerzy">Program detaliczny · 10–15 %</a>
+          <a href="affiliate.html#white-label">B2B / white-label · 10 %</a>
           <a href="hero.html#instytut">Instytut i badania</a>
         </div>
       </div>
